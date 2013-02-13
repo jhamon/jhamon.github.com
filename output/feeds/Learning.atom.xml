@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jen's Log</title><link href="http://jhamon.github.com/" rel="alternate"></link><link href="http://jhamon.github.com/feeds/Learning.atom.xml" rel="self"></link><id>http://jhamon.github.com/</id><updated>2012-01-17T00:00:00Z</updated><entry><title>These aren’t your grandma’s flashcards</title><link href="http://jhamon.github.com/Anki.html" rel="alternate"></link><updated>2012-01-17T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-01-17:Anki.html</id><summary type="html">&lt;p&gt;Richard Feynmann famously bemoaned the way that too many students
+memorized instead of thought their way through problems.  But I
+disagree: memorizing things is a necessary part of developing a field
+of expertise that is too-often neglected.  Sure, it&amp;#8217;s great to be
+&lt;em&gt;smart&lt;/em&gt;, but if at the end of the day you don&amp;#8217;t really &lt;em&gt;know things&lt;/em&gt;
+then what kind of expert are you,&amp;nbsp;really?&lt;/p&gt;
+&lt;p&gt;This reality about the need to know things cold is one of the first
+hard truths I ran into during graduate school.  I&amp;#8217;m sure anybody who
+has worked on a science PhD has been through a conversation like this
+(substituting appropriate bits of argot from your own field, of&amp;nbsp;course):&lt;/p&gt;
+&lt;p&gt;A professor walks up to the blackboard and asks a general knowledge
+question.  &amp;#8220;Who remembers the mineral formula for olivine?&amp;#8221;  Or,
+maybe, &amp;#8220;Can anyone tell me the difference between a clinopyroxene and
+an orthopyroxene?&amp;#8221;  There might be a few mumbles from the class, but
+usually there will be silence. I&amp;#8217;m usually on the fence about speaking
+up because I &lt;em&gt;think&lt;/em&gt; I know something, but I&amp;#8217;m not 100% sure and am
+loath to show ignorance.  Then the professor gives a gruff admonition
+that, &amp;#8220;You should really know this for your quals,&amp;#8221; before proceeding
+to answer his own question and carry&amp;nbsp;on.&lt;/p&gt;
+&lt;p&gt;To those who&amp;#8217;ve been to grad school this will feel like a familiar
+scenario.  It&amp;#8217;s one that nearly caused me to drop out of graduate
+school, and I know it is a source of anxiety for many of my fellow
+students.  The mixture of shame, frustration, and anxiety that comes
+from not being able to remember those things that are simultaneously
+fundamental, familiar, and easy to understand cannot be&amp;nbsp;overstated.&lt;/p&gt;
+&lt;p&gt;I, and I&amp;#8217;m sure others, blame ourselves for these feelings, but the
+truth is that nobody in our educational legacy ever gave us the tools
+to learn and retain information.  Memorization as a teaching
+philosophy has been out of fashion for many years now, so that the
+current products of the public education system have never been asked
+to &lt;em&gt;memorize&lt;/em&gt; anything.  The sad truth of it is, though, that if you
+aren&amp;#8217;t being asked to memorize anything while moving through a
+content-based educational curriculum (e.g. history, social studies,
+etc), then you aren&amp;#8217;t really being asked to do anything at all of
+lasting educational&amp;nbsp;value.&lt;/p&gt;
+&lt;p&gt;What I know now is that &lt;a href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak?currentPage=all"&gt;&lt;em&gt;&amp;#8220;spaced
+repetition&amp;#8221;&lt;/em&gt;&lt;/a&gt;
+is the key. Memories decay exponentially; without systematic review
+eventually of substance just evaporates leaving nothing but the vague
+feeling of having seen something&amp;nbsp;before.&lt;/p&gt;
+&lt;p&gt;Flashcards are an obvious tool for reviews, but I find them difficult
+to make by hand and annoying to carry around.  Fortunately, in the
+last decade or so several bits of software have been written to help
+people manage large digital collections of electronic flashcards.
+These applications, termed &lt;a href="http://en.wikipedia.org/wiki/Spaced_repetition"&gt;&amp;#8220;Spaced Repetition
+Systems,&amp;#8221;&lt;/a&gt; help you
+schedule reviews to maximize learning over the long&amp;nbsp;term.&lt;/p&gt;
+&lt;p&gt;Some of the most popular&amp;nbsp;are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="http://ankisrs.net/"&gt;Anki&lt;/a&gt;&lt;/strong&gt; (free, cross&amp;nbsp;platform)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.mnemosyne-proj.org/"&gt;Mnemosyne&lt;/a&gt; (free, cross&amp;nbsp;platform)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.supermemo.com/"&gt;SuperMemo&lt;/a&gt; (paid, Windows&amp;nbsp;only)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://orgmode.org/worg/org-contrib/org-drill.html"&gt;Org-Drill&lt;/a&gt;,&lt;/li&gt;
+&lt;li&gt;part of Org-Mode in Emacs (free, cross&amp;nbsp;platform)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These systems have the user rate themselves on how well they know each
+card and then uses an algorithm to figure out when they should study
+the card again.  The best time to study a card is right before you
+forget it.  Each time the user answers a card correctly the interval
+gets a little longer, until pretty soon a card only needs one or two
+reps per year to be maintained in memory. Forgetting a card resets the
+interval to daily&amp;nbsp;reviews.&lt;/p&gt;
+&lt;p&gt;Even if you think you hate flashcards, I&amp;#8217;d recommend giving this
+method of study a fresh look.  Really knowing things is such a high, I
+think you&amp;#8217;ll quickly come around to liking&amp;nbsp;them.&lt;/p&gt;</summary></entry></feed>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <title>Pelican blog says: Hello&nbsp;World!</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
+        <link href="./" type="application/atom+xml" rel="alternate" title="Jen's Log ATOM Feed" />
+        
+
+        <!--[if IE]>
+                <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+        <!--[if lte IE 7]>
+                <link rel="stylesheet" type="text/css" media="all" href="./css/ie.css"/>
+                <script src="./js/IE8.js" type="text/javascript"></script><![endif]-->
+
+        <!--[if lt IE 7]>
+                <link rel="stylesheet" type="text/css" media="all" href="./css/ie6.css"/><![endif]-->
+
+</head>
+
+<body id="index" class="home">
+<!--         <header id="banner" class="body">
+                <h1><a href="./index.html">Jen's Log </a></h1>
+                <nav><ul>
+                                                <li><a href="./index.html">Home</a></li>
+                                    <li ><a href="./pages/about-me.html">About&nbsp;Me</a></li>
+                                                                </ul></nav>
+        </header><!-- /#banner --> 
+
+        <section id="content" class="body">
+<article>
+        <header> <h1 class="entry-title"><a href="hello-world.html"
+        rel="bookmark" title="Permalink to Pelican blog says: Hello&nbsp;World!">Pelican blog says: Hello&nbsp;World!</a></h1>  </header>
+        <div class="entry-content">
+        <footer class="post-info">
+        <abbr class="published" title="2013-02-09T00:00:00">
+                <!-- Sat 09 February 2013 -->
+        </abbr>
+
+<!--                 <address class="vcard author">
+                By <a class="url fn" href="./author/jennifer-hamon.html">Jennifer Hamon</a>
+        </address> -->
+        
+<p><!--Posted in <a href="./category/misc.html">misc</a>.--> </p>
+<!-- <p>tags: <a href="./tag/tech.html">tech</a></p></p> -->
+</footer><!-- /.post-info --><!-- /.post-info -->
+        <!-- Category: Personal -->
+
+<p>This is my first attempt to generate a blog using the Pelican static blog generator.  I&#8217;m hopeful that this will work because the last tool I tried to use, a static site generator called <a href="http://www.github.com/hyde">hyde</a>, seems to have been abandoned by its maintainer.  The official hyde installation instructions no longer work, and the maintainer has not addressed any of the issues languishing in the bug tracker since I filed my report about a month ago.  Prior to that I messed around with Jekyll/Octopress, but I&#8217;m not much of a&nbsp;rubyist.</p>
+<p>But that&#8217;s all okay because <strong><a href="http://www.github.com/getpelican/pelican">Pelican</a></strong> is the cool new kid on the block: it&#8217;s a python-based static website generator with a thriving community of users and contributors.  I&#8217;m not surprised the project is growing rapidly, because getting started with Pelican is as simple as running their <code>pelican-quickstart</code> script and answering a few questions about how you intended to use your&nbsp;site.  </p>
+<h2>How to change the theme on your new Pelican-powered&nbsp;blog</h2>
+<p>After running the <code>pelican-quickstart</code> script and copying over some existing writing to the <code>content/</code> folder I was ready to tweak the theme.  It took a bit of googling for me to figure this out, so I&#8217;ll summarize it here for anyone who is having a problem customizing their Pelican site&nbsp;theme.</p>
+<p>First, get the <code>pelican-themes</code> repository:</p>
+<div class="codehilite"><pre><span class="nv">$ </span>mkdir ~/path/to/themes
+<span class="nv">$ </span><span class="nb">cd</span> ~/path/to/themes
+<span class="nv">$ </span>git clone git://github.com/getpelican/pelican-themes.git
+</pre></div>
+
+
+<p>Look through the screenshots and choose a theme that you like from those now present in <code>~/path/to/themes/pelican-themes/</code>.  When you find one that seems close to what you want, you&#8217;re ready to update your Pelican configuration&nbsp;files:</p>
+<div class="codehilite"><pre><span class="c"># Put this in your pelicanconf.py file</span>
+<span class="n"><span class="caps">THEME</span></span> <span class="o">=</span> <span class="s">&#39;~/path/to/themes/pelican-themes/theme_dir&#39;</span>
+</pre></div>
+
+
+<p>where <code>theme_dir</code> is the directory of the theme you like.  Next rebuild your site with <code>make html</code> and you&#8217;re good to&nbsp;go.</p>
+<p>The best way to get started on a custom theme of your own design is to copy one of the themes in the <code>pelican-themes</code> repo and start tinkering.  By doing that, you already have the necesasry structure in place for generating a theme.  The <code>simple</code> theme is provided for those who want to start from a relatively blank&nbsp;canvas.</p>
+<p>Good luck with Pelican, and happy&nbsp;blogging!</p>
+        </div><!-- /.entry-content -->
+        
+</article>
+</section>
+
+        <aside id="sidebar">
+                <div class="widget">
+                                            <h1><a class="logo" href="./index.html"> Jen's Log </a></h1>
+
+                        <p>
+                        I am a graduate student, geologist, and hobbyist coder. I love learning new skills and visiting new places.  I set up this blog to get in the habit of writing on a regular basis.</p>
+                    
+                                  
+                                                 <li ><h2><a href="./pages/about-me.html">About&nbsp;Me</a></h2></li>
+                                            
+                    			            <ul><li><h2>            <a href="./archives.html"> Archive </a> </h2>   </li></ul>
+
+			                </div>
+                        </aside><!-- /#sidebar -->
+
+        <footer id="footer" class="body">
+                <address id="about" class="vcard body">
+                This blog is powered by <a id="pelican" href="http://www.github.com/getpelican/pelican/">pelican</a>, a python-based static site generator.
+                </address><!-- /#about -->
+        </footer><!-- /#footer -->
+
+</body>
+</html>
