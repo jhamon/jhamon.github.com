@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <title>Turn your mac into&nbsp;<span class="caps">HAL</span></title>
+        <title>Turn your mac into HAL</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
-        <link href="./" type="application/atom+xml" rel="alternate" title="Jen's Log ATOM Feed" />
+        <link href="./" type="application/atom+xml" rel="alternate" title="Jennifer Hamon ATOM Feed" />
         
 
         <!--[if IE]>
@@ -21,17 +21,15 @@
 
 <body id="index" class="home">
 <!--         <header id="banner" class="body">
-                <h1><a href="./index.html">Jen's Log </a></h1>
+                <h1><a href="./index.html">Jennifer Hamon </a></h1>
                 <nav><ul>
-                                                <li><a href="./index.html">Home</a></li>
-                                    <li ><a href="./pages/about-me.html">About&nbsp;Me</a></li>
                                                                 </ul></nav>
         </header><!-- /#banner --> 
 
         <section id="content" class="body">
 <article>
         <header> <h1 class="entry-title"><a href="sleep-schedule.html"
-        rel="bookmark" title="Permalink to Turn your mac into&nbsp;<span class="caps">HAL</span>">Turn your mac into&nbsp;<span class="caps">HAL</span></a></h1>  </header>
+        rel="bookmark" title="Permalink to Turn your mac into HAL">Turn your mac into HAL</a></h1>  </header>
         <div class="entry-content">
         <footer class="post-info">
         <abbr class="published" title="2013-02-12T00:00:00">
@@ -45,12 +43,12 @@
 <p><!--Posted in <a href="./category/productivity.html">Productivity</a>.--> </p>
 <!-- </p> -->
 </footer><!-- /.post-info --><!-- /.post-info -->
-        <p>In the past I have had some problems going to bed at a reasonable hour.  When I get interested in something on the computer late at night, I often end up staying up well past the time when I should have gone to sleep.  This is bad because it affects my happiness and productivity significantly the following&nbsp;day.</p>
-<p>This has happened to me a lot recently, so I decided to write a little script to nag me about the benefits of regular sleep if I&#8217;m on the computer in the wee hours of the&nbsp;morning.</p>
-<h3>1. Finding things for my computer to tell&nbsp;me</h3>
-<p>I started with a quick google search about healthy sleep to find things for my script to say.  I did a copy/paste on the first couple articles that looked good and edited them into a text file with one fact-filled sentence per line.  I deleted any lines that wouldn&#8217;t stand on their own as a statement of fact, and gave it a descriptive name: <code>SleepFacts.txt</code>.</p>
-<h3>2. Writing the&nbsp;script</h3>
-<p>Next I need a small script to print a random line from my text file of sleep facts.  Much as I wish there were a <code>sort --random</code> type of command available, I couldn&#8217;t find one so decided to write my own in python.  I saved the following into <code>~/scripts/print_random_line.py</code>:</p>
+        <p>In the past I have had some problems going to bed at a reasonable hour.  When I get interested in something on the computer late at night, I often end up staying up well past the time when I should have gone to sleep.  This is bad because it affects my happiness and productivity significantly the following day.</p>
+<p>This has happened to me a lot recently, so I decided to write a little script to nag me about the benefits of regular sleep if I'm on the computer in the wee hours of the morning.</p>
+<h3>1. Finding things for my computer to tell me</h3>
+<p>I started with a quick google search about healthy sleep to find things for my script to say.  I did a copy/paste on the first couple articles that looked good and edited them into a text file with one fact-filled sentence per line.  I deleted any lines that wouldn't stand on their own as a statement of fact, and gave it a descriptive name: <code>SleepFacts.txt</code>.</p>
+<h3>2. Writing the script</h3>
+<p>Next I need a small script to print a random line from my text file of sleep facts.  Much as I wish there were a <code>sort --random</code> type of command available, I couldn't find one so decided to write my own in python.  I saved the following into <code>~/scripts/print_random_line.py</code>:</p>
 <div class="codehilite"><pre><span class="c">#!/usr/bin/env python</span>
 <span class="c"># Prints one random line from a text file, e.g. SleepFacts.txt</span>
 <span class="c"># usage: print_random_line.py ~/path/to/file</span>
@@ -76,53 +74,75 @@
 </pre></div>
 
 
-<p>Now I&#8217;m ready to make the computer say a random line in a text file using the builtin text-to-speech capability.  On a&nbsp;mac:</p>
+<p>Now I'm ready to make the computer say a random line in a text file using the builtin text-to-speech capability.  On a mac:</p>
 <div class="codehilite"><pre><span class="nv">$ </span>printrl SleepFacts.txt | say
 <span class="nv">$ </span><span class="nb">echo </span>Jen: <span class="sb">`</span>printrl ~/txt/SleepFacts.txt<span class="sb">`</span> | say <span class="c"># Personalize it!</span>
 </pre></div>
 
 
-<p>or on most linux&nbsp;systems</p>
+<p>or on most linux systems</p>
 <div class="codehilite"><pre><span class="nv">$ </span>printrl SleepFacts.txt | espeak
 </pre></div>
 
 
-<h3>3. Automating the&nbsp;process</h3>
-<p>Awesome.  Now I have something that performs the action I&#8217;m after, I just need to schedule it to execute and nudge me toward healthier sleep habits anytime I&#8217;m on the computer late at night.  <code>cron</code> is the perfect tool for&nbsp;this.</p>
+<h3>3. Automating the process</h3>
+<p>Awesome.  Now I have something that performs the action I'm after, I just need to schedule it to execute and nudge me toward healthier sleep habits anytime I'm on the computer late at night.  <code>cron</code> is the perfect tool for this.</p>
 <div class="codehilite"><pre> <span class="nv">$ </span>crontab -e
 </pre></div>
 
 
-<p>And put this on a new&nbsp;line:</p>
+<p>And put this on a new line:</p>
 <div class="codehilite"><pre> */10 0,1,2,3,4,5,6 * * * /usr/bin/printrl ~/txt/SleepFacts.txt | /usr/bin/say
 </pre></div>
 
 
-<h3><span class="caps">PROFIT</span>!</h3>
-<p>Now anytime I&#8217;m on the computer after midnight, my computer helpfully nags me every 10 minutes about the benefits of regular sleep.  Was this kind of silly?  Definitely.  But I think it will help me improve my&nbsp;habits.</p>
+<h3>PROFIT!</h3>
+<p>Now anytime I'm on the computer after midnight, my computer helpfully nags me every 10 minutes about the benefits of regular sleep.  Was this kind of silly?  Definitely.  But I think it will help me improve my habits.</p>
 <blockquote>
-<p><em><span class="dquo">&#8220;</span>Without adequate sleep and rest, over-worked neurons can no longer function to coordinate information properly, and we lose our ability to access previously learned&nbsp;information.&#8221;</em></p>
-<p><em><span class="dquo">&#8220;</span>A sleep-deprived person cannot focus attention optimally and therefore cannot learn&nbsp;efficiently.&#8221;</em></p>
-<p><em><span class="dquo">&#8220;</span>Although chronic sleep deprivation affects different individuals in a variety of ways, it is clear that a good night’s rest has a strong impact on learning and&nbsp;memory.&#8221;</em></p>
-<p><strong>//powers off computer and goes to&nbsp;bed//</strong></p>
+<p><em>"Without adequate sleep and rest, over-worked neurons can no longer function to coordinate information properly, and we lose our ability to access previously learned information."</em></p>
+<p><em>"A sleep-deprived person cannot focus attention optimally and therefore cannot learn efficiently."</em></p>
+<p><em>"Although chronic sleep deprivation affects different individuals in a variety of ways, it is clear that a good night’s rest has a strong impact on learning and memory."</em></p>
+<p><strong>//powers off computer and goes to bed//</strong></p>
 </blockquote>
         </div><!-- /.entry-content -->
         
 </article>
-</section>
+<br>
+<hr>
+<h1>Other writing</h1> 
+                  <header>
+                        <h2><a href="./sleep-schedule.html" rel="bookmark" title="Permalink to Turn your mac into HAL">Turn your mac into HAL</a></h2>
+                </header>
+
+                  <header>
+                        <h2><a href="./memorizing-poetry.html" rel="bookmark" title="Permalink to Memorizing poetry">Memorizing poetry</a></h2>
+                </header>
+
+                  <header>
+                        <h2><a href="./hello-world.html" rel="bookmark" title="Permalink to Pelican blog says: Hello World!">Pelican blog says: Hello World!</a></h2>
+                </header>
+
+                  <header>
+                        <h2><a href="./emacs-and-org-mode.html" rel="bookmark" title="Permalink to Emacs and Org-Mode">Emacs and Org-Mode</a></h2>
+                </header>
+
+                  <header>
+                        <h2><a href="./Anki.html" rel="bookmark" title="Permalink to These aren't your grandma's flashcards">These aren't your grandma's flashcards</a></h2>
+                </header>
+
+    </section>
 
         <aside id="sidebar">
                 <div class="widget">
-                                            <h1><a class="logo" href="./index.html"> Jen's Log </a></h1>
-
-                        <p> I am a graduate student, geologist, and hobbyist coder. I love learning new skills and visiting new places.  I set up this blog to get in the habit of writing on a regular basis. </p>
+                                            <h1><a class="logo" href="./index.html"> Jennifer Hamon </a></h1>
+                                                            <p> grad student. geologist. hobbyist coder. </p>
+                                                            <p> I love learning new skills. </p>
+                                                
                     
-                                  
-                                                    <li ><h2><a href="./pages/about-me.html">About&nbsp;Me</a></h2></li>
-                                            
-                    			            <ul><li><h2>            <a href="./archives.html"> Archive </a> </h2>   </li></ul>
+                            			
+                                            <ul><li><h2><a href="./archives.html"> Archive </a> </h2>   </li></ul>
 
-			                </div>
+        			                </div>
                         </aside><!-- /#sidebar -->
 
         <footer id="footer" class="body">

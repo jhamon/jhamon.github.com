@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Jen's Log</title><link href="http://jhamon.github.com/" rel="alternate"></link><link href="http://jhamon.github.com/feeds/all-en.atom.xml" rel="self"></link><id>http://jhamon.github.com/</id><updated>2013-02-12T00:00:00Z</updated><entry><title>Turn your mac into HAL</title><link href="http://jhamon.github.com/sleep-schedule.html" rel="alternate"></link><updated>2013-02-12T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-12:sleep-schedule.html</id><summary type="html">&lt;p&gt;In the past I have had some problems going to bed at a reasonable hour.  When I get interested in something on the computer late at night, I often end up staying up well past the time when I should have gone to sleep.  This is bad because it affects my happiness and productivity significantly the following&amp;nbsp;day.&lt;/p&gt;
-&lt;p&gt;This has happened to me a lot recently, so I decided to write a little script to nag me about the benefits of regular sleep if I&amp;#8217;m on the computer in the wee hours of the&amp;nbsp;morning.&lt;/p&gt;
-&lt;h3&gt;1. Finding things for my computer to tell&amp;nbsp;me&lt;/h3&gt;
-&lt;p&gt;I started with a quick google search about healthy sleep to find things for my script to say.  I did a copy/paste on the first couple articles that looked good and edited them into a text file with one fact-filled sentence per line.  I deleted any lines that wouldn&amp;#8217;t stand on their own as a statement of fact, and gave it a descriptive name: &lt;code&gt;SleepFacts.txt&lt;/code&gt;.&lt;/p&gt;
-&lt;h3&gt;2. Writing the&amp;nbsp;script&lt;/h3&gt;
-&lt;p&gt;Next I need a small script to print a random line from my text file of sleep facts.  Much as I wish there were a &lt;code&gt;sort --random&lt;/code&gt; type of command available, I couldn&amp;#8217;t find one so decided to write my own in python.  I saved the following into &lt;code&gt;~/scripts/print_random_line.py&lt;/code&gt;:&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jennifer Hamon</title><link href="http://jhamon.github.com/" rel="alternate"></link><link href="http://jhamon.github.com/feeds/all-en.atom.xml" rel="self"></link><id>http://jhamon.github.com/</id><updated>2013-02-12T00:00:00Z</updated><entry><title>Turn your mac into HAL</title><link href="http://jhamon.github.com/sleep-schedule.html" rel="alternate"></link><updated>2013-02-12T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-12:sleep-schedule.html</id><summary type="html">&lt;p&gt;In the past I have had some problems going to bed at a reasonable hour.  When I get interested in something on the computer late at night, I often end up staying up well past the time when I should have gone to sleep.  This is bad because it affects my happiness and productivity significantly the following day.&lt;/p&gt;
+&lt;p&gt;This has happened to me a lot recently, so I decided to write a little script to nag me about the benefits of regular sleep if I'm on the computer in the wee hours of the morning.&lt;/p&gt;
+&lt;h3&gt;1. Finding things for my computer to tell me&lt;/h3&gt;
+&lt;p&gt;I started with a quick google search about healthy sleep to find things for my script to say.  I did a copy/paste on the first couple articles that looked good and edited them into a text file with one fact-filled sentence per line.  I deleted any lines that wouldn't stand on their own as a statement of fact, and gave it a descriptive name: &lt;code&gt;SleepFacts.txt&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;2. Writing the script&lt;/h3&gt;
+&lt;p&gt;Next I need a small script to print a random line from my text file of sleep facts.  Much as I wish there were a &lt;code&gt;sort --random&lt;/code&gt; type of command available, I couldn't find one so decided to write my own in python.  I saved the following into &lt;code&gt;~/scripts/print_random_line.py&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/env python&lt;/span&gt;
 &lt;span class="c"&gt;# Prints one random line from a text file, e.g. SleepFacts.txt&lt;/span&gt;
 &lt;span class="c"&gt;# usage: print_random_line.py ~/path/to/file&lt;/span&gt;
@@ -30,43 +30,43 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Now I&amp;#8217;m ready to make the computer say a random line in a text file using the builtin text-to-speech capability.  On a&amp;nbsp;mac:&lt;/p&gt;
+&lt;p&gt;Now I'm ready to make the computer say a random line in a text file using the builtin text-to-speech capability.  On a mac:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;printrl SleepFacts.txt | say
 &lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo &lt;/span&gt;Jen: &lt;span class="sb"&gt;`&lt;/span&gt;printrl ~/txt/SleepFacts.txt&lt;span class="sb"&gt;`&lt;/span&gt; | say &lt;span class="c"&gt;# Personalize it!&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;or on most linux&amp;nbsp;systems&lt;/p&gt;
+&lt;p&gt;or on most linux systems&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;printrl SleepFacts.txt | espeak
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;h3&gt;3. Automating the&amp;nbsp;process&lt;/h3&gt;
-&lt;p&gt;Awesome.  Now I have something that performs the action I&amp;#8217;m after, I just need to schedule it to execute and nudge me toward healthier sleep habits anytime I&amp;#8217;m on the computer late at night.  &lt;code&gt;cron&lt;/code&gt; is the perfect tool for&amp;nbsp;this.&lt;/p&gt;
+&lt;h3&gt;3. Automating the process&lt;/h3&gt;
+&lt;p&gt;Awesome.  Now I have something that performs the action I'm after, I just need to schedule it to execute and nudge me toward healthier sleep habits anytime I'm on the computer late at night.  &lt;code&gt;cron&lt;/code&gt; is the perfect tool for this.&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt; &lt;span class="nv"&gt;$ &lt;/span&gt;crontab -e
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;And put this on a new&amp;nbsp;line:&lt;/p&gt;
+&lt;p&gt;And put this on a new line:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt; */10 0,1,2,3,4,5,6 * * * /usr/bin/printrl ~/txt/SleepFacts.txt | /usr/bin/say
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;h3&gt;&lt;span class="caps"&gt;PROFIT&lt;/span&gt;!&lt;/h3&gt;
-&lt;p&gt;Now anytime I&amp;#8217;m on the computer after midnight, my computer helpfully nags me every 10 minutes about the benefits of regular sleep.  Was this kind of silly?  Definitely.  But I think it will help me improve my&amp;nbsp;habits.&lt;/p&gt;
+&lt;h3&gt;PROFIT!&lt;/h3&gt;
+&lt;p&gt;Now anytime I'm on the computer after midnight, my computer helpfully nags me every 10 minutes about the benefits of regular sleep.  Was this kind of silly?  Definitely.  But I think it will help me improve my habits.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;Without adequate sleep and rest, over-worked neurons can no longer function to coordinate information properly, and we lose our ability to access previously learned&amp;nbsp;information.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;A sleep-deprived person cannot focus attention optimally and therefore cannot learn&amp;nbsp;efficiently.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;Although chronic sleep deprivation affects different individuals in a variety of ways, it is clear that a good night’s rest has a strong impact on learning and&amp;nbsp;memory.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;//powers off computer and goes to&amp;nbsp;bed//&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</summary></entry><entry><title>Memorizing poetry</title><link href="http://jhamon.github.com/memorizing-poetry.html" rel="alternate"></link><updated>2013-02-11T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-11:memorizing-poetry.html</id><summary type="html">&lt;p&gt;There was recently a &lt;a href="http://www.newyorker.com/online/blogs/books/2013/01/why-we-should-memorize.html"&gt;piece in the New Yorker&lt;/a&gt; in which a professor describes his students balking at the prospect of memorizing poetry for his class.  The piece caught my interest, and so I turned to Google to see what sort of people are memorizing poems these days. I stumbled onto a &lt;a href="http://www.nytimes.com/2009/04/05/books/review/Holt-t.html"&gt;2009 article&lt;/a&gt; by a man who memorizes poetry for&amp;nbsp;fun:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;"Without adequate sleep and rest, over-worked neurons can no longer function to coordinate information properly, and we lose our ability to access previously learned information."&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;"A sleep-deprived person cannot focus attention optimally and therefore cannot learn efficiently."&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;"Although chronic sleep deprivation affects different individuals in a variety of ways, it is clear that a good night’s rest has a strong impact on learning and memory."&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;//powers off computer and goes to bed//&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</summary></entry><entry><title>Memorizing poetry</title><link href="http://jhamon.github.com/memorizing-poetry.html" rel="alternate"></link><updated>2013-02-11T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-11:memorizing-poetry.html</id><summary type="html">&lt;p&gt;There was recently a &lt;a href="http://www.newyorker.com/online/blogs/books/2013/01/why-we-should-memorize.html"&gt;piece in the New Yorker&lt;/a&gt; in which a professor describes his students balking at the prospect of memorizing poetry for his class.  The piece caught my interest, and so I turned to Google to see what sort of people are memorizing poems these days. I stumbled onto a &lt;a href="http://www.nytimes.com/2009/04/05/books/review/Holt-t.html"&gt;2009 article&lt;/a&gt; by a man who memorizes poetry for fun:&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;A few years ago, I started learning poetry by heart on a daily basis. I’ve now memorized about a hundred poems, some of them quite long — more than 2,000 lines in all, not including limericks and Bob Dylan lyrics. I recite them to myself while jogging along the Hudson River, quite loudly if no other joggers are within&amp;nbsp;earshot.&lt;/p&gt;
+&lt;p&gt;A few years ago, I started learning poetry by heart on a daily basis. I’ve now memorized about a hundred poems, some of them quite long — more than 2,000 lines in all, not including limericks and Bob Dylan lyrics. I recite them to myself while jogging along the Hudson River, quite loudly if no other joggers are within earshot.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;Memorizing poetry recreationally is something I&amp;#8217;ve never thought about attempting, but after reading these pieces I have to admit that I feel drawn to the idea.  I commute on foot around 30 minutes a day, and I think it would be great for my overall mental health if I had a way of transforming that walk from a time for angst about the day&amp;#8217;s work into a time to relax and enjoy the artistic aspects of&amp;nbsp;language.  &lt;/p&gt;
-&lt;p&gt;Besides, memorizing poetry is precisely the kind of little idiosyncrasy that differentiates a regular person from a really interesting one.  Having a bizarre hobby or talent like memorizing poetry virtually guarantees that you are not one to waste time clicking refresh on Facebook or following trends in fashion or&amp;nbsp;sports.&lt;/p&gt;
-&lt;p&gt;Clearly, the ones who spend their down time reciting poems have gone beyond what most people think is cool and important and reached a higher&amp;#8212;or at least more&amp;nbsp;interesting&amp;#8212;plane.&lt;/p&gt;
-&lt;p&gt;Maybe I&amp;#8217;ll start with something nice and musical like Blake&amp;#8217;s &lt;em&gt;Tyger&lt;/em&gt;:&lt;/p&gt;
+&lt;p&gt;Memorizing poetry recreationally is something I've never thought about attempting, but after reading these pieces I have to admit that I feel drawn to the idea.  I commute on foot around 30 minutes a day, and I think it would be great for my overall mental health if I had a way of transforming that walk from a time for angst about the day's work into a time to relax and enjoy the artistic aspects of language.  &lt;/p&gt;
+&lt;p&gt;Besides, memorizing poetry is precisely the kind of little idiosyncrasy that differentiates a regular person from a really interesting one.  Having a bizarre hobby or talent like memorizing poetry virtually guarantees that you are not one to waste time clicking refresh on Facebook or following trends in fashion or sports.&lt;/p&gt;
+&lt;p&gt;Clearly, the ones who spend their down time reciting poems have gone beyond what most people think is cool and important and reached a higher--or at least more interesting--plane.&lt;/p&gt;
+&lt;p&gt;Maybe I'll start with something nice and musical like Blake's &lt;em&gt;Tyger&lt;/em&gt;:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;Tyger&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt; &lt;span class="n"&gt;Tyger&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt; &lt;span class="n"&gt;burning&lt;/span&gt; &lt;span class="n"&gt;bright&lt;/span&gt; 
 &lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;forests&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;night&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
 &lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;immortal&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt; &lt;span class="n"&gt;or&lt;/span&gt; &lt;span class="n"&gt;eye&lt;/span&gt; 
@@ -91,12 +91,12 @@
 &lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;forests&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;night&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
 &lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;immortal&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt; &lt;span class="n"&gt;or&lt;/span&gt; &lt;span class="n"&gt;eye&lt;/span&gt; 
 &lt;span class="n"&gt;Dare&lt;/span&gt; &lt;span class="n"&gt;frame&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;fearful&lt;/span&gt; &lt;span class="n"&gt;symmetry&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="memorization"></category></entry><entry><title>Pelican blog says: Hello World!</title><link href="http://jhamon.github.com/hello-world.html" rel="alternate"></link><updated>2013-02-09T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-09:hello-world.html</id><summary type="html">&lt;!-- Category: Personal --&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="memorization"></category></entry><entry><title>Pelican blog says: Hello World!</title><link href="http://jhamon.github.com/hello-world.html" rel="alternate"></link><updated>2013-02-09T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-09:hello-world.html</id><summary type="html">&lt;!-- Category: Personal --&gt;
 
-&lt;p&gt;This is my first attempt to generate a blog using the Pelican static blog generator.  I&amp;#8217;m hopeful that this will work because the last tool I tried to use, a static site generator called &lt;a href="http://www.github.com/hyde"&gt;hyde&lt;/a&gt;, seems to have been abandoned by its maintainer.  The official hyde installation instructions no longer work, and the maintainer has not addressed any of the issues languishing in the bug tracker since I filed my report about a month ago.  Prior to that I messed around with Jekyll/Octopress, but I&amp;#8217;m not much of a&amp;nbsp;rubyist.&lt;/p&gt;
-&lt;p&gt;But that&amp;#8217;s all okay because &lt;strong&gt;&lt;a href="http://www.github.com/getpelican/pelican"&gt;Pelican&lt;/a&gt;&lt;/strong&gt; is the cool new kid on the block: it&amp;#8217;s a python-based static website generator with a thriving community of users and contributors.  I&amp;#8217;m not surprised the project is growing rapidly, because getting started with Pelican is as simple as running their &lt;code&gt;pelican-quickstart&lt;/code&gt; script and answering a few questions about how you intended to use your&amp;nbsp;site.  &lt;/p&gt;
-&lt;h2&gt;How to change the theme on your new Pelican-powered&amp;nbsp;blog&lt;/h2&gt;
-&lt;p&gt;After running the &lt;code&gt;pelican-quickstart&lt;/code&gt; script and copying over some existing writing to the &lt;code&gt;content/&lt;/code&gt; folder I was ready to tweak the theme.  It took a bit of googling for me to figure this out, so I&amp;#8217;ll summarize it here for anyone who is having a problem customizing their Pelican site&amp;nbsp;theme.&lt;/p&gt;
+&lt;p&gt;This is my first attempt to generate a blog using the Pelican static blog generator.  I'm hopeful that this will work because the last tool I tried to use, a static site generator called &lt;a href="http://www.github.com/hyde"&gt;hyde&lt;/a&gt;, seems to have been abandoned by its maintainer.  The official hyde installation instructions no longer work, and the maintainer has not addressed any of the issues languishing in the bug tracker since I filed my report about a month ago.  Prior to that I messed around with Jekyll/Octopress, but I'm not much of a rubyist.&lt;/p&gt;
+&lt;p&gt;But that's all okay because &lt;strong&gt;&lt;a href="http://www.github.com/getpelican/pelican"&gt;Pelican&lt;/a&gt;&lt;/strong&gt; is the cool new kid on the block: it's a python-based static website generator with a thriving community of users and contributors.  I'm not surprised the project is growing rapidly, because getting started with Pelican is as simple as running their &lt;code&gt;pelican-quickstart&lt;/code&gt; script and answering a few questions about how you intended to use your site.  &lt;/p&gt;
+&lt;h2&gt;How to change the theme on your new Pelican-powered blog&lt;/h2&gt;
+&lt;p&gt;After running the &lt;code&gt;pelican-quickstart&lt;/code&gt; script and copying over some existing writing to the &lt;code&gt;content/&lt;/code&gt; folder I was ready to tweak the theme.  It took a bit of googling for me to figure this out, so I'll summarize it here for anyone who is having a problem customizing their Pelican site theme.&lt;/p&gt;
 &lt;p&gt;First, get the &lt;code&gt;pelican-themes&lt;/code&gt; repository:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;mkdir ~/path/to/themes
 &lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; ~/path/to/themes
@@ -104,108 +104,109 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Look through the screenshots and choose a theme that you like from those now present in &lt;code&gt;~/path/to/themes/pelican-themes/&lt;/code&gt;.  When you find one that seems close to what you want, you&amp;#8217;re ready to update your Pelican configuration&amp;nbsp;files:&lt;/p&gt;
+&lt;p&gt;Look through the screenshots and choose a theme that you like from those now present in &lt;code&gt;~/path/to/themes/pelican-themes/&lt;/code&gt;.  When you find one that seems close to what you want, you're ready to update your Pelican configuration files:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Put this in your pelicanconf.py file&lt;/span&gt;
-&lt;span class="n"&gt;&lt;span class="caps"&gt;THEME&lt;/span&gt;&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;~/path/to/themes/pelican-themes/theme_dir&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;THEME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;~/path/to/themes/pelican-themes/theme_dir&amp;#39;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;where &lt;code&gt;theme_dir&lt;/code&gt; is the directory of the theme you like.  Next rebuild your site with &lt;code&gt;make html&lt;/code&gt; and you&amp;#8217;re good to&amp;nbsp;go.&lt;/p&gt;
-&lt;p&gt;The best way to get started on a custom theme of your own design is to copy one of the themes in the &lt;code&gt;pelican-themes&lt;/code&gt; repo and start tinkering.  By doing that, you already have the necesasry structure in place for generating a theme.  The &lt;code&gt;simple&lt;/code&gt; theme is provided for those who want to start from a relatively blank&amp;nbsp;canvas.&lt;/p&gt;
-&lt;p&gt;Good luck with Pelican, and happy&amp;nbsp;blogging!&lt;/p&gt;</summary><category term="tech"></category></entry><entry><title>Emacs and Org-Mode</title><link href="http://jhamon.github.com/emacs-and-org-mode.html" rel="alternate"></link><updated>2012-02-01T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-02-01:emacs-and-org-mode.html</id><summary type="html">&lt;p&gt;I&amp;#8217;ve finally gotten emacs up and running and configured in a way that
-I like.  I think org-mode is just the thing I&amp;#8217;ve been looking for.
-I&amp;#8217;ve tried out a half a dozen todo list and productivity apps and they
-all suffer from the same couple of&amp;nbsp;problems.&lt;/p&gt;
+&lt;p&gt;where &lt;code&gt;theme_dir&lt;/code&gt; is the directory of the theme you like.  Next rebuild your site with &lt;code&gt;make html&lt;/code&gt; and you're good to go.&lt;/p&gt;
+&lt;p&gt;The best way to get started on a custom theme of your own design is to copy one of the themes in the &lt;code&gt;pelican-themes&lt;/code&gt; repo and start tinkering.  By doing that, you already have the necesasry structure in place for generating a theme.  The &lt;code&gt;simple&lt;/code&gt; theme is provided for those who want to start from a relatively blank canvas.&lt;/p&gt;
+&lt;p&gt;Good luck with Pelican, and happy blogging!&lt;/p&gt;</summary><category term="tech"></category></entry><entry><title>Emacs and Org-Mode</title><link href="http://jhamon.github.com/emacs-and-org-mode.html" rel="alternate"></link><updated>2012-02-01T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-02-01:emacs-and-org-mode.html</id><summary type="html">&lt;p&gt;I've finally gotten emacs up and running and configured in a way that
+I like.  I think org-mode is just the thing I've been looking for.
+I've tried out a half a dozen todo list and productivity apps and they
+all suffer from the same couple of problems.&lt;/p&gt;
 &lt;p&gt;I found the desktop solutions (OmniFocus and Things) to both be
-encumbered by clunky user interfaces.  For instance, when I&amp;#8217;m trying
-to add a new item to a project, I shouldn&amp;#8217;t have to click more than
+encumbered by clunky user interfaces.  For instance, when I'm trying
+to add a new item to a project, I shouldn't have to click more than
 once or twice to enter all the relevant details: Project name, notes,
 dates, and attachments.  Things was definitely more attractive than
-OmniFocus, but the inability to tab through &lt;span class="caps"&gt;ALL&lt;/span&gt; the settings is a deal
-breaker for me. If I&amp;#8217;m going to be using something dozens of times per
+OmniFocus, but the inability to tab through ALL the settings is a deal
+breaker for me. If I'm going to be using something dozens of times per
 day and hundreds of times per week my interaction needs to be fluid.
-The software solution needs to&amp;nbsp;disappear.&lt;/p&gt;
-&lt;p&gt;Secondary concerns with proprietary solutions&amp;#8212;including cloud-based
-services like Remember the Milk, Springpad, and Evernote&amp;#8212;is that they
+The software solution needs to disappear.&lt;/p&gt;
+&lt;p&gt;Secondary concerns with proprietary solutions--including cloud-based
+services like Remember the Milk, Springpad, and Evernote--is that they
 have absolute control over you data.  If the company dies, your data
-goes with it unless you have a reliable backup system in&amp;nbsp;place.&lt;/p&gt;
+goes with it unless you have a reliable backup system in place.&lt;/p&gt;
 &lt;p&gt;But even more important, I would really prefer to do everything I can
-anywhere &lt;span class="caps"&gt;OTHER&lt;/span&gt; than the browser.  When I&amp;#8217;m trying to be productive, I
-don&amp;#8217;t want to be one tab over from timesucks like facebook,
+anywhere OTHER than the browser.  When I'm trying to be productive, I
+don't want to be one tab over from timesucks like facebook,
 stackoverflow, or nytimes.com.  Any gains from staying organized with
 online tools like that are surely lost to these temptations.  For me
-and probably many&amp;nbsp;others&lt;/p&gt;
+and probably many others&lt;/p&gt;
 &lt;p&gt;No, I think emacs is the way to go.  Or vim.  Hell, some people are
 now charging upwards of $30 for minimalist editors, which says
 something about the needs of people who are really ready to settle
-down and do some work.  I&amp;#8217;ve read that oldschool hackers would spend
-80+% of their &amp;#8220;tube time&amp;#8221; in editors like vi or emacs.  I&amp;#8217;m not sure
-if it&amp;#8217;s true or not, but if it is that explains a lot about how they
+down and do some work.  I've read that oldschool hackers would spend
+80+% of their "tube time" in editors like vi or emacs.  I'm not sure
+if it's true or not, but if it is that explains a lot about how they
 managed to hack together something as massive and complex as
-&lt;span class="caps"&gt;GNU&lt;/span&gt;/Linux.  Trying to work in a web browser is like studying with the
-&lt;span class="caps"&gt;TV&lt;/span&gt; on.  It&amp;#8217;s just not a good idea.  If yesterdays hackers had been
-trying to write &lt;span class="caps"&gt;GNU&lt;/span&gt;/Linux under the conditions people find on modern
-computers&amp;#8211;with social media, streaming video, lolcats, and the whole
-universe&amp;#8211;mere seconds away&amp;#8230;. well, I might be writing this on a
-Windows computer because I&amp;#8217;m not sure those good samaritans would have
+GNU/Linux.  Trying to work in a web browser is like studying with the
+TV on.  It's just not a good idea.  If yesterdays hackers had been
+trying to write GNU/Linux under the conditions people find on modern
+computers---with social media, streaming video, lolcats, and the whole
+universe---mere seconds away.... well, I might be writing this on a
+Windows computer because I'm not sure those good samaritans would have
 been able to resist the temptation long enough to create an entire
-operating&amp;nbsp;system.&lt;/p&gt;
+operating system.&lt;/p&gt;
 &lt;p&gt;There was a recent post on Slashdot about research to this effect:
 truly great work happens in solitude, after much hard thinking.  So,
-for now, I&amp;#8217;m embracing org-mode.  It&amp;#8217;s a complicated animal, but I&amp;#8217;m
-excited to start down this new rode of productive peace.  It&amp;#8217;s just me
-and this little blinking cursor.  Together we will do great&amp;nbsp;things.&lt;/p&gt;
+for now, I'm embracing org-mode.  It's a complicated animal, but I'm
+excited to start down this new rode of productive peace.  It's just me
+and this little blinking cursor.  Together we will do great things.&lt;/p&gt;
 &lt;p&gt;(I literally wrote this as a stream-of-conciousness over 10-15 minutes
-before bed.  Don&amp;#8217;t judge me for ill-formed paragraph&amp;nbsp;structures.)&lt;/p&gt;</summary></entry><entry><title>These aren’t your grandma’s flashcards</title><link href="http://jhamon.github.com/Anki.html" rel="alternate"></link><updated>2012-01-17T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-01-17:Anki.html</id><summary type="html">&lt;p&gt;Richard Feynmann famously bemoaned the way that too many students
+before bed.  Don't judge me for ill-formed paragraph structures.)&lt;/p&gt;</summary></entry><entry><title>These aren't your grandma's flashcards</title><link href="http://jhamon.github.com/Anki.html" rel="alternate"></link><updated>2012-01-17T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-01-17:Anki.html</id><summary type="html">&lt;p&gt;Richard Feynmann famously bemoaned the way that too many students
 memorized instead of thought their way through problems.  But I
 disagree: memorizing things is a necessary part of developing a field
-of expertise that is too-often neglected.  Sure, it&amp;#8217;s great to be
-&lt;em&gt;smart&lt;/em&gt;, but if at the end of the day you don&amp;#8217;t really &lt;em&gt;know things&lt;/em&gt;
-then what kind of expert are you,&amp;nbsp;really?&lt;/p&gt;
+of expertise that is too-often neglected.  Sure, it's great to be
+&lt;em&gt;smart&lt;/em&gt;, but if at the end of the day you don't really &lt;em&gt;know things&lt;/em&gt;
+then what kind of expert are you, really?&lt;/p&gt;
 &lt;p&gt;This reality about the need to know things cold is one of the first
-hard truths I ran into during graduate school.  I&amp;#8217;m sure anybody who
+hard truths I ran into during graduate school.  I'm sure anybody who
 has worked on a science PhD has been through a conversation like this
-(substituting appropriate bits of argot from your own field, of&amp;nbsp;course):&lt;/p&gt;
+(substituting appropriate bits of argot from your own field, of
+course):&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;A professor walks up to the blackboard and asks a general knowledge
-question.  &amp;#8220;Who remembers the mineral formula for diopside?&amp;#8221; There might be a few mumbles from the class, but usually there will be silence. In situations like this I&amp;#8217;ll often be on the fence about speaking up because I &lt;em&gt;think&lt;/em&gt; I know something, but I&amp;#8217;m not 100% sure and am
+question.  "Who remembers the mineral formula for diopside?" There might be a few mumbles from the class, but usually there will be silence. In situations like this I'll often be on the fence about speaking up because I &lt;em&gt;think&lt;/em&gt; I know something, but I'm not 100% sure and am
 loath to show ignorance.  Then the professor gives a gruff admonition
-that, &amp;#8220;You should really know this for your quals,&amp;#8221; before proceeding
-to answer his own question and carry&amp;nbsp;on.&lt;/p&gt;
+that, "You should really know this for your quals," before proceeding
+to answer his own question and carry on.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;The mixture of shame, frustration, and anxiety that comes
 from not being able to recall those things that are simultaneously
-fundamental, familiar, and easy to understand cannot be&amp;nbsp;overstated.&lt;/p&gt;
+fundamental, familiar, and easy to understand cannot be overstated.&lt;/p&gt;
 &lt;p&gt;I at first blamed myself for these feelings, but the
 truth is that nobody in my educational legacy ever gave me the tools
 to learn and retain factual information.  Memorization as a teaching
 philosophy has been out of fashion for many years now, so that the
 current products of the public education system have never been asked
-to &lt;em&gt;memorize&lt;/em&gt; much of anything.  The &amp;#8220;concepts&amp;#8221; are all that matter, they say.  The sad truth of it is, though, that if you
-aren&amp;#8217;t being asked to memorize anything while moving through a
+to &lt;em&gt;memorize&lt;/em&gt; much of anything.  The "concepts" are all that matter, they say.  The sad truth of it is, though, that if you
+aren't being asked to memorize anything while moving through a
 largely &lt;em&gt;content-based&lt;/em&gt; educational curriculum (e.g. history, social studies,
-etc), then you aren&amp;#8217;t really being asked to do anything at all of
-lasting educational&amp;nbsp;value.&lt;/p&gt;
-&lt;h2&gt;Spaced repetition offers some&amp;nbsp;advantages&lt;/h2&gt;
-&lt;p&gt;What I know now is that &lt;a href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak?currentPage=all"&gt;&lt;em&gt;&amp;#8220;spaced
-repetition&amp;#8221;&lt;/em&gt;&lt;/a&gt;
+etc), then you aren't really being asked to do anything at all of
+lasting educational value.&lt;/p&gt;
+&lt;h2&gt;Spaced repetition offers some advantages&lt;/h2&gt;
+&lt;p&gt;What I know now is that &lt;a href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak?currentPage=all"&gt;&lt;em&gt;"spaced
+repetition"&lt;/em&gt;&lt;/a&gt;
 is a huge help in retention and recall of factual information. Memories decay exponentially; without systematic review
 eventually of substance just evaporates leaving nothing but the vague
-feeling of having seen something&amp;nbsp;before.&lt;/p&gt;
+feeling of having seen something before.&lt;/p&gt;
 &lt;p&gt;Flashcards are an obvious tool for reviews, but I find them difficult
 to make by hand and annoying to carry around.  Fortunately, in the
 last decade or so several bits of software have been written to help
 people manage large digital collections of electronic flashcards.
-These applications, termed &lt;a href="http://en.wikipedia.org/wiki/Spaced_repetition"&gt;&amp;#8220;Spaced Repetition
-Systems,&amp;#8221;&lt;/a&gt; help you
-schedule reviews to maximize learning over the long&amp;nbsp;term.&lt;/p&gt;
-&lt;p&gt;Some of the most popular&amp;nbsp;are:&lt;/p&gt;
+These applications, termed &lt;a href="http://en.wikipedia.org/wiki/Spaced_repetition"&gt;"Spaced Repetition
+Systems,"&lt;/a&gt; help you
+schedule reviews to maximize learning over the long term.&lt;/p&gt;
+&lt;p&gt;Some of the most popular are:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href="http://ankisrs.net/"&gt;Anki&lt;/a&gt;&lt;/strong&gt; (free, cross&amp;nbsp;platform)&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://www.mnemosyne-proj.org/"&gt;Mnemosyne&lt;/a&gt; (free, cross&amp;nbsp;platform)&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://www.supermemo.com/"&gt;SuperMemo&lt;/a&gt; (paid, Windows&amp;nbsp;only)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href="http://ankisrs.net/"&gt;Anki&lt;/a&gt;&lt;/strong&gt; (free, cross platform)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.mnemosyne-proj.org/"&gt;Mnemosyne&lt;/a&gt; (free, cross platform)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.supermemo.com/"&gt;SuperMemo&lt;/a&gt; (paid, Windows only)&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://orgmode.org/worg/org-contrib/org-drill.html"&gt;Org-Drill&lt;/a&gt;,&lt;/li&gt;
-&lt;li&gt;part of Org-Mode in Emacs (free, cross&amp;nbsp;platform)&lt;/li&gt;
+&lt;li&gt;part of Org-Mode in Emacs (free, cross platform)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;These systems have the user rate themselves on how well they know each
 card and then uses an algorithm to figure out when they should study
@@ -213,7 +214,7 @@ the card again.  The best time to study a card is right before you
 forget it.  Each time the user answers a card correctly the interval
 gets a little longer, until pretty soon a card only needs one or two
 reps per year to be maintained in memory. Forgetting a card resets the
-interval to daily&amp;nbsp;reviews.&lt;/p&gt;
-&lt;p&gt;Even if you think you hate flashcards, I&amp;#8217;d recommend giving this
+interval to daily reviews.&lt;/p&gt;
+&lt;p&gt;Even if you think you hate flashcards, I'd recommend giving this
 method of study a fresh look.  Really knowing things is such a high, I
-think you&amp;#8217;ll quickly come around to liking&amp;nbsp;them.&lt;/p&gt;</summary></entry></feed>
+think you'll quickly come around to liking them.&lt;/p&gt;</summary></entry></feed>

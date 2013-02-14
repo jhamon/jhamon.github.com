@@ -3,6 +3,7 @@ Date: 12/2/2013
 Slug: sleep-schedule
 Author: Jennifer Hamon 
 Category: Productivity
+Summary: In the past I have had some problems going to bed at a reasonable hour.  Now my computer tells me when I should.
 
 In the past I have had some problems going to bed at a reasonable hour.  When I get interested in something on the computer late at night, I often end up staying up well past the time when I should have gone to sleep.  This is bad because it affects my happiness and productivity significantly the following day.
 

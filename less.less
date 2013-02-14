@@ -1,14 +1,20 @@
 @import url("reset.css");
 @import url("pygment.css");
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400|Open+Sans:700);
+// @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
+@import url(http://fonts.googleapis.com/css?family=Inconsolata);
 @import url(http://fonts.googleapis.com/css?family=PT+Sans+Narrow:700);
-@import url(http://fonts.googleapis.com/css?family=Permanent+Marker:400);
+// @import url(http://fonts.googleapis.com/css?family=Permanent+Marker:400);
 
 @blue: #009DFF;
 @highlighttext: white;
-@titlefont: 'Permanent Marker';
+// @titlefont: 'Permanent Marker';
+
 @headingsfont: 'PT Sans Narrow';
+@titlefont: @headingsfont;
 @mainfont: 'Open Sans';
+// @codefont: 'Source Code Pro';
+@codefont: 'Inconsolata';
 @bgcolor: #fff;
 @tcolor: #000305;
 //@codebg: #EDF5FA;
@@ -48,6 +54,13 @@ body{
   	padding-top: 100px;
   	// .border-radius(10px);
  
+ .logo {
+  font-size: 130%;
+  line-height: 50%; 
+text-transform: uppercase;
+text-align: left;
+margin-bottom: 0px;}
+// text-shadow: 1px 1px @highlightcolor;}
   
   p { padding: 10px; }
  
@@ -71,16 +84,20 @@ body{
   }
   
   #sidebar { 
-  	   padding-right: 30%;
+  	   padding-right: 25%;
 	     margin-top: 10px;
        font-family: @mainfont;
        // font-weight: bold;
-       // font-size: 90%;
-       margin-top: 120px;
+       // font-size: %;
+       // margin-top: 120px;
 
 
-	    li {display: none;}
-       p {text-align: justify; color: @blue;}   
+	    li {list-style: none;}
+       p {
+        // text-align: justify; 
+        // font-family: @codefont;
+        // line-height: 120%;
+        color: @blue;}   
       h1, h2 { color: @blue;
       	       	      font-family: @headingsfont;}
   		      h1 {color: desaturate(@blue,50%);}
@@ -117,6 +134,7 @@ code {
   // background-color: @codebg;
   color: darken(@blue,10%);
   font-weight: heavy;
+  font-family: @codefont;
 				font-size: 120%;
 					     padding: 2px;}
 
@@ -179,7 +197,9 @@ dl {margin: 0 0 1.5em 0;}
 dt {font-weight: bold;}
 dd {margin-left: 1.5em;}
 
-pre{background-color: @codebg; 
+pre{
+  font-family: @codefont;
+  background-color: @codebg; 
 .border-radius(5px);
 padding: 10px;
 margin-bottom: 10px;

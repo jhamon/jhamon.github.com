@@ -3,6 +3,7 @@ Author: Jennifer Hamon
 Date: 11/2/2013
 Category: Writings
 tags: memorization
+Summary: Memorizing poems for fun is precisely the kind of little idiosyncrasy that differentiates a regular person from a really interesting one.
 
 There was recently a [piece in the New Yorker](http://www.newyorker.com/online/blogs/books/2013/01/why-we-should-memorize.html) in which a professor describes his students balking at the prospect of memorizing poetry for his class.  The piece caught my interest, and so I turned to Google to see what sort of people are memorizing poems these days. I stumbled onto a [2009 article](http://www.nytimes.com/2009/04/05/books/review/Holt-t.html) by a man who memorizes poetry for fun:
 

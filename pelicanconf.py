@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 
 AUTHOR = u'Jennifer Hamon'
-SITENAME = u'Jen\'s Log'
+SITENAME = u'Jennifer Hamon'
 SITEURL = 'http://jhamon.github.com'
 
 FEED_DOMAIN = 'http://jhamon.github.com'
@@ -34,6 +34,6 @@ ABOUT = True
 LINKS = False
 #SOCIAL = True
 CATEGORIES = False
-TYPOGRIFY = True
-AUTHOR_BLURB = """I am a graduate student, geologist, and hobbyist coder. I love learning new skills and visiting new places.  I set up this blog to get in the habit of writing on a regular basis."""
-DISPLAY_PAGES_ON_MENU = True
+TYPOGRIFY = False
+AUTHOR_BLURB = ('grad student. geologist. hobbyist coder.', 'I love learning new skills.')
+DISPLAY_PAGES_ON_MENU = False

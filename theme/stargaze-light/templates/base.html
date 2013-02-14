@@ -49,8 +49,9 @@
                 <div class="widget">
                     {% if ABOUT %}
                         <h1><a class="logo" href="{{ SITEURL }}/index.html"> {{ SITENAME }} </a></h1>
-
-                        <p> {{ AUTHOR_BLURB }} </p>
+                            {% for paragraph in AUTHOR_BLURB %}
+                                <p> {{ paragraph }} </p>
+                            {% endfor %}
                     {% endif %}
 
                     {% if DISPLAY_PAGES_ON_MENU %}              
@@ -67,10 +68,11 @@
                         {% endfor %}
                         </ul>
                     {% endif %}
-			{% if ARCHIVE %}
-            <ul><li><h2>            <a href="{{ SITEURL }}/archives.html"> Archive </a> </h2>   </li></ul>
+        			
+                    {% if ARCHIVE %}
+                        <ul><li><h2><a href="{{ SITEURL }}/archives.html"> Archive </a> </h2>   </li></ul>
 
-			{% endif %}
+        			{% endif %}
                 </div>
         {% if LINKS %}
                 <div class="widget blogroll">
