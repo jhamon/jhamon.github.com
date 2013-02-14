@@ -64,6 +64,9 @@ body #content {
   float: left;
   margin-right: 3%;
 }
+body #content p {
+  text-align: justify;
+}
 body #content h1 {
   font-family: 'Permanent Marker';
 }
@@ -71,10 +74,14 @@ body #sidebar {
   padding-right: 30%;
   margin-top: 10px;
   font-family: 'Open Sans';
-  font-size: 80%;
+  margin-top: 120px;
 }
 body #sidebar li {
   display: none;
+}
+body #sidebar p {
+  text-align: justify;
+  color: #009dff;
 }
 body #sidebar h1,
 body #sidebar h2 {
