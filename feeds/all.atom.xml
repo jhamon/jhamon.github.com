@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>Jen's Log</title><link href="http://jhamon.github.com/" rel="alternate"></link><link href="http://jhamon.github.com/feeds/all.atom.xml" rel="self"></link><id>http://jhamon.github.com/</id><updated>2013-02-12T00:00:00Z</updated><entry><title>Turn your mac into HAL</title><link href="http://jhamon.github.com/sleep-schedule.html" rel="alternate"></link><updated>2013-02-12T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-12:sleep-schedule.html</id><summary type="html">&lt;p&gt;In the past I have had some problems going to bed at a reasonable hour.  When I get interested in something on the computer late at night, I often end up staying up well past the time when I should have gone to sleep.  This is bad because it affects my happiness and productivity significantly the following&amp;nbsp;day.&lt;/p&gt;
 &lt;p&gt;This has happened to me a lot recently, so I decided to write a little script to nag me about the benefits of regular sleep if I&amp;#8217;m on the computer in the wee hours of the&amp;nbsp;morning.&lt;/p&gt;
-&lt;p&gt;I started with a quick google search about healthy sleep.  I did a copy/paste on the first couple articles that looked good and edited them to have one fact-filled sentence per line.  I deleted any lines that wouldn&amp;#8217;t stand on their own as a statement of fact.  Save it with a descriptive name like &lt;code&gt;SleepFacts.txt&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Next I need a small script to print a random line.  Much as I wish there were a &lt;code&gt;sort --random&lt;/code&gt; type of command available, I couldn&amp;#8217;t find one so decided to write my own in python.  I saved the following into &lt;code&gt;~/scripts/print_random_line.py&lt;/code&gt;:&lt;/p&gt;
+&lt;h3&gt;1. Finding things for my computer to tell&amp;nbsp;me&lt;/h3&gt;
+&lt;p&gt;I started with a quick google search about healthy sleep to find things for my script to say.  I did a copy/paste on the first couple articles that looked good and edited them into a text file with one fact-filled sentence per line.  I deleted any lines that wouldn&amp;#8217;t stand on their own as a statement of fact, and gave it a descriptive name: &lt;code&gt;SleepFacts.txt&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;2. Writing the&amp;nbsp;script&lt;/h3&gt;
+&lt;p&gt;Next I need a small script to print a random line from my text file of sleep facts.  Much as I wish there were a &lt;code&gt;sort --random&lt;/code&gt; type of command available, I couldn&amp;#8217;t find one so decided to write my own in python.  I saved the following into &lt;code&gt;~/scripts/print_random_line.py&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/env python&lt;/span&gt;
 &lt;span class="c"&gt;# Prints one random line from a text file, e.g. SleepFacts.txt&lt;/span&gt;
 &lt;span class="c"&gt;# usage: print_random_line.py ~/path/to/file&lt;/span&gt;
@@ -28,7 +30,7 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Now we&amp;#8217;re ready to make the computer say a random line in a text file.  On a&amp;nbsp;mac:&lt;/p&gt;
+&lt;p&gt;Now I&amp;#8217;m ready to make the computer say a random line in a text file using the builtin text-to-speech capability.  On a&amp;nbsp;mac:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;printrl SleepFacts.txt | say
 &lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo &lt;/span&gt;Jen: &lt;span class="sb"&gt;`&lt;/span&gt;printrl ~/txt/SleepFacts.txt&lt;span class="sb"&gt;`&lt;/span&gt; | say &lt;span class="c"&gt;# Personalize it!&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -39,6 +41,7 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
+&lt;h3&gt;3. Automating the&amp;nbsp;process&lt;/h3&gt;
 &lt;p&gt;Awesome.  Now I have something that performs the action I&amp;#8217;m after, I just need to schedule it to execute and nudge me toward healthier sleep habits anytime I&amp;#8217;m on the computer late at night.  &lt;code&gt;cron&lt;/code&gt; is the perfect tool for&amp;nbsp;this.&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt; &lt;span class="nv"&gt;$ &lt;/span&gt;crontab -e
 &lt;/pre&gt;&lt;/div&gt;
@@ -49,9 +52,10 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Now anytime I&amp;#8217;m on the computer after midnight, my computer helpfully nags me every 10 minutes about the benefits of regular&amp;nbsp;sleep.&lt;/p&gt;
+&lt;h3&gt;&lt;span class="caps"&gt;PROFIT&lt;/span&gt;!&lt;/h3&gt;
+&lt;p&gt;Now anytime I&amp;#8217;m on the computer after midnight, my computer helpfully nags me every 10 minutes about the benefits of regular sleep.  Was this kind of silly?  Definitely.  But I think it will help me improve my&amp;nbsp;habits.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;Jen: Without adequate sleep and rest, over-worked neurons can no longer function to coordinate information properly, and we lose our ability to access previously learned&amp;nbsp;information.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;Without adequate sleep and rest, over-worked neurons can no longer function to coordinate information properly, and we lose our ability to access previously learned&amp;nbsp;information.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;A sleep-deprived person cannot focus attention optimally and therefore cannot learn&amp;nbsp;efficiently.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;Although chronic sleep deprivation affects different individuals in a variety of ways, it is clear that a good night’s rest has a strong impact on learning and&amp;nbsp;memory.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;//powers off computer and goes to&amp;nbsp;bed//&lt;/strong&gt;&lt;/p&gt;
@@ -108,10 +112,7 @@
 
 &lt;p&gt;where &lt;code&gt;theme_dir&lt;/code&gt; is the directory of the theme you like.  Next rebuild your site with &lt;code&gt;make html&lt;/code&gt; and you&amp;#8217;re good to&amp;nbsp;go.&lt;/p&gt;
 &lt;p&gt;The best way to get started on a custom theme of your own design is to copy one of the themes in the &lt;code&gt;pelican-themes&lt;/code&gt; repo and start tinkering.  By doing that, you already have the necesasry structure in place for generating a theme.  The &lt;code&gt;simple&lt;/code&gt; theme is provided for those who want to start from a relatively blank&amp;nbsp;canvas.&lt;/p&gt;
-&lt;p&gt;Good luck with Pelican, and happy&amp;nbsp;blogging!&lt;/p&gt;</summary><category term="tech"></category></entry><entry><title>College regrets</title><link href="http://jhamon.github.com/college-regrets.html" rel="alternate"></link><updated>2012-02-19T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-02-19:college-regrets.html</id><summary type="html">&lt;p&gt;&lt;span class="caps"&gt;TLDR&lt;/span&gt;: Showing up is half the battle.  Massive action is the other&amp;nbsp;2/3.&lt;/p&gt;
-&lt;p&gt;When I reflect on my college experience, my biggest regret is that I didn&amp;#8217;t spend more time being awesome.  By awesome I mean taking the initiative to do interesting things.  I was too busy studying and doing all the things I&amp;#8217;m supposed to do.  I was too busy waiting for people to give me permission to do the things I wanted to&amp;nbsp;do.&lt;/p&gt;
-&lt;p&gt;If I could go back, I would shake myself and say &amp;#8220;&lt;span class="caps"&gt;LISTEN&lt;/span&gt;! You are not here to do problem sets!&amp;#8221;  As a naturally introverted person, I think I have shied away from those whose expertise is far beyond mine.  I always want to read a bit more or study a few more things before I&amp;#8217;m comfortable taking the next step.  Problem is, I&amp;#8217;ll never learn everything.  So I get stuck in the learning loop and never take the next step of collaborating, extending, throwing out my own&amp;nbsp;ideas.&lt;/p&gt;
-&lt;p&gt;The people in this world who are the most successful aren&amp;#8217;t the smartest people or the most well-connected.  Successful people are the ones who stop pondering all the things that could go wrong, stop worrying about how they aren&amp;#8217;t quite smart enough, and just start &lt;em&gt;doing&lt;/em&gt; something.  People who do enough doing eventually get to where they are&amp;nbsp;going.&lt;/p&gt;</summary><category term="personal"></category><category term="goals"></category></entry><entry><title>Emacs and Org-Mode</title><link href="http://jhamon.github.com/emacs-and-org-mode.html" rel="alternate"></link><updated>2012-02-01T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-02-01:emacs-and-org-mode.html</id><summary type="html">&lt;p&gt;I&amp;#8217;ve finally gotten emacs up and running and configured in a way that
+&lt;p&gt;Good luck with Pelican, and happy&amp;nbsp;blogging!&lt;/p&gt;</summary><category term="tech"></category></entry><entry><title>Emacs and Org-Mode</title><link href="http://jhamon.github.com/emacs-and-org-mode.html" rel="alternate"></link><updated>2012-02-01T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-02-01:emacs-and-org-mode.html</id><summary type="html">&lt;p&gt;I&amp;#8217;ve finally gotten emacs up and running and configured in a way that
 I like.  I think org-mode is just the thing I&amp;#8217;ve been looking for.
 I&amp;#8217;ve tried out a half a dozen todo list and productivity apps and they
 all suffer from the same couple of&amp;nbsp;problems.&lt;/p&gt;
@@ -165,6 +166,7 @@ then what kind of expert are you,&amp;nbsp;really?&lt;/p&gt;
 hard truths I ran into during graduate school.  I&amp;#8217;m sure anybody who
 has worked on a science PhD has been through a conversation like this
 (substituting appropriate bits of argot from your own field, of&amp;nbsp;course):&lt;/p&gt;
+&lt;blockquote&gt;
 &lt;p&gt;A professor walks up to the blackboard and asks a general knowledge
 question.  &amp;#8220;Who remembers the mineral formula for olivine?&amp;#8221;  Or,
 maybe, &amp;#8220;Can anyone tell me the difference between a clinopyroxene and
@@ -174,10 +176,8 @@ up because I &lt;em&gt;think&lt;/em&gt; I know something, but I&amp;#8217;m not 
 loath to show ignorance.  Then the professor gives a gruff admonition
 that, &amp;#8220;You should really know this for your quals,&amp;#8221; before proceeding
 to answer his own question and carry&amp;nbsp;on.&lt;/p&gt;
-&lt;p&gt;To those who&amp;#8217;ve been to grad school this will feel like a familiar
-scenario.  It&amp;#8217;s one that nearly caused me to drop out of graduate
-school, and I know it is a source of anxiety for many of my fellow
-students.  The mixture of shame, frustration, and anxiety that comes
+&lt;/blockquote&gt;
+&lt;p&gt;The mixture of shame, frustration, and anxiety that comes
 from not being able to remember those things that are simultaneously
 fundamental, familiar, and easy to understand cannot be&amp;nbsp;overstated.&lt;/p&gt;
 &lt;p&gt;I, and I&amp;#8217;m sure others, blame ourselves for these feelings, but the
@@ -190,9 +190,10 @@ aren&amp;#8217;t being asked to memorize anything while moving through a
 content-based educational curriculum (e.g. history, social studies,
 etc), then you aren&amp;#8217;t really being asked to do anything at all of
 lasting educational&amp;nbsp;value.&lt;/p&gt;
+&lt;h2&gt;Spaced repetition overs some&amp;nbsp;advantages&lt;/h2&gt;
 &lt;p&gt;What I know now is that &lt;a href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak?currentPage=all"&gt;&lt;em&gt;&amp;#8220;spaced
 repetition&amp;#8221;&lt;/em&gt;&lt;/a&gt;
-is the key. Memories decay exponentially; without systematic review
+is a huge help in retention and recall of factual information. Memories decay exponentially; without systematic review
 eventually of substance just evaporates leaving nothing but the vague
 feeling of having seen something&amp;nbsp;before.&lt;/p&gt;
 &lt;p&gt;Flashcards are an obvious tool for reviews, but I find them difficult
