@@ -12,7 +12,7 @@ FEED_DOMAIN = 'http://jhamon.github.com'
 
 DEFAULT_LANG = u'en'
 
-THEME = '/Users/jhamon/tools/pelican-themes/stargaze-light'
+THEME = 'theme/stargaze-light/'
 
 
 

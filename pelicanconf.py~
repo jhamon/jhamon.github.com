@@ -23,7 +23,7 @@ LINKS =  (('Pelican', 'http://docs.notmyidea.org/alexis/pelican/'),
           ('iPython', 'http://www.ipython.org'),)
 
 # Social widget
-SOCIAL = (('Github', 'http://www.github.com/jhamon'),)
+# SOCIAL = (('Github', 'http://www.github.com/jhamon'),)
 
 
 
