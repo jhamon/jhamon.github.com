@@ -27,7 +27,6 @@ LINKS =  (('Pelican', 'http://docs.notmyidea.org/alexis/pelican/'),
 
 
 
-
 ARCHIVE = True
 DEFAULT_PAGINATION = False
 ABOUT = True
@@ -36,3 +35,5 @@ LINKS = False
 #SOCIAL = True
 CATEGORIES = False
 TYPOGRIFY = True
+AUTHOR_BLURB = """I am a graduate student, geologist, and hobbyist coder. I love learning new skills and visiting new places.  I set up this blog to get in the habit of writing on a regular basis."""
+DISPLAY_PAGES_ON_MENU = True

@@ -66,8 +66,8 @@ body{
   }
   
   #sidebar { 
-  	     margin-right: 10%;
-         margin-top: 15px;
+  	     margin-right: 30%;
+	     margin-top: 15px;
 	         li {display: none;}
   
     

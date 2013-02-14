@@ -4,6 +4,7 @@ Date: 19/2/2012
 Category: Personal
 Tags: personal, goals
 Slug: college-regrets
+status: draft
 Summary: I should have been more proactive and outgoing.
 
 

@@ -15,6 +15,7 @@ h4 {
   font-family: 'PT Sans Narrow';
   color: #000305;
   font-size: 150%;
+  margin-top: 20px;
 }
 .invert {
   color: #ffffff;
@@ -30,7 +31,6 @@ body {
   line-height: 1.429;
   padding: 0;
   text-align: left;
-  min-width: 800px;
   position: relative;
   border-top: .5em solid #009DFF;
   margin: 0px;
@@ -62,16 +62,26 @@ body #content {
   margin-left: 10%;
   overflow: visible;
   float: left;
+  margin-right: 3%;
+}
+body #content p {
+  text-align: justify;
 }
 body #content h1 {
   font-family: 'Permanent Marker';
 }
 body #sidebar {
-  margin-right: 30%;
-  margin-top: 15px;
+  padding-right: 30%;
+  margin-top: 10px;
+  font-family: 'Open Sans';
+  margin-top: 120px;
 }
 body #sidebar li {
   display: none;
+}
+body #sidebar p {
+  text-align: justify;
+  color: #009dff;
 }
 body #sidebar h1,
 body #sidebar h2 {
@@ -103,8 +113,9 @@ body #about a {
   text-decoration: underline;
 }
 code {
-  background-color: #e5f5ff;
-  font-size: 110%;
+  color: #007ecc;
+  font-weight: heavy;
+  font-size: 120%;
   padding: 2px;
 }
 /* Headings */
@@ -202,6 +213,9 @@ pre {
   -moz-border-radius: 5px;
   border-radius: 5px;
   padding: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 5px;
   overflow: visible;
 }
 /* Quotes */

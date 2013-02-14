@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>Jen's Log</title><link href="http://jhamon.github.com/" rel="alternate"></link><link href="http://jhamon.github.com/feeds/Productivity.atom.xml" rel="self"></link><id>http://jhamon.github.com/</id><updated>2013-02-12T00:00:00Z</updated><entry><title>Turn your mac into HAL</title><link href="http://jhamon.github.com/sleep-schedule.html" rel="alternate"></link><updated>2013-02-12T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-12:sleep-schedule.html</id><summary type="html">&lt;p&gt;In the past I have had some problems going to bed at a reasonable hour.  When I get interested in something on the computer late at night, I often end up staying up well past the time when I should have gone to sleep.  This is bad because it affects my happiness and productivity significantly the following&amp;nbsp;day.&lt;/p&gt;
 &lt;p&gt;This has happened to me a lot recently, so I decided to write a little script to nag me about the benefits of regular sleep if I&amp;#8217;m on the computer in the wee hours of the&amp;nbsp;morning.&lt;/p&gt;
-&lt;p&gt;I started with a quick google search about healthy sleep.  I did a copy/paste on the first couple articles that looked good and edited them to have one fact-filled sentence per line.  I deleted any lines that wouldn&amp;#8217;t stand on their own as a statement of fact.  Save it with a descriptive name like &lt;code&gt;SleepFacts.txt&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Next I need a small script to print a random line.  Much as I wish there were a &lt;code&gt;sort --random&lt;/code&gt; type of command available, I couldn&amp;#8217;t find one so decided to write my own in python.  I saved the following into &lt;code&gt;~/scripts/print_random_line.py&lt;/code&gt;:&lt;/p&gt;
+&lt;h3&gt;1. Finding things for my computer to tell&amp;nbsp;me&lt;/h3&gt;
+&lt;p&gt;I started with a quick google search about healthy sleep to find things for my script to say.  I did a copy/paste on the first couple articles that looked good and edited them into a text file with one fact-filled sentence per line.  I deleted any lines that wouldn&amp;#8217;t stand on their own as a statement of fact, and gave it a descriptive name: &lt;code&gt;SleepFacts.txt&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;2. Writing the&amp;nbsp;script&lt;/h3&gt;
+&lt;p&gt;Next I need a small script to print a random line from my text file of sleep facts.  Much as I wish there were a &lt;code&gt;sort --random&lt;/code&gt; type of command available, I couldn&amp;#8217;t find one so decided to write my own in python.  I saved the following into &lt;code&gt;~/scripts/print_random_line.py&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/env python&lt;/span&gt;
 &lt;span class="c"&gt;# Prints one random line from a text file, e.g. SleepFacts.txt&lt;/span&gt;
 &lt;span class="c"&gt;# usage: print_random_line.py ~/path/to/file&lt;/span&gt;
@@ -28,7 +30,7 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Now we&amp;#8217;re ready to make the computer say a random line in a text file.  On a&amp;nbsp;mac:&lt;/p&gt;
+&lt;p&gt;Now I&amp;#8217;m ready to make the computer say a random line in a text file using the builtin text-to-speech capability.  On a&amp;nbsp;mac:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;printrl SleepFacts.txt | say
 &lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo &lt;/span&gt;Jen: &lt;span class="sb"&gt;`&lt;/span&gt;printrl ~/txt/SleepFacts.txt&lt;span class="sb"&gt;`&lt;/span&gt; | say &lt;span class="c"&gt;# Personalize it!&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -39,6 +41,7 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
+&lt;h3&gt;3. Automating the&amp;nbsp;process&lt;/h3&gt;
 &lt;p&gt;Awesome.  Now I have something that performs the action I&amp;#8217;m after, I just need to schedule it to execute and nudge me toward healthier sleep habits anytime I&amp;#8217;m on the computer late at night.  &lt;code&gt;cron&lt;/code&gt; is the perfect tool for&amp;nbsp;this.&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt; &lt;span class="nv"&gt;$ &lt;/span&gt;crontab -e
 &lt;/pre&gt;&lt;/div&gt;
@@ -49,9 +52,10 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Now anytime I&amp;#8217;m on the computer after midnight, my computer helpfully nags me every 10 minutes about the benefits of regular&amp;nbsp;sleep.&lt;/p&gt;
+&lt;h3&gt;&lt;span class="caps"&gt;PROFIT&lt;/span&gt;!&lt;/h3&gt;
+&lt;p&gt;Now anytime I&amp;#8217;m on the computer after midnight, my computer helpfully nags me every 10 minutes about the benefits of regular sleep.  Was this kind of silly?  Definitely.  But I think it will help me improve my&amp;nbsp;habits.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;Jen: Without adequate sleep and rest, over-worked neurons can no longer function to coordinate information properly, and we lose our ability to access previously learned&amp;nbsp;information.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;Without adequate sleep and rest, over-worked neurons can no longer function to coordinate information properly, and we lose our ability to access previously learned&amp;nbsp;information.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;A sleep-deprived person cannot focus attention optimally and therefore cannot learn&amp;nbsp;efficiently.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;span class="dquo"&gt;&amp;#8220;&lt;/span&gt;Although chronic sleep deprivation affects different individuals in a variety of ways, it is clear that a good night’s rest has a strong impact on learning and&amp;nbsp;memory.&amp;#8221;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;//powers off computer and goes to&amp;nbsp;bed//&lt;/strong&gt;&lt;/p&gt;

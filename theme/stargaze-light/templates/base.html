@@ -50,13 +50,12 @@
                     {% if ABOUT %}
                         <h1><a class="logo" href="{{ SITEURL }}/index.html"> {{ SITENAME }} </a></h1>
 
-                        <p>
-                        I am a graduate student, geologist, and hobbyist coder. I love learning new skills and visiting new places.  I set up this blog to get in the habit of writing on a regular basis.</p>
+                        <p> {{ AUTHOR_BLURB }} </p>
                     {% endif %}
 
-                    {% if DISPLAY_PAGES_ON_MENU != False %}              
-                         {% for p in PAGES %}
-                        <li {% if p == page %}class="active"{% endif %}><h2><a href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a></h2></li>
+                    {% if DISPLAY_PAGES_ON_MENU %}              
+                        {% for p in PAGES %}
+                            <li {% if p == page %}class="active"{% endif %}><h2><a href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a></h2></li>
                         {% endfor %}
                     {% endif %}
 

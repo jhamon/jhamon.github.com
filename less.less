@@ -25,6 +25,7 @@ h1, h2, h3, h4 {
     font-family: @headingsfont;
   color: @tcolor;
   font-size: 150%;
+  margin-top: 20px;
 }
 
 .invert {
@@ -39,7 +40,7 @@ body{
     line-height: 1.429;
     padding: 0;
     text-align: left;
-    min-width: 800px;
+    // min-width: 800px;
     position: relative;
     border-top: .5em solid #009DFF;
     margin: 0px;
@@ -55,22 +56,31 @@ body{
   a:hover{ .invert}
    
    #content {
-   padding-bottom: 250px;
-   min-width: 400px;
-   max-width: 600px;
-  margin-left: 10%;
-  overflow: visible;
-  float: left;
-  
+      padding-bottom: 250px;
+      min-width: 400px;
+      max-width: 600px;
+      margin-left: 10%;
+      overflow: visible;
+      float: left;
+      margin-right: 3%;
+
+      p { text-align: justify;}
+
+     // ol, li, blockquote, pre {text-align: left;}
      h1 { font-family: @titlefont}
   }
   
   #sidebar { 
-  	     margin-right: 30%;
-	     margin-top: 15px;
-	         li {display: none;}
-  
-    
+  	   padding-right: 30%;
+	     margin-top: 10px;
+       font-family: @mainfont;
+       // font-weight: bold;
+       // font-size: 90%;
+       margin-top: 120px;
+
+
+	    li {display: none;}
+       p {text-align: justify; color: @blue;}   
       h1, h2 { color: @blue;
       	       	      font-family: @headingsfont;}
   		      h1 {color: desaturate(@blue,50%);}
@@ -103,8 +113,11 @@ body{
 
 
 
-code {background-color: @codebg;
-				font-size: 110%;
+code {
+  // background-color: @codebg;
+  color: darken(@blue,10%);
+  font-weight: heavy;
+				font-size: 120%;
 					     padding: 2px;}
 
 
@@ -169,6 +182,9 @@ dd {margin-left: 1.5em;}
 pre{background-color: @codebg; 
 .border-radius(5px);
 padding: 10px;
+margin-bottom: 10px;
+margin-top: 10px;
+margin-left: 5px;
 overflow: visible;}
 
 /* Quotes */

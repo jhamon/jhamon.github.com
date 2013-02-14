@@ -18,37 +18,32 @@ has worked on a science PhD has been through a conversation like this
 (substituting appropriate bits of argot from your own field, of
 course):
 
-A professor walks up to the blackboard and asks a general knowledge
-question.  "Who remembers the mineral formula for olivine?"  Or,
-maybe, "Can anyone tell me the difference between a clinopyroxene and
-an orthopyroxene?"  There might be a few mumbles from the class, but
-usually there will be silence. I'm usually on the fence about speaking
-up because I *think* I know something, but I'm not 100% sure and am
+>A professor walks up to the blackboard and asks a general knowledge
+question.  "Who remembers the mineral formula for diopside?" There might be a few mumbles from the class, but usually there will be silence. In situations like this I'll often be on the fence about speaking up because I *think* I know something, but I'm not 100% sure and am
 loath to show ignorance.  Then the professor gives a gruff admonition
 that, "You should really know this for your quals," before proceeding
 to answer his own question and carry on.
 
-To those who've been to grad school this will feel like a familiar
-scenario.  It's one that nearly caused me to drop out of graduate
-school, and I know it is a source of anxiety for many of my fellow
-students.  The mixture of shame, frustration, and anxiety that comes
-from not being able to remember those things that are simultaneously
+The mixture of shame, frustration, and anxiety that comes
+from not being able to recall those things that are simultaneously
 fundamental, familiar, and easy to understand cannot be overstated.
 
-I, and I'm sure others, blame ourselves for these feelings, but the
-truth is that nobody in our educational legacy ever gave us the tools
-to learn and retain information.  Memorization as a teaching
+I at first blamed myself for these feelings, but the
+truth is that nobody in my educational legacy ever gave me the tools
+to learn and retain factual information.  Memorization as a teaching
 philosophy has been out of fashion for many years now, so that the
 current products of the public education system have never been asked
-to *memorize* anything.  The sad truth of it is, though, that if you
+to *memorize* much of anything.  The "concepts" are all that matter, they say.  The sad truth of it is, though, that if you
 aren't being asked to memorize anything while moving through a
-content-based educational curriculum (e.g. history, social studies,
+largely *content-based* educational curriculum (e.g. history, social studies,
 etc), then you aren't really being asked to do anything at all of
 lasting educational value.
 
+## Spaced repetition offers some advantages
+
 What I know now is that [*"spaced
 repetition"*](http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak?currentPage=all)
-is the key. Memories decay exponentially; without systematic review
+is a huge help in retention and recall of factual information. Memories decay exponentially; without systematic review
 eventually of substance just evaporates leaving nothing but the vague
 feeling of having seen something before.
 
