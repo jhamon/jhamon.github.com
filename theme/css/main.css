@@ -4,9 +4,9 @@
 
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400|Open+Sans:700);
 
-@import url(http://fonts.googleapis.com/css?family=PT+Sans+Narrow:700);
+@import url(http://fonts.googleapis.com/css?family=Inconsolata);
 
-@import url(http://fonts.googleapis.com/css?family=Permanent+Marker:400);
+@import url(http://fonts.googleapis.com/css?family=PT+Sans+Narrow:700);
 /* Mixin */
 h1,
 h2,
@@ -36,6 +36,13 @@ body {
   margin: 0px;
   padding: 20px;
   padding-top: 100px;
+}
+body .logo {
+  font-size: 130%;
+  line-height: 50%;
+  text-transform: uppercase;
+  text-align: left;
+  margin-bottom: 0px;
 }
 body p {
   padding: 10px;
@@ -68,19 +75,17 @@ body #content p {
   text-align: justify;
 }
 body #content h1 {
-  font-family: 'Permanent Marker';
+  font-family: 'PT Sans Narrow';
 }
 body #sidebar {
-  padding-right: 30%;
+  padding-right: 25%;
   margin-top: 10px;
   font-family: 'Open Sans';
-  margin-top: 120px;
 }
 body #sidebar li {
-  display: none;
+  list-style: none;
 }
 body #sidebar p {
-  text-align: justify;
   color: #009dff;
 }
 body #sidebar h1,
@@ -115,6 +120,7 @@ body #about a {
 code {
   color: #007ecc;
   font-weight: heavy;
+  font-family: 'Inconsolata';
   font-size: 120%;
   padding: 2px;
 }
@@ -208,6 +214,7 @@ dd {
   margin-left: 1.5em;
 }
 pre {
+  font-family: 'Inconsolata';
   background-color: #e5f5ff;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;

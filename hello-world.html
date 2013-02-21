@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <title>Pelican blog says: Hello&nbsp;World!</title>
+        <title>Pelican blog says: Hello World!</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
-        <link href="./" type="application/atom+xml" rel="alternate" title="Jen's Log ATOM Feed" />
+        <link href="./" type="application/atom+xml" rel="alternate" title="Jennifer Hamon ATOM Feed" />
         
 
         <!--[if IE]>
@@ -21,17 +21,15 @@
 
 <body id="index" class="home">
 <!--         <header id="banner" class="body">
-                <h1><a href="./index.html">Jen's Log </a></h1>
+                <h1><a href="./index.html">Jennifer Hamon </a></h1>
                 <nav><ul>
-                                                <li><a href="./index.html">Home</a></li>
-                                    <li ><a href="./pages/about-me.html">About&nbsp;Me</a></li>
                                                                 </ul></nav>
         </header><!-- /#banner --> 
 
         <section id="content" class="body">
 <article>
         <header> <h1 class="entry-title"><a href="hello-world.html"
-        rel="bookmark" title="Permalink to Pelican blog says: Hello&nbsp;World!">Pelican blog says: Hello&nbsp;World!</a></h1>  </header>
+        rel="bookmark" title="Permalink to Pelican blog says: Hello World!">Pelican blog says: Hello World!</a></h1>  </header>
         <div class="entry-content">
         <footer class="post-info">
         <abbr class="published" title="2013-02-09T00:00:00">
@@ -47,10 +45,10 @@
 </footer><!-- /.post-info --><!-- /.post-info -->
         <!-- Category: Personal -->
 
-<p>This is my first attempt to generate a blog using the Pelican static blog generator.  I&#8217;m hopeful that this will work because the last tool I tried to use, a static site generator called <a href="http://www.github.com/hyde">hyde</a>, seems to have been abandoned by its maintainer.  The official hyde installation instructions no longer work, and the maintainer has not addressed any of the issues languishing in the bug tracker since I filed my report about a month ago.  Prior to that I messed around with Jekyll/Octopress, but I&#8217;m not much of a&nbsp;rubyist.</p>
-<p>But that&#8217;s all okay because <strong><a href="http://www.github.com/getpelican/pelican">Pelican</a></strong> is the cool new kid on the block: it&#8217;s a python-based static website generator with a thriving community of users and contributors.  I&#8217;m not surprised the project is growing rapidly, because getting started with Pelican is as simple as running their <code>pelican-quickstart</code> script and answering a few questions about how you intended to use your&nbsp;site.  </p>
-<h2>How to change the theme on your new Pelican-powered&nbsp;blog</h2>
-<p>After running the <code>pelican-quickstart</code> script and copying over some existing writing to the <code>content/</code> folder I was ready to tweak the theme.  It took a bit of googling for me to figure this out, so I&#8217;ll summarize it here for anyone who is having a problem customizing their Pelican site&nbsp;theme.</p>
+<p>This is my first attempt to generate a blog using the Pelican static blog generator.  I'm hopeful that this will work because the last tool I tried to use, a static site generator called <a href="http://www.github.com/hyde">hyde</a>, seems to have been abandoned by its maintainer.  The official hyde installation instructions no longer work, and the maintainer has not addressed any of the issues languishing in the bug tracker since I filed my report about a month ago.  Prior to that I messed around with Jekyll/Octopress, but I'm not much of a rubyist.</p>
+<p>But that's all okay because <strong><a href="http://www.github.com/getpelican/pelican">Pelican</a></strong> is the cool new kid on the block: it's a python-based static website generator with a thriving community of users and contributors.  I'm not surprised the project is growing rapidly, because getting started with Pelican is as simple as running their <code>pelican-quickstart</code> script and answering a few questions about how you intended to use your site.  </p>
+<h2>How to change the theme on your new Pelican-powered blog</h2>
+<p>After running the <code>pelican-quickstart</code> script and copying over some existing writing to the <code>content/</code> folder I was ready to tweak the theme.  It took a bit of googling for me to figure this out, so I'll summarize it here for anyone who is having a problem customizing their Pelican site theme.</p>
 <p>First, get the <code>pelican-themes</code> repository:</p>
 <div class="codehilite"><pre><span class="nv">$ </span>mkdir ~/path/to/themes
 <span class="nv">$ </span><span class="nb">cd</span> ~/path/to/themes
@@ -58,32 +56,54 @@
 </pre></div>
 
 
-<p>Look through the screenshots and choose a theme that you like from those now present in <code>~/path/to/themes/pelican-themes/</code>.  When you find one that seems close to what you want, you&#8217;re ready to update your Pelican configuration&nbsp;files:</p>
+<p>Look through the screenshots and choose a theme that you like from those now present in <code>~/path/to/themes/pelican-themes/</code>.  When you find one that seems close to what you want, you're ready to update your Pelican configuration files:</p>
 <div class="codehilite"><pre><span class="c"># Put this in your pelicanconf.py file</span>
-<span class="n"><span class="caps">THEME</span></span> <span class="o">=</span> <span class="s">&#39;~/path/to/themes/pelican-themes/theme_dir&#39;</span>
+<span class="n">THEME</span> <span class="o">=</span> <span class="s">&#39;~/path/to/themes/pelican-themes/theme_dir&#39;</span>
 </pre></div>
 
 
-<p>where <code>theme_dir</code> is the directory of the theme you like.  Next rebuild your site with <code>make html</code> and you&#8217;re good to&nbsp;go.</p>
-<p>The best way to get started on a custom theme of your own design is to copy one of the themes in the <code>pelican-themes</code> repo and start tinkering.  By doing that, you already have the necesasry structure in place for generating a theme.  The <code>simple</code> theme is provided for those who want to start from a relatively blank&nbsp;canvas.</p>
-<p>Good luck with Pelican, and happy&nbsp;blogging!</p>
+<p>where <code>theme_dir</code> is the directory of the theme you like.  Next rebuild your site with <code>make html</code> and you're good to go.</p>
+<p>The best way to get started on a custom theme of your own design is to copy one of the themes in the <code>pelican-themes</code> repo and start tinkering.  By doing that, you already have the necesasry structure in place for generating a theme.  The <code>simple</code> theme is provided for those who want to start from a relatively blank canvas.</p>
+<p>Good luck with Pelican, and happy blogging!</p>
         </div><!-- /.entry-content -->
         
 </article>
-</section>
+<br>
+<hr>
+<h1>Other writing</h1> 
+                  <header>
+                        <h2><a href="./sleep-schedule.html" rel="bookmark" title="Permalink to Turn my mac into HAL">Turn my mac into HAL</a></h2>
+                </header>
+
+                  <header>
+                        <h2><a href="./memorizing-poetry.html" rel="bookmark" title="Permalink to Memorizing poetry">Memorizing poetry</a></h2>
+                </header>
+
+                  <header>
+                        <h2><a href="./hello-world.html" rel="bookmark" title="Permalink to Pelican blog says: Hello World!">Pelican blog says: Hello World!</a></h2>
+                </header>
+
+                  <header>
+                        <h2><a href="./emacs-and-org-mode.html" rel="bookmark" title="Permalink to Emacs and Org-Mode">Emacs and Org-Mode</a></h2>
+                </header>
+
+                  <header>
+                        <h2><a href="./Anki.html" rel="bookmark" title="Permalink to These aren't your grandma's flashcards">These aren't your grandma's flashcards</a></h2>
+                </header>
+
+    </section>
 
         <aside id="sidebar">
                 <div class="widget">
-                                            <h1><a class="logo" href="./index.html"> Jen's Log </a></h1>
-
-                        <p> I am a graduate student, geologist, and hobbyist coder. I love learning new skills and visiting new places.  I set up this blog to get in the habit of writing on a regular basis. </p>
+                                            <h1><a class="logo" href="./index.html"> Jennifer Hamon </a></h1>
+                                                            <p> grad student. geologist. hobbyist coder. </p>
+                                                            <p> I love learning new skills. </p>
+                                                
                     
-                                  
-                                                    <li ><h2><a href="./pages/about-me.html">About&nbsp;Me</a></h2></li>
-                                            
-                    			            <ul><li><h2>            <a href="./archives.html"> Archive </a> </h2>   </li></ul>
+                            			
+                                            <ul><li><h2><a href="./archives.html"> Archive </a> </h2>   </li></ul>
 
-			                </div>
+        			                </div>
                         </aside><!-- /#sidebar -->
 
         <footer id="footer" class="body">
