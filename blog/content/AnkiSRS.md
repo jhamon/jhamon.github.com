@@ -6,31 +6,28 @@ Category: Learning
 Summary: Spaced repetition is a great way to learn and retain information.
 
 Richard Feynmann famously bemoaned the way that too many students
-memorized instead of thought their way through problems.  But I
-disagree: memorizing things is a necessary part of developing a field
+memorized instead of thought their way through problems.  He's right that people need to learn to think, but I
+disagree about the importance of memorization: memorizing things is a necessary part of developing a field
 of expertise that is too-often neglected.  Sure, it's great to be
 *smart*, but if at the end of the day you don't really *know things*
 then what kind of expert are you, really?
 
 This reality about the need to know things cold is one of the first
 hard truths I ran into during graduate school.  I'm sure anybody who
-has worked on a science PhD has been through a conversation like this
-(substituting appropriate bits of argot from your own field, of
-course):
-
->A professor walks up to the blackboard and asks a general knowledge
-question.  "Who remembers the mineral formula for diopside?" There might be a few mumbles from the class, but usually there will be silence. In situations like this I'll often be on the fence about speaking up because I *think* I know something, but I'm not 100% sure and am
-loath to show ignorance.  Then the professor gives a gruff admonition
-that, "You should really know this for your quals," before proceeding
-to answer his own question and carry on.
-
-The mixture of shame, frustration, and anxiety that comes
+has worked on a science PhD has been through conversations with their advisors that left them feeling stupid or embarassed just because they hadn't memorized some niggling detail of their science. The mixture of shame, frustration, and anxiety that comes
 from not being able to recall those things that are simultaneously
 fundamental, familiar, and easy to understand cannot be overstated.
 
+
+<!-- >A professor walks up to the blackboard and asks a general knowledge
+question.  "Who remembers the mineral formula for diopside?" There might be a few mumbles from the class, but usually there will be silence. In situations like this I'll often be on the fence about speaking up because I *think* I know something, but I'm not 100% sure and am
+loath to show ignorance.  Then the professor gives a gruff admonition
+that, "You should really know this for your quals," before proceeding
+to answer his own question and carry on. -->
+
+
 I at first blamed myself for these feelings, but the
-truth is that nobody in my educational legacy ever gave me the tools
-to learn and retain factual information.  Memorization as a teaching
+truth is that nobody in my educational history has ever taught me techniques to memorize and retain factual information.  Memorization as a teaching
 philosophy has been out of fashion for many years now, so that the
 current products of the public education system have never been asked
 to *memorize* much of anything.  The "concepts" are all that matter, they say.  The sad truth of it is, though, that if you
@@ -38,6 +35,8 @@ aren't being asked to memorize anything while moving through a
 largely *content-based* educational curriculum (e.g. history, social studies,
 etc), then you aren't really being asked to do anything at all of
 lasting educational value.
+
+It's only by pure luck that I stumbled onto online language learning communities who take memorization very seriously.  And the techniques self language learners are using seem broadly applicable to other fields.
 
 ## Spaced repetition offers some advantages
 

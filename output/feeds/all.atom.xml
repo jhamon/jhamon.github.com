@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Jennifer Hamon</title><link href="http://jhamon.github.com/" rel="alternate"></link><link href="http://jhamon.github.com/feeds/all.atom.xml" rel="self"></link><id>http://jhamon.github.com/</id><updated>2013-02-12T00:00:00Z</updated><entry><title>Turn your mac into HAL</title><link href="http://jhamon.github.com/sleep-schedule.html" rel="alternate"></link><updated>2013-02-12T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-12:sleep-schedule.html</id><summary type="html">&lt;p&gt;In the past I have had some problems going to bed at a reasonable hour.  When I get interested in something on the computer late at night, I often end up staying up well past the time when I should have gone to sleep.  This is bad because it affects my happiness and productivity significantly the following day.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jennifer Hamon</title><link href="http://jhamon.github.com/" rel="alternate"></link><link href="http://jhamon.github.com/feeds/all.atom.xml" rel="self"></link><id>http://jhamon.github.com/</id><updated>2013-02-12T00:00:00Z</updated><entry><title>Turn my mac into HAL</title><link href="http://jhamon.github.com/sleep-schedule.html" rel="alternate"></link><updated>2013-02-12T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-12:sleep-schedule.html</id><summary type="html">&lt;p&gt;In the past I have had some problems going to bed at a regular time.  When I get interested in something on the computer late at night, I often end up staying up well past the time when I should have gone to sleep.  This is bad because it affects my happiness and productivity significantly the following day.&lt;/p&gt;
 &lt;p&gt;This has happened to me a lot recently, so I decided to write a little script to nag me about the benefits of regular sleep if I'm on the computer in the wee hours of the morning.&lt;/p&gt;
 &lt;h3&gt;1. Finding things for my computer to tell me&lt;/h3&gt;
 &lt;p&gt;I started with a quick google search about healthy sleep to find things for my script to say.  I did a copy/paste on the first couple articles that looked good and edited them into a text file with one fact-filled sentence per line.  I deleted any lines that wouldn't stand on their own as a statement of fact, and gave it a descriptive name: &lt;code&gt;SleepFacts.txt&lt;/code&gt;.&lt;/p&gt;
@@ -69,28 +69,28 @@
 &lt;p&gt;Maybe I'll start with something nice and musical like Blake's &lt;em&gt;Tyger&lt;/em&gt;:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;Tyger&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt; &lt;span class="n"&gt;Tyger&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt; &lt;span class="n"&gt;burning&lt;/span&gt; &lt;span class="n"&gt;bright&lt;/span&gt; 
 &lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;forests&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;night&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;immortal&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt; &lt;span class="n"&gt;or&lt;/span&gt; &lt;span class="n"&gt;eye&lt;/span&gt; 
-&lt;span class="n"&gt;Could&lt;/span&gt; &lt;span class="n"&gt;frame&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;fearful&lt;/span&gt; &lt;span class="n"&gt;symmetry&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
-&lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;distant&lt;/span&gt; &lt;span class="n"&gt;deeps&lt;/span&gt; &lt;span class="n"&gt;or&lt;/span&gt; &lt;span class="n"&gt;skies&lt;/span&gt; 
-&lt;span class="n"&gt;Burnt&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;fire&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;thine&lt;/span&gt; &lt;span class="n"&gt;eyes&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
-&lt;span class="n"&gt;On&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;wings&lt;/span&gt; &lt;span class="n"&gt;dare&lt;/span&gt; &lt;span class="n"&gt;he&lt;/span&gt; &lt;span class="n"&gt;aspire&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
-&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt; &lt;span class="n"&gt;dare&lt;/span&gt; &lt;span class="n"&gt;sieze&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;fire&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
-&lt;span class="n"&gt;And&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;shoulder&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;art&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; 
-&lt;span class="n"&gt;Could&lt;/span&gt; &lt;span class="n"&gt;twist&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;sinews&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;heart&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;immortal&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;eye&lt;/span&gt; 
+&lt;span class="n"&gt;Could&lt;/span&gt; &lt;span class="n"&gt;frame&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;fearful&lt;/span&gt; &lt;span class="n"&gt;symmetry&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;distant&lt;/span&gt; &lt;span class="n"&gt;deeps&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;skies&lt;/span&gt; 
+&lt;span class="n"&gt;Burnt&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;fire&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;thine&lt;/span&gt; &lt;span class="n"&gt;eyes&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;On&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;wings&lt;/span&gt; &lt;span class="n"&gt;dare&lt;/span&gt; &lt;span class="n"&gt;he&lt;/span&gt; &lt;span class="n"&gt;aspire&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt; &lt;span class="n"&gt;dare&lt;/span&gt; &lt;span class="n"&gt;sieze&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;fire&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;And&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;shoulder&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;art&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; 
+&lt;span class="n"&gt;Could&lt;/span&gt; &lt;span class="n"&gt;twist&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;sinews&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;heart&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
 &lt;span class="n"&gt;And&lt;/span&gt; &lt;span class="n"&gt;when&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;heart&lt;/span&gt; &lt;span class="n"&gt;began&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;beat&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;dread&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;dread&lt;/span&gt; &lt;span class="n"&gt;feet&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
-&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;hammer&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;chain&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
-&lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;furnace&lt;/span&gt; &lt;span class="n"&gt;was&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;brain&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
-&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;anvil&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;dread&lt;/span&gt; &lt;span class="n"&gt;grasp&lt;/span&gt; 
-&lt;span class="n"&gt;Dare&lt;/span&gt; &lt;span class="n"&gt;its&lt;/span&gt; &lt;span class="n"&gt;deadly&lt;/span&gt; &lt;span class="n"&gt;terrors&lt;/span&gt; &lt;span class="n"&gt;clasp&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;dread&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;dread&lt;/span&gt; &lt;span class="n"&gt;feet&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;hammer&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;chain&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;furnace&lt;/span&gt; &lt;span class="n"&gt;was&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;brain&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;anvil&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;what&lt;/span&gt; &lt;span class="n"&gt;dread&lt;/span&gt; &lt;span class="n"&gt;grasp&lt;/span&gt; 
+&lt;span class="n"&gt;Dare&lt;/span&gt; &lt;span class="n"&gt;its&lt;/span&gt; &lt;span class="n"&gt;deadly&lt;/span&gt; &lt;span class="n"&gt;terrors&lt;/span&gt; &lt;span class="n"&gt;clasp&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
 &lt;span class="n"&gt;When&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;stars&lt;/span&gt; &lt;span class="n"&gt;threw&lt;/span&gt; &lt;span class="n"&gt;down&lt;/span&gt; &lt;span class="n"&gt;their&lt;/span&gt; &lt;span class="n"&gt;spears&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
 &lt;span class="n"&gt;And&lt;/span&gt; &lt;span class="n"&gt;watered&lt;/span&gt; &lt;span class="n"&gt;heaven&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;their&lt;/span&gt; &lt;span class="n"&gt;tears&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-&lt;span class="n"&gt;Did&lt;/span&gt; &lt;span class="n"&gt;he&lt;/span&gt; &lt;span class="n"&gt;smile&lt;/span&gt; &lt;span class="n"&gt;his&lt;/span&gt; &lt;span class="n"&gt;work&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;see&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
-&lt;span class="n"&gt;Did&lt;/span&gt; &lt;span class="n"&gt;he&lt;/span&gt; &lt;span class="n"&gt;who&lt;/span&gt; &lt;span class="n"&gt;made&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;Lamb&lt;/span&gt; &lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;thee&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;Did&lt;/span&gt; &lt;span class="n"&gt;he&lt;/span&gt; &lt;span class="n"&gt;smile&lt;/span&gt; &lt;span class="n"&gt;his&lt;/span&gt; &lt;span class="n"&gt;work&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;see&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
+&lt;span class="n"&gt;Did&lt;/span&gt; &lt;span class="n"&gt;he&lt;/span&gt; &lt;span class="n"&gt;who&lt;/span&gt; &lt;span class="n"&gt;made&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;Lamb&lt;/span&gt; &lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;thee&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; 
 &lt;span class="n"&gt;Tyger&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt; &lt;span class="n"&gt;Tyger&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt; &lt;span class="n"&gt;burning&lt;/span&gt; &lt;span class="n"&gt;bright&lt;/span&gt; 
 &lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;forests&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;night&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
-&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;immortal&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt; &lt;span class="n"&gt;or&lt;/span&gt; &lt;span class="n"&gt;eye&lt;/span&gt; 
-&lt;span class="n"&gt;Dare&lt;/span&gt; &lt;span class="n"&gt;frame&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;fearful&lt;/span&gt; &lt;span class="n"&gt;symmetry&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt;
+&lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;immortal&lt;/span&gt; &lt;span class="n"&gt;hand&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;eye&lt;/span&gt; 
+&lt;span class="n"&gt;Dare&lt;/span&gt; &lt;span class="n"&gt;frame&lt;/span&gt; &lt;span class="n"&gt;thy&lt;/span&gt; &lt;span class="n"&gt;fearful&lt;/span&gt; &lt;span class="n"&gt;symmetry&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;</summary><category term="memorization"></category></entry><entry><title>Pelican blog says: Hello World!</title><link href="http://jhamon.github.com/hello-world.html" rel="alternate"></link><updated>2013-02-09T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2013-02-09:hello-world.html</id><summary type="html">&lt;!-- Category: Personal --&gt;
 
 &lt;p&gt;This is my first attempt to generate a blog using the Pelican static blog generator.  I'm hopeful that this will work because the last tool I tried to use, a static site generator called &lt;a href="http://www.github.com/hyde"&gt;hyde&lt;/a&gt;, seems to have been abandoned by its maintainer.  The official hyde installation instructions no longer work, and the maintainer has not addressed any of the issues languishing in the bug tracker since I filed my report about a month ago.  Prior to that I messed around with Jekyll/Octopress, but I'm not much of a rubyist.&lt;/p&gt;
@@ -113,30 +113,25 @@
 &lt;p&gt;where &lt;code&gt;theme_dir&lt;/code&gt; is the directory of the theme you like.  Next rebuild your site with &lt;code&gt;make html&lt;/code&gt; and you're good to go.&lt;/p&gt;
 &lt;p&gt;The best way to get started on a custom theme of your own design is to copy one of the themes in the &lt;code&gt;pelican-themes&lt;/code&gt; repo and start tinkering.  By doing that, you already have the necesasry structure in place for generating a theme.  The &lt;code&gt;simple&lt;/code&gt; theme is provided for those who want to start from a relatively blank canvas.&lt;/p&gt;
 &lt;p&gt;Good luck with Pelican, and happy blogging!&lt;/p&gt;</summary><category term="tech"></category></entry><entry><title>Emacs and Org-Mode</title><link href="http://jhamon.github.com/emacs-and-org-mode.html" rel="alternate"></link><updated>2012-02-01T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-02-01:emacs-and-org-mode.html</id><summary type="html">&lt;p&gt;I've finally gotten emacs up and running and configured in a way that
-I like.  I think org-mode is just the thing I've been looking for.
-I've tried out a half a dozen todo list and productivity apps and they
-all suffer from the same couple of problems.&lt;/p&gt;
-&lt;p&gt;I found the desktop solutions (OmniFocus and Things) to both be
-encumbered by clunky user interfaces.  For instance, when I'm trying
+I like.  One thing I've discovered that I really like is something called "Org-Mode", which at first appears to be just an outlining tool but is actually a versital way to keep track of projects, tasks, and deadlines all from inside the text editor.  I think org-mode is just the thing I've been looking for to keep myself organized and on-task.  &lt;/p&gt;
+&lt;p&gt;I've tried out a half a dozen dedicated todo list and productivity apps and they  all suffer from the same couple of problems.  I found the desktop solutions (e.g. OmniFocus and Things) to be
+encumbered by clunky user interfaces that are frustrating to me as somebody who loves keyboard shortcuts.  For instance, when I'm trying
 to add a new item to a project, I shouldn't have to click more than
 once or twice to enter all the relevant details: Project name, notes,
 dates, and attachments.  Things was definitely more attractive than
-OmniFocus, but the inability to tab through ALL the settings is a deal
-breaker for me. If I'm going to be using something dozens of times per
-day and hundreds of times per week my interaction needs to be fluid.
-The software solution needs to disappear.&lt;/p&gt;
+OmniFocus, but the inability to tab through ALL the settings is a deal  breaker for me. If I'm going to be using something dozens of times per day and hundreds of times per week my interaction needs to be fluid.  The software solution needs to disappear.&lt;/p&gt;
 &lt;p&gt;Secondary concerns with proprietary solutions--including cloud-based
 services like Remember the Milk, Springpad, and Evernote--is that they
 have absolute control over you data.  If the company dies, your data
 goes with it unless you have a reliable backup system in place.&lt;/p&gt;
 &lt;p&gt;But even more important, I would really prefer to do everything I can
 anywhere OTHER than the browser.  When I'm trying to be productive, I
-don't want to be one tab over from timesucks like facebook,
+don't want to be one tab over from timesucks like Hacker News,
 stackoverflow, or nytimes.com.  Any gains from staying organized with
 online tools like that are surely lost to these temptations.  For me
 and probably many others&lt;/p&gt;
 &lt;p&gt;No, I think emacs is the way to go.  Or vim.  Hell, some people are
-now charging upwards of $30 for minimalist editors, which says
+now charging upwards of $30 for minimalist editors (just look at Writeroom on the Mac App Store), which I think says
 something about the needs of people who are really ready to settle
 down and do some work.  I've read that oldschool hackers would spend
 80+% of their "tube time" in editors like vi or emacs.  I'm not sure
@@ -153,33 +148,25 @@ operating system.&lt;/p&gt;
 &lt;p&gt;There was a recent post on Slashdot about research to this effect:
 truly great work happens in solitude, after much hard thinking.  So,
 for now, I'm embracing org-mode.  It's a complicated animal, but I'm
-excited to start down this new rode of productive peace.  It's just me
-and this little blinking cursor.  Together we will do great things.&lt;/p&gt;
-&lt;p&gt;(I literally wrote this as a stream-of-conciousness over 10-15 minutes
-before bed.  Don't judge me for ill-formed paragraph structures.)&lt;/p&gt;</summary></entry><entry><title>These aren't your grandma's flashcards</title><link href="http://jhamon.github.com/Anki.html" rel="alternate"></link><updated>2012-01-17T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-01-17:Anki.html</id><summary type="html">&lt;p&gt;Richard Feynmann famously bemoaned the way that too many students
-memorized instead of thought their way through problems.  But I
-disagree: memorizing things is a necessary part of developing a field
+excited to start down this new rode of productive peace.  It's just me and this little blinking cursor.  Together we will do great things.&lt;/p&gt;</summary></entry><entry><title>These aren't your grandma's flashcards</title><link href="http://jhamon.github.com/Anki.html" rel="alternate"></link><updated>2012-01-17T00:00:00Z</updated><author><name>Jennifer Hamon</name></author><id>tag:jhamon.github.com,2012-01-17:Anki.html</id><summary type="html">&lt;p&gt;Richard Feynmann famously bemoaned the way that too many students
+memorized instead of thought their way through problems.  He's right that people need to learn to think, but I
+disagree about the importance of memorization: memorizing things is a necessary part of developing a field
 of expertise that is too-often neglected.  Sure, it's great to be
 &lt;em&gt;smart&lt;/em&gt;, but if at the end of the day you don't really &lt;em&gt;know things&lt;/em&gt;
 then what kind of expert are you, really?&lt;/p&gt;
 &lt;p&gt;This reality about the need to know things cold is one of the first
 hard truths I ran into during graduate school.  I'm sure anybody who
-has worked on a science PhD has been through a conversation like this
-(substituting appropriate bits of argot from your own field, of
-course):&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A professor walks up to the blackboard and asks a general knowledge
-question.  "Who remembers the mineral formula for diopside?" There might be a few mumbles from the class, but usually there will be silence. In situations like this I'll often be on the fence about speaking up because I &lt;em&gt;think&lt;/em&gt; I know something, but I'm not 100% sure and am
-loath to show ignorance.  Then the professor gives a gruff admonition
-that, "You should really know this for your quals," before proceeding
-to answer his own question and carry on.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;The mixture of shame, frustration, and anxiety that comes
+has worked on a science PhD has been through conversations with their advisors that left them feeling stupid or embarassed just because they hadn't memorized some niggling detail of their science. The mixture of shame, frustration, and anxiety that comes
 from not being able to recall those things that are simultaneously
 fundamental, familiar, and easy to understand cannot be overstated.&lt;/p&gt;
+&lt;!-- &gt;A professor walks up to the blackboard and asks a general knowledge
+question.  "Who remembers the mineral formula for diopside?" There might be a few mumbles from the class, but usually there will be silence. In situations like this I'll often be on the fence about speaking up because I *think* I know something, but I'm not 100% sure and am
+loath to show ignorance.  Then the professor gives a gruff admonition
+that, "You should really know this for your quals," before proceeding
+to answer his own question and carry on. --&gt;
+
 &lt;p&gt;I at first blamed myself for these feelings, but the
-truth is that nobody in my educational legacy ever gave me the tools
-to learn and retain factual information.  Memorization as a teaching
+truth is that nobody in my educational history has ever taught me techniques to memorize and retain factual information.  Memorization as a teaching
 philosophy has been out of fashion for many years now, so that the
 current products of the public education system have never been asked
 to &lt;em&gt;memorize&lt;/em&gt; much of anything.  The "concepts" are all that matter, they say.  The sad truth of it is, though, that if you
@@ -187,6 +174,7 @@ aren't being asked to memorize anything while moving through a
 largely &lt;em&gt;content-based&lt;/em&gt; educational curriculum (e.g. history, social studies,
 etc), then you aren't really being asked to do anything at all of
 lasting educational value.&lt;/p&gt;
+&lt;p&gt;It's only by pure luck that I stumbled onto online language learning communities who take memorization very seriously.  And the techniques self language learners are using seem broadly applicable to other fields.&lt;/p&gt;
 &lt;h2&gt;Spaced repetition offers some advantages&lt;/h2&gt;
 &lt;p&gt;What I know now is that &lt;a href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak?currentPage=all"&gt;&lt;em&gt;"spaced
 repetition"&lt;/em&gt;&lt;/a&gt;
