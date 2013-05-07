@@ -1,0 +1,56 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:600italic,400,700);
+@import url(http://fonts.googleapis.com/css?family=PT Sans Narrow:700);
+
+// @blue: #009DFF;
+@blue: #329345;
+@highlighttext: white;
+
+body {font-family: 'Open Sans', 'Helvetica', 'Arial', sans serif;
+}
+
+h1 {font-family: 'Open Sans', 'Arial';
+    font-style: italic;
+	font-weight: 600;
+/*color: @blue;}*/
+}
+#container {
+position: relative;
+	}
+
+a {text-decoration: none;
+color: @blue;
+font-weight: bold;
+}
+
+em {font-weight: bold; font-style: normal;}
+
+a:hover {text-decoration: none; 
+	color: @highlighttext;
+	background-color: @blue;}
+
+@radius: 100px;
+.rounded {
+-webkit-border-radius: @radius;
+-moz-border-radius: @radius;
+border-radius: @radius;
+}
+
+.profilepic {.rounded;
+position: absolute;
+left: 5%;
+top: 10%;
+background: url(mypic.jpg) no-repeat;
+background-size:200px;
+
+	width: 200px;
+	height: 200px;
+	border-radius: 100px;
+	-webkit-border-radius: 100px;
+	-moz-border-radius: 100px;
+/*	box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+	-webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+	-moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+*/	
+/*margin-left: 50px;*/
+	/*margin-bottom: 150px;*/
+}
