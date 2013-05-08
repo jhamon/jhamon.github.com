@@ -16,14 +16,6 @@
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
-.code {
-    background-color: #00530F;
-    font-family: 'Source Code Pro', monospace;
-    color: #FFF;
-    padding: 5px;
-    margin: 5px;
-}
-
 .clearfix {
   *zoom: 1;
 }
@@ -86,6 +78,7 @@ a:focus {
 a:hover,
 a:active {
   outline: 0;
+  text-decoration: none;
 }
 sub,
 sup {
@@ -178,7 +171,7 @@ textarea {
   }
   a,
   a:visited {
-    text-decoration: underline;
+    text-decoration: none;
   }
   a[href]:after {
     content: " (" attr(href) ")";
@@ -236,7 +229,7 @@ a {
 a:hover,
 a:focus {
   color: #1f5a2a;
-  text-decoration: underline;
+  text-decoration: none;
 }
 .img-rounded {
   -webkit-border-radius: 6px;
