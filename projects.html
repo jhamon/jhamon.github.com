@@ -6,7 +6,7 @@
 -->
 <html>
   <head>
-    <title>Jen Hamon, Ruby and Javascript Web Developer</title>
+    <title>Jen Hamon, Ruby and JavaScript Web Developer</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -100,15 +100,21 @@
               </header>
               
 
-<p>Conway's Game of Life holds a special place in my heart.  The first non-trivial program I ever wrote was a simple version of the game implemented in Python, and when I decided to learn Javascript I started by coding up Life.  It makes a great code kata because it is relatively quick and easy to get a basic version going, but also leaves a lot of room for experimentation and improvement.</p>
+<p>Conway's Game of Life holds a special place in my heart.  The first non-trivial program I ever wrote was a simple version of the game implemented in Python, and when I decided to learn JavaScript I began by coding up Life.  Life makes a great code kata because it is relatively quick and easy to get a basic version going, but it also leaves a lot of room for experimentation and improvement.</p>
 
 <a href="http://www.hamon.io/conway.js"><img class="projects pull-right" src="images/conway_controls.png" alt="User controls for Conway's Game of Life"></a>
 
-<p>I've now done this several times in javascript, each time learning something new.  My first implementation was to learn basic JS syntax, and the HTML5 canvas API, but the code was pretty terrible by my current standards. A second implementation improved on my seperation of concerns between view rendering and game calculations.  My third implementation was to learn more about event-driven programming with Backbone.js; in the Backbone version, each cell was represented as a backbone model listening for changes in all its neighbors and cell views rerendered when the model they were watching changed state. </p>
+<p>I've now done this several times in JavaScript, each time learning something new.  My first implementation was to learn basic JavaScript syntax  and the HTML5 Canvas API, but the code was pretty terrible by my current standards. A second implementation went after the low-hanging fruit by improving the seperation of concerns between view rendering and game calculations.  </p>
 
-<p>My best and most recent iteration on Life uses HTML5 Web Workers, provides a user control panel to play with parameters, and implements several algorithmic improvements.  Instead of visiting every cell once per iteration, I now keep track of a "change list".  Since the only thing that can change a node's status is a change in its number of immediate living neighbors, we need only check the nodes that have changed and the neighbors of a node that changed in the previous iteration.  This is a huge savings after the first few chaotic iterations.</p>
+<p>My third JavaScript implementation was to learn more about event-driven programming with Backbone.js.  In the Backbone version, each cell was represented as a Backbone model listening for changes in all its neighbors.  Each div element in the page was bound to a Backbone view that was listening for changes in a cell model.  The Backbone view automatically changed the div's CSS styling when the underlying data model fired a change event.</p>
 
-<p>Using web workers was a natural evolution.  Now all the calculations are handled in a background thread and I no longer worry about crashing the tab while testing the limits of how small I can go on the pixel size.</p>
+<p>Though by no means "fast" compared to other implementations (see the memoized <a href="http://en.wikipedia.org/wiki/Hashlife">Hashlife</a> algorithm to have your mind blown), my latest rendition of the game adds several improvements.  Most important of these is my use of the HTML5 Web Workers API to offload heavy calculations to another thread.  This allows the UI thread responsible for rendering everything the user sees in the active tab to continue unimpeded while the Life code runs the simluation in the background thread. </p>
+
+<p>
+Now that the UI thread of not saturated by Life's iterative calculations, I have added a simple web form to allow users to adjust the game's parameters.  When users interact with the form, a <span class="code">jQuery</span> click handler sends a message to the background process to adjust the game's state.</p>
+
+<p>
+I have also improved the algorithmic efficiency in the latest version.  Instead of visiting every cell during every iteration, I now keep track of a "change list".  Since the only thing that can change a cell's status is a change in its number of immediate living neighbors, I only need to check the cells that have changed and or whose neighbors have changed.  This is a huge savings in computational expense after the first few chaotic iterations.</p>
 
 
               <footer>
@@ -129,40 +135,40 @@
                 <h2 class="alt"><a href="http://www.adoptme.me">AdoptMe.me</a><br>Meme generator meets Petfinder.com API.</h2>
               </header>
               
-<p>When I began <a href="http://www.adoptme.me">Adoptme.me</a>, I knew it was an ambitious project because of the many moving parts involved.  I learned a lot from the process, but it is currently on inedefinite hiatus. You can view the bones live on the web at adoptme.me.  </p>
+<p>When I began <a href="http://www.adoptme.me">AdoptMe.me</a>, I knew it was an ambitious project because of the many moving parts involved.  I learned a lot from the process, both successes and failures, but the project is currently on inedefinite hiatus. You can view the bones live on the web at <a href="http://www.adoptme.me">AdoptMe.me</a>.  </p>
 
 <p>I originally concieved of the site as a cat meme generator in the same vein as icanhascheezburger, but with a social mission of bringing visibility to cats languishing in animal shelters. I thought that if a person is going to spend their time making funny captions for cat images and sharing them around, they might as well give the visibility to a cat that needs it.  </p>
 
 <a href="http://www.adoptme.me"><img class="projects pull-left" src="images/AdoptMeme.png" alt="AdoptMe.me meme editor"></a>
 
-<p>The technical vision was that I would pull images and data from the free petfinder.com API, push them into my Amazon S3 bucket, let users caption them with a canvas-based javascript editor, and then send the resulting image off to my Amazon S3 bucket.  The image would be watermarked with a generated shortlink that viewers of the image could follow to learn more about how to adopt that animal.</p>
+<p>The technical vision was that I would pull images and data from the free petfinder.com API, push them into my Amazon S3 bucket, let users caption them with a canvas-based JavaScript editor, and then send the resulting image off to my Amazon S3 bucket.  The image would be watermarked with a generated shortlink that viewers of the image could follow to learn more about how to adopt that animal should they be interested in doing so.</p>
 
 <h3>Rails Backend</h3>
 
-<p>A lot needs to happen behind the scenes to create a site handling image media and integrating with third-party APIs.  Since I was deploying on Heroku, first order of business was to find a third-party provider of storage for all my image assets.  Amazon S3 was the obvious choice because it is cheap, fast, and reliable.  Amazon provides an official <span class="code">aws-sdk</span> gem for interacting with their web services, but it contains hundreds of methods for dozens of services so I ended up writing my own <span class="code">Storable</span> module that extends <span class="code">ActiveSupport::Concerns</span> to wrap just the functionality I needed with a simpler API.  My <span class="code">Storable</span> module follows a template pattern, allowing me to easily store and retrieve image data associated with my models on on Amazon's services by only specifying a filename root.</p>
+<p>A lot needs to happen behind the scenes to create a site handling image media and integrating with third-party APIs.  Since I was deploying on Heroku, first order of business was to find a third-party provider of storage for all my image assets.  Amazon S3 was the obvious choice because it is cheap, fast, and reliable.  Amazon provides an official <span class="code">aws-sdk</span> gem for interacting with their web services, but it contains hundreds of methods for dozens of services so I ended up writing my own <span class="code">Storable</span> module that extends <span class="code">ActiveSupport::Concerns</span> to wrap just the functionality I needed with a simpler API.  My <span class="code">Storable</span> module follows a template pattern, allowing me to easily store and retrieve image data associated with any of my ActiveRecord models by specifying a filename root and including the module.</p>
 
-<p>The backend included models for <span class="code">Pet</span>, <span class="code">Image</span>, and <span class="code">Caption</span>.  Pet models were created and populated using data fetched from the Petfinder JSON API.  I quickly discovered that their free API is worth what I paid for it (i.e. nothing), and I spent a lot of time writing code to clean or discard bogus responses.  <span class="code">Image</span> tracked the metadata for unaltered images and <span class="code">Caption</span> tracked metadata for each user-created meme.  Having seperate <span class="code">Image</span> and <span class="code">Caption</span> made the associations clear and easily extensible should I want to find, say, all memes with common text content or all memes derived from a particular animal or photo.</p>  
+<p>The backend included models for <span class="code">Pet</span>, <span class="code">Image</span>, and <span class="code">Caption</span>.  Pet models were created and populated using data fetched from the Petfinder JSON API.  I quickly discovered that their free API is worth about what I paid for it (i.e. not much), and I spent a lot of time writing code to clean or discard bogus responses.  <span class="code">Image</span> tracked the metadata for unaltered images associated with a <span class="code">Pet</span>, and <span class="code">Caption</span> tracked metadata for each user-created meme.  Having seperate <span class="code">Image</span> and <span class="code">Caption</span> made the associations clear and easily extensible should I want to find, say, all memes with common text content or all memes derived from a particular animal or photo.</p>  
 
-<p>I decided not to build views on the server side, because I knew the image editor I wanted to write would involve heavy javascript.  So the data in my models is all exposed via a JSON API.</p>
+<p>I decided not to build views on the server side, because I knew the image editor I wanted to write would involve heavy JavaScript.  So the data in my models is all exposed via a JSON API for consumption by a client-side application I would develop with Backbone.js.</p>
 
-<p>Finally, I used <span class="code">figaro</span> to manage my third-party credentials.  The <span class="code">figaro</span> gem allows you to store private credentials in an initialization file that is not checked into source control, but the gem will load them into an environment variable for you when the app boots up.</p>
+<p>Finally, I used <span class="code">figaro</span> to manage my third-party credentials.  The <span class="code">figaro</span> gem allows me to store my private credentials in an initialization file that is not checked into source control, but the gem will load them into an environment variable for you when the app boots up.</p>
 
 <h3>Backbone.js, HTML5 Canvas Frontend</h3>
 
-<p>Visiting the site you will be served a static page with the Backbone application.  Much of the data is bootstrapped into the page to avoid unnecessary calls to my JSON api.  I made backbone views for an index page, a meme creation editor, and a show pet/meme page where viewers could learn more about adopting.</p>
+<p>Visiting the site you will be served a static page with the Backbone application.  Much of the data is bootstrapped into the page to avoid unnecessary calls to my JSON API.  I made Backbone views for an index page, a meme creation editor, and a show pet/meme page where viewers could learn more about adopting.  Each of these views is complex, and involves one or more sub-views.</p>
 
-<p>Coding an MVP version of the canvas-based meme editor was a straightforward task.  The editor listens to keypress events and updates the overlayed text as you type.  I wanted each image to have a shortlink-style url in the corner where a viewer of the image could visit and learn more about adopting the pet.  So I wrote the shortlink and watermarking logic on the backend, and was nearing the last piece of the MVP puzzle: uploading my newly captioned images.</p>
+<p>Coding an MVP version of the canvas-based meme editor was a straightforward task after some of my other Canvas projects.  A cat image is set as the background for the canvas element.  As the user types, the editor listens to keypress events and updates the overlayed text.  I wanted each image to have a shortlink-style url in the corner where a viewer of the image could visit and learn more about adopting the pet.  So I wrote the shortlink and watermarking logic on the backend, and was nearing the last piece of the MVP puzzle: uploading my newly captioned images.</p>
 
 <h3> Problems with the Same-Origin Policy</h3>
 
-<p>It is at that moment that I ran head-on into a Same-Origin security error.  I learned, painfully, that the browser's Same-Origin Policy was not going to let me save any of my users meme images directly to S3 because the background cat image was not coming from the same origin as the page I was serving from heroku.  What I thought was going to be as easy as a call to <span class="code">canvas.toDataURL</span> ended up being a much bigger problem.</p>
+<p>It is at that moment that I ran head-on into a Same-Origin security error.  I learned, painfully, that the browser's Same-Origin Policy was not going to let me save any of my users meme images directly to S3 because the background cat image was not coming from the same origin as the page I was serving from Heroku.  What I thought was going to be as easy as a call to <span class="code">canvas.toDataURL()</span> ended up being a much bigger problem.</p>
 
-<p>I fiddled with server side generation of the captioned images using <span class="code">imagemagick</span> via the <span class="code">rmagick</span> gem.  I actually got this to work and its what you will experience if you try to use the live version of the site, but I knew that blocking my rails application with image processing jobs was going to be unacceptably slow with more than one or two concurrent users.  The image work wasn't a candidate to be a deferred job because the user is waiting to see their creation.  </p>
+<p>I fiddled with server side generation of the captioned images using <span class="code">imagemagick</span> via the <span class="code">rmagick</span> gem.  I actually got this to work and its what you will experience if you try to use the live version of the site at this time.  This backend image manipulation is why the actual results do not match the editor preview. I realized quickly, however, that <span class="code">imagemagick</span> was slow, and I knew that blocking my Rails application with big image processing jobs was going to be unacceptably slow with more than one or two concurrent users.  And the image work wasn't a candidate to be a deferred job because the user is waiting to see their creation and share it around on the web.  </p>
 
 
 <h3> Hiatus </h3>
 
-<p>The whole thing seemed unsalvageable at that point (given my knowledge at the time) so I put the project on hold while I kept learning and working on other things.  Since then I've learned that what I originally intended may be possible with CORS, Cross-Origin Resource Sharing, but I haven't yet gotten back to the project.</p>
+<p>Given my knowledge at the time, the whole thing seemed unsalvageable at that point.  I made the decision to put the project on hold while I kept learning and working on other things, hoping to get back to it one day and do the job right.  Since then I've learned that what I originally intended may be possible with CORS, Cross-Origin Resource Sharing, so I'm excited to pick up again where I left off.</p>
     <footer>
       <a href="http://www.adoptme.me" class="button scrolly">View Live</a> <a href="http://www.github.com/jhamon/adoptmeme" class="button scrolly">Source on Github</a>
     </footer>
@@ -181,14 +187,14 @@
                 <h2 class="alt"><a href="http://www.jlh.io">jlh.io</a><br>My very own link shortener.</h2>
               </header>
 
-<p>I created this Backbone/Rails app because sometimes it's nice to have shortlinks, but I wanted to retain control of my links rather than routing them through a third-party service I have no control over.  In it's present form, it only has one user-facing feature: enter a URL and recieve back a valid shortlink.  </p>
+<p>I created this Backbone/Rails app because sometimes it's nice to have shortlinks, but I wanted to retain control of my links rather than routing them through a third-party service I have no control over.  In it's present form, it only has one user-facing feature: enter a URL and recieve back a valid shortlink.  It does one thing, and does it well.</p>
 
 <a href="http://www.jlh.io"><img src="images/jlhio.png" class="pull-right projects"></a>
 
 <h3>Rails Backend</h3>
 <p>Even though the public-facing site is almost trivial in what it offers at this time, I have kept in mind the analytics features of sites like Bitly.com while implementing a backend with seperate models for <span class="code">PageView</span>, <span class="code">Shortlink</span>, <span class="code">TargetUrl</span>, and <span class="code">User</span>.</p>
 
-<p>When you follow a shortlink, a controller logs that visit by creating a <span class="code">PageView</span> before sending you on your way to your destination.  Having distinct <span class="code">Shortlink</span> and <span class="code">TargetUrl</span> means that I will be able to easily compute and show viist analytics on a per-site or per-shortlink or per-user basis if I ever get around to it. <span class="code">Shortlink</span> and <span class="code">TargetUrl</span> must be seperate models because a user might own a shortlink but not the associated target url; many people might create their own shortlinks for the same online destination.</p>
+<p>When you follow a shortlink, a controller logs that visit by creating a <span class="code">PageView</span> before sending you on your way to your destination.  Having distinct <span class="code">Shortlink</span> and <span class="code">TargetUrl</span> means that I will be able to easily compute and show visit analytics on a per-site or per-shortlink or per-user basis if I ever get around to it. <span class="code">Shortlink</span> and <span class="code">TargetUrl</span> must be seperate models because a user might own a shortlink but not the associated target url; many people might create their own shortlinks for the same online destination.</p>
 
 <p>The site serves my present needs just fine in its present form so I haven't built-out the analytics frontend.  But I enjoyed thinking about the associations needed in the domain model on the backend.</p>
 
@@ -210,18 +216,18 @@
                 <h2 class="alt"><a href="http://www.serpent.io">Serpent.io</a><br>Event-driven programming, with snakes!</h2>
               </header>
 
-<p>When I first wrote this game I was still learning the "javascript way" of doing object-oriented programming with prototypical inheritance.  I more or less succeeded in that aspect, but the code responsible for rendering the view and managing user interactions was a huge ball of mud.  At that time I knew just enough jQuery to be dangerous, and while the basic mechanics seemed to work I had all my truth in the DOM and ran into a wall while trying to extend it to have more features.  I wasn't unbinding events properly, so chaos ensued when I tried to reset the game for another play without a hard refresh.  It was a mess, but I had other things I wanted to work on.</p>
+<p>When I first wrote this game I was still learning the "JavaScript way" of doing object-oriented programming with prototypical inheritance.  I more or less succeeded in that aspect, but the code responsible for rendering the view and managing user interactions was a huge ball of mud.  At that time I knew just enough jQuery to be dangerous, and while the basic mechanics seemed to work I had all my truth in the DOM and ran into a wall while trying to extend it to have more features.  I wasn't unbinding events properly, so chaos ensued when I tried to reset the game for another play without a hard refresh.  It was a mess, but I had other things I wanted to work on.</p>
 
 <h3>Backbone reboot</h3>
-<p>I recently revisted the project for a couple of days to apply what I'd learned in the intervening months about keeping a clean seperation between the DOM and my data with the help of a client-side framework called Backbone.js.  I did an almost complete rewrite, and instead of iterating over all the cells for every frame the game is now primarily driven by cascading events.  The cell is the fundamental model of the game, which may belong to any of several different collections (snakeSegments, apples, obstacles) depending on the current state of that cell; these collections publish appropriate events when cells are added or removed, which trigger changes elsewhere in the game.  For example, when an apple is eaten the game view hears the "appleEaten" event and knows to update the score and make a new apple.</p>
+<p>I recently revisted the project for a couple of days to apply what I'd learned in the intervening months about keeping a clean seperation between the DOM and my data with the help of a client-side framework called Backbone.js.  I did an almost complete rewrite, and the game is now primarily driven by cascading events.  The cell is the fundamental model of the game, which may belong to any of several different collections (<span class="code">snakeSegments</span>, <span class="code">apples</span>, <span class="code">obstacles</span>) depending on the current state of that cell; these collections publish appropriate events when cells are added or removed, which trigger changes elsewhere in the game.  For example, when an apple is eaten the game view hears the <span class="code">"appleEaten"</span> event and knows to update the score and make a new apple.</p>
 
 <a href="http://www.serpent.io"><img src="images/serpent_scoreboard.png" class="pull-right projects"></a>
 
-<p>Each square on the screen is linked to a cell view.  The view listens to change events on the cell model and changes it's css class when the underlying model changes.  The game state is now maintained complately seperate from the DOM's appearance thanks to views that listen to data models.</p>
+<p>Each square is a div with <span class="code">display:inline-block</span> and special classes providing styles for each possible state.  The squares each have an associated Backbone view that listens for change events on the cell data model.  When the Backbone cell model changes, the cell view updates the CSS classes applied to its div element, creating the illusion of objects moving across the board.  The game state is now maintained completely seperate from the DOM's appearance thanks to views that listen only to data models.</p>
 
 <h3> Rails backend </h3>
 
-<p>This was primarily a javascript project, but as a finishing touch I whipped up a simple Ruby on Rails backend to allow users to save scores to a scoreboard.  A <span class="code">HighScore</span> model is created when the Backbone app <span class="code">POST</span>s one to the <span class="code">/high_scores</span> url. I originally fetched the scores with a <span class="code">GET</span> request to <span class="code">/high_scores</span>, but eventually moved to bootstrapping the high score data with the page delivering the Backbone app to avoid an unnecessary XHR request.</p>
+<p>This was primarily a JavaScript project, but as a finishing touch I whipped up a simple Ruby on Rails backend to allow users to save scores to a scoreboard.  A <span class="code">HighScore</span> model is created when the Backbone app <span class="code">POST</span>s one to the <span class="code">/high_scores</span> url. I originally fetched the scores with a <span class="code">GET</span> request to <span class="code">/high_scores</span>, but eventually moved to bootstrapping the high score data with the page delivering the Backbone app to avoid an unnecessary XHR request.</p>
 
               <footer>
                 <a href="http://www.serpent.io" class="button scrolly">Play snake!</a> <a href="http://www.github.com/jhamon/snake.js" class="button scrolly">Source on Github</a>
@@ -242,7 +248,7 @@
               </header>
 
 <a href="http://www.hamon.io/asteroids.js"><img class="projects pull-right" src="images/asteroids.png"></a>
-<p>Asteroids is more experiment than finished game since there are no win conditions.  It's one of the first things I made using javascript, and it was a great way to wrap my head around javascript's prototypical inheritance.  The   game has several different types of objects (the spaceship, bullets, asteroids) that have specific behaviors but have a common need to know where they are, move around, etc.  This is easily accomplished by having a base object, <span class="code">MovingObject.prototype</span>, that all other objects delegate to (a.k.a. "inherit from").</p>
+<p>Asteroids is more experiment than finished game since there are no win conditions.  It's one of the first things I made using JavaScript, and it was a great way to wrap my head around JavaScript's prototypical inheritance.  The game has several different types of objects (the spaceship, bullets, asteroids) that have specific behaviors but have a common need to know where they are, move around, etc.  This is easily accomplished by having a base object, <span class="code">MovingObject.prototype</span>, that all other objects delegate to (a.k.a. "inherit from").</p>
 
 <p>Here's a simplified snippet showing the inheritance pattern:</p>
 <pre>
@@ -271,17 +277,17 @@
 
 <p>To understand what's happening here, you have to know that every object has a hidden <span class="code">[[Prototype]]</span> property that is set by the constructor function at creation time to whatever is at the constructor's <span class="code">.prototype</span> property.  Whenever we try to access a property that an object doesn't have, it defers to its prototype.  So when we try to access a property on an object, the interpreter will check that object, then the object's prototype, then the prototype's prototype, etc until it finds a defined property with that name or reaches the end of the prototype chain and returns <span class="code">undefined</span>.  For this reason, it's best to avoid long prototype chains because accessing properties high up on the chain is relatively slow.</p>
 
-<p>As a more concrete example, let's say I want to call <span class="code">ship.move()</span> on a <span class="code">Ship</span> instance that I create with <span class="code">var ship = new Asteroids.Ship()</span>.  Well, <span class="code">ship</span> doesn't have a property called <span class="code">move</span> and neither does the prototype of <span class="code">ship</span> (e.g. <span class="code">Ship.prototype</span>) which was an instance of <span class="code">MovingObject</span>.  But the prototype's prototype, e.g. <span class="code">MovingObject.prototype</span> will have a function under the <span class="code">move</span> property name.</p>
+<p>As a more concrete example, let's say I want to call <span class="code">ship.move()</span> on a <span class="code">Ship</span> instance that I create with <span class="code">var ship = new Asteroids.Ship()</span>.  Well, <span class="code">ship</span> doesn't have a property called <span class="code">move</span> and neither does the prototype of <span class="code">ship</span> (e.g. <span class="code">Ship.prototype</span>) which was an instance of <span class="code">MovingObject</span>.  But the prototype's prototype, e.g. <span class="code">MovingObject.prototype</span> <em>will</em> have a function under the <span class="code">move</span> property name.</p>
 
 <p>I want to give a shoutout to Kyle Simpson for explaining prototypical inheritance (better known as "behavior delegation") in <a href="http://davidwalsh.name/javascript-objects">a way that actually makes sense.</a></p>
 
 
 <h3>Render performance</h3>
 
-<p>While refactoring, I got a big render performance boost when I replaced <span class="code">window.setInterval</span> with <span class="code">window.requestAnimationFrame</span>, which is a new timer API available in HTML5.  The browser calls the <span class="code">requestAnimationFrame</span> (rAF) callback before each repaint, however often that might be.  Browser implementations of rAF have platform-specific knowledge that allows timing to be optimized and avoid dropped frames and other visual jank that crops up when a timer (even a reliable one, which window.setInterval is not) is out of sync with browser repaints.  
+<p>While refactoring, I got a big render performance boost when I replaced <span class="code">window.setInterval</span> with <span class="code">window.requestAnimationFrame</span>, which is a new timer API available in HTML5.  The browser calls the <span class="code">requestAnimationFrame</span> (rAF) callback before each repaint, however often that might be.  Browser implementations of rAF have platform-specific knowledge that allows timing to be optimized and avoid dropped frames and other visual jank that crops up when a timer (even a reliable one, which <span class="code">window.setInterval</span> is not) is out of sync with browser repaints.  
 </p>
 
-<p>The "game" still has performance problems when too many asteroids are added because a lot of calculation is happening to draw the irregularly shaped asteroid polygons in canvas.  In a real game where performance is a serious concern, I would replace these complex geometric objects with a prerendered sprite.</p>
+<p>The "game" still has performance problems when too many asteroids are added because a lot of calculation is happening to draw the irregularly shaped asteroid polygons in canvas.  In a real game where performance is a serious concern, the first thing I would do is replace these complex geometric objects with a prerendered sprite.</p>
 
               <footer>
                 <a href="http://www.hamon.io/asteroids.js" class="button scrolly">Play asteroids</a> <a href="http://www.github.com/jhamon/asteroids.js" class="button scrolly">Source on Github</a>
@@ -303,14 +309,33 @@
                 <h2 class="alt">Confessions:<br>Backbone beyond the basics</h2>
               </header>
 
-<p><strong>This project is under active development and is not currently available live on the web.</strong>I call this app confessions because my original vision was for something like fmylife.  Enter your anonymous confession, let people vote and comment on it and laugh at your expense.  The app has many more models and views than any of my other projects as of this writing.</p>
+<p><strong>This project is under active development and is not currently available live on the web.</strong>  I call this app "confessions" because my original intent was to make  something like <a href="http://www.fmylife.com">fmylife.com</a>.  Enter your anonymous confession, let people vote and comment on it and laugh at your expense.  The app has many more models and views than any of my other   projects as of this writing.</p>
 
-<p>I wrote and tested the Rails models and associations needed to support creation and categorization of confessions, upvoting, downvoting, flagging inappropriate content (inevitable on an anonymous site), commenting, and comment voting/flagging.  A first for me, I set up some custom counter caches for things like upvote/downvote count and number of comments.  I also discovered the awesome Kaminari gem for pagination.  There is a single static view that delivers the Backbone app, and the remaining controller logic implements a pure JSON API that is consumed by the client-side Backbone.js code.  Because of all the moving parts, I wrote unit tests for the models, controllers, and requests with Rspec, Faker, FactoryGirl, and Shoulda. </p>
+<img class="projects pull-left" src="images/confessions.png">
 
-<p>Although this was not my first use of Backbone (see AdoptMe.me), I felt like it really stretched my ablities and taught me a lot about how to write a non-trivial single page app.  I wrote client-side validations to prevent saving bogus or blank confessions.  I used caching to display the number of upvotes and downvotes.  I learned how to get jQuery to use DocumentFragments to minimize repaint/reflow on collection renders.  I learned to be as specific as possible when setting up event listeners.  And some of my views have objects for tracking view state, to prevent keeping state in the DOM as the user interacts with the page.</p>
+<h3> Rails Backend, with RSpec </h3>
+
+<p>I wrote and tested the Rails models and associations needed to support creation and categorization of confessions, upvoting, downvoting, flagging inappropriate content (which is inevitable on an anonymous site), commenting, and comment voting/flagging.  A first for me, I set up some custom counter caches for things like upvote/downvote count and number of comments to avoid hitting the database unecessarily.  I also discovered the awesome Kaminari gem for paginating results.</p>
+
+<p>  There is a single static view that delivers the Backbone app, and the remaining controller logic implements a RESTful JSON API that is consumed by the client-side Backbone.js code.  Because of all the moving parts, I've written unit tests for most of the models, controllers, and requests using RSpec, Faker, FactoryGirl, and Shoulda. </p>
+
+<h3> Client-side Backbone.js </h3>
+<p>Although this has not been not my first use of Backbone (see AdoptMe.me and Snake), I feel like it is really stretching my ablities and teaching me a lot about how to write a non-trivial single page app.  I've been figuring out how to go well beyond a TodoMVC-style demo app. Problems I've wrestled with and researched include: </p>
+
+<ol>
+<li>Writing client-side validations and displaying helpful error messages.</li>
+<li>Using caching to keep updated vote or comment counts. </li>
+<li>Avoiding unecessary page reflows on collection subview renders.  </li>
+<li>Being as specific as possible when setting up event listeners.</li>
+<li>Using objects to manage view state, rather than the DOM.</li>
+<li>Using custom events.</li>
+</ol>
+
+<p>They don't talk about this stuff in the demo/tutorial applications, but there's a lot of complexity involved in creating a non-trivial single page application.</p>
+
 
               <footer>
-   <a href="http://www.github.com/jhamon/confessions" class="button scrolly">Source on Github</a>
+   <a href="http://www.github.com/jhamon/confessions" class="button scrolly">See my progress on Github</a>
               </footer>
 
             </div>
@@ -325,19 +350,23 @@
             <img class="image featured" alt="Life" src="images/conway_divider.png">
 
               <header>
-                <h2 class="alt">Algorithm Study</h2>
+                <h2 class="alt">Algorithm and Data Structure Study:</h2>
+                <h2>Sharpening the saw</h2>
               </header>
 
-<p>I don't come from a traditional computer science background, but I am interested in learning what I can about the practical use of algorithms because I know they are important for building applications that scale to millions of users.  There's no better way to learn about algorithms than to get your hands dirty implementing and using them.</p>
+<p>I don't come from a traditional computer science background, but as part of my scientific training I have learned to take a calm and methodical approach to solving problems.  I am interested in learning what I can about the practical use of algorithms and data structures because I know they are important for building applications that scale to millions of users.  There's no better way to learn about algorithms, or anything really, than to get your hands dirty implementing and using them.</p>
 
 <img class="projects pull-left" src="images/projecteuler.png">
-<p>I first became aware of Algorithms as a distinct and useful discipline while working on <a href="https://projecteuler.net/">Project Euler</a> problems while still in graduate school for geology. Project Euler is a collection of puzzle problems and claims to be an experiment in inductive learning; the lessons from each problem should help you to solve the problems that follow it.  I solved <a href="http://www.github.com/jhamon/projecteuler">27 problems with Python</a>, which doesn't sound like a lot but is enough to place me in the top 15% of the site's participants.  My solutions were not always very elegant or the most efficient, but I learned a lot by discussing and studying the solutions of others after I'd found an answer.</p>
+<p>I first became aware of Algorithms as a distinct and useful discipline while working on <a href="https://projecteuler.net/">Project Euler</a> problems while still in graduate school at Caltech for geology. Project Euler is a collection of puzzle problems and claims to be an experiment in inductive learning; the lessons from each problem should help you to solve the problems that follow it.  I solved <a href="http://www.github.com/jhamon/projecteuler">27 problems with Python</a>, which doesn't sound like a lot but is enough to place me in the top 15% of the site's participants.  My solutions were not always very elegant or the most efficient, but I learned a lot by struggling through and then discussing the solutions of others after I'd found an answer.</p>
 
 <a href="http://www.github.com/jhamon/sortable"><img class="projects pull-right" src="images/algos.png"></a>
 
-<p>More recently, I've implemented several common sorting algorithms in a Ruby module I call <span class="code"><a href="http://www.github.com/jhamon/sortable">Sortable</a></span>.  In addition to demonstrating my practice with sorting algorithms, the module is tested with Rspec and uses advanced Ruby features like metaprogramming and blocks.  Just like native <span class="code">Array.sort</span>, many of my methods accept blocks defining custom comparison logic.  <span class="code">Sortable</span> is primarily for use with arrays, but can be used with any class that mixes in the <span class="code">Enumerable</span> module with <span class="code">each</span> and <span class="code">each_with_index</span> methods yielding successive items.</p>
+<p>More recently, I've done several small things that have developed my knowledge of Algorithms and Data Structures while also improving my ability to write good tests with tools like RSpec, Jasmine, and Travis CI.  One of these is a toy Ruby module I call <span class="code"><a href="http://www.github.com/jhamon/sortable">Sortable</a></span> that extends the Array class with several different types of sorts</span>.  The module, though short, uses advanced Ruby features such as custom methods accepting blocks and metaprogramming.  Just like native <span class="code">Array.sort</span>, many of my methods accept blocks defining custom comparison logic.  </p>
 
-<p>I've also taken time to write some rough implementations of common data structures like hash maps, linked lists, queues, stacks, and heaps <a href="http://www.github.com/jhamon/DataStructures">here</a> and <a href="http://www.github.com/jhamon/js-heap">here</a>.
+<p>I've also taken time to write some rough implementations of common data structures like hashmaps, linked lists, queues, stacks, heaps, and trees.  Most of these have been done in Ruby, but a few were developed with JavaScript and Jasmine. </p>
+
+
+<a href="https://github.com/jhamon/ruby_data_structures">Ruby Data Structures</a> and <a href="http://www.github.com/jhamon/js-heap">here</a>.
 
 
             </div>
