@@ -111,7 +111,7 @@
 <p>Though by no means "fast" compared to other implementations (see the memoized <a href="http://en.wikipedia.org/wiki/Hashlife">Hashlife</a> algorithm to have your mind blown), my latest rendition of the game adds several improvements.  Most important of these is my use of the HTML5 Web Workers API to offload heavy calculations to another thread.  This allows the UI thread responsible for rendering everything the user sees in the active tab to continue unimpeded while the Life code runs the simluation in the background thread. </p>
 
 <p>
-Now that the UI thread of not saturated by Life's iterative calculations, I have added a simple web form to allow users to adjust the game's parameters.  When users interact with the form, a <span class="code">jQuery</span> click handler sends a message to the background process to adjust the game's state.</p>
+Now that the UI thread is not saturated by Life's iterative calculations, I have added a simple web form to allow users to adjust the game's parameters.  When users interact with the form, a <span class="code">jQuery</span> click handler sends a message to the background process to adjust the game's state.</p>
 
 <p>
 I have also improved the algorithmic efficiency in the latest version.  Instead of visiting every cell during every iteration, I now keep track of a "change list".  Since the only thing that can change a cell's status is a change in its number of immediate living neighbors, I only need to check the cells that have changed and or whose neighbors have changed.  This is a huge savings in computational expense after the first few chaotic iterations.</p>
@@ -366,7 +366,7 @@ I have also improved the algorithmic efficiency in the latest version.  Instead 
 <p>I've also taken time to write some rough implementations of common data structures like hashmaps, linked lists, queues, stacks, heaps, and trees.  Most of these have been done in Ruby, but a few were developed with JavaScript and Jasmine. </p>
 
 
-<a href="https://github.com/jhamon/ruby_data_structures">Ruby Data Structures</a> and <a href="http://www.github.com/jhamon/js-heap">here</a>.
+<a href="https://github.com/jhamon/ruby_data_structures">Ruby Data Structures</a> and <a href="">here</a>.
 
 
             </div>
