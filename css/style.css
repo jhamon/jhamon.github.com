@@ -916,7 +916,7 @@
   {
     position: fixed;
     top: 0;
-    left: 0;
+    right: 0;
     width: 375px;
     height: 100%;
     color: #fff;
@@ -928,7 +928,7 @@
     #header .top
     {
       position: absolute;
-      left: 0;
+      right: 0;
       top: 0;
       width: 100%;
     }
@@ -936,7 +936,7 @@
     #header .bottom
     {
       position: absolute;
-      left: 0;
+      right: 0;
       bottom: 0;
       width: 100%;
     }
@@ -1065,7 +1065,7 @@
   
   #footer
   {
-    margin-left: 375px;
+    margin-right: 375px;
     text-align: center;
     background-color: #dce3e2;
     padding: 3em 0 4em 0;
@@ -1094,7 +1094,7 @@
 
   #main
   {
-    margin-left: 375px;
+    margin-right: 375px;
   }
   
     #main > section
