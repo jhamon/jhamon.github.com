@@ -28,7 +28,7 @@
 	.image.featured
 	{
 		position: relative;
-		min-height: 10em;
+		/*min-height: 10em;*/
 		overflow: hidden;
 	}
 	
@@ -53,8 +53,10 @@
 
 	#main
 	{
+		margin-right: 0px;
 	}
-	
+
+
 		#main > section
 		{
 			padding: 2em 0 2em 0;

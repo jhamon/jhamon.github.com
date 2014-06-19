@@ -14,7 +14,7 @@
 
   body
   {
-    background: #fff;
+    background: #ff3;
   }
 
   body,input,textarea,select
@@ -190,6 +190,7 @@
         width: 48px;
         height: 48px;
         background: #f00;
+
       }
       
         .image.avatar48 img
@@ -315,7 +316,7 @@
         -webkit-appearance: none;
         display: block;
         border: 0;
-        background: #fff;
+        background: #D3D0D6;
         background: rgba(255,255,255,0.75);
         width: 100%;
         border-radius: 0.35em;
@@ -340,7 +341,7 @@
         form textarea:focus
         {
           box-shadow: 0 0 2px 1px #8ededc;
-          background: #fff;
+          background: #D3D0D6;
         }
         
         form textarea
@@ -405,14 +406,14 @@
         {
           text-align: left;
           padding: 0.5em 1em 0.5em 1em;
-          color: #fff;
-          background: #222729 url('images/overlay.png');
+          color: #D3D0D6;
+          background: #6B07C7 url('images/overlay.png');
         }
       
         table.default thead
         {
           background: #444;
-          color: #fff;
+          color: #D3D0D6;
         }
         
         table.default tfoot
@@ -430,11 +431,12 @@
     {
       position: relative;
       display: inline-block;
-      border-radius: 0.35em;
-      color: #fff !important;
+      border-radius: 0.15em;
+      color: #D3D0D6 !important;
       text-decoration: none;
+      margin: 10px 10px 10px 10px;
       padding: 0.75em 2.5em 0.75em 2.5em;
-      background-color: #8ebebc;
+      background-color: #FF0022;
       border: 0;
       cursor: pointer;
       background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url('images/overlay.png');
@@ -451,7 +453,7 @@
 
       .button:hover
       {
-        background-color: #9ececc;
+        background-color: #E50000;
       }
       
       .button:active
@@ -469,7 +471,7 @@
     
       .item header
       {
-        background: #fff;
+        background: none;
         margin: 0;
         padding: 1em 0 1em 0;
         font-size: 0.8em;
@@ -536,7 +538,7 @@
     .fa-stack-1x,.fa-stack-2x{position:absolute;left:0;width:100%;text-align:center}
     .fa-stack-1x{line-height:inherit}
     .fa-stack-2x{font-size:2em}
-    .fa-inverse{color:#fff}
+    .fa-inverse{color:#D3D0D6}
     .fa-glass:before{content:"\f000"}
     .fa-music:before{content:"\f001"}
     .fa-search:before{content:"\f002"}
@@ -919,8 +921,8 @@
     right: 0;
     width: 375px;
     height: 100%;
-    color: #fff;
-    background: #222729 url('images/overlay.png');
+    color: #FF0022;
+    background: #1CB4FA url('images/overlay.png');
     box-shadow: inset -0.25em 0 0.25em 0 rgba(0,0,0,0.125);
     text-align: right;
   }
@@ -960,7 +962,7 @@
       
         #header .icons a:hover
         {
-          color: #fff;
+          color: #D3D0D6;
         }
 
   #logo
@@ -974,7 +976,7 @@
     #logo h1
     {
       position: relative;
-      color: #fff;
+      color: #FFF;
       font-weight: 600;
       font-size: 1em;
       line-height: 1em;
@@ -1048,6 +1050,7 @@
             background: rgba(0,0,0,0.15);
             box-shadow: inset 0 0 0.25em 0 rgba(0,0,0,0.125);
             color: #fff;
+            font-style: bold;
           }
 
             #nav ul li a.active span
@@ -1056,7 +1059,7 @@
 
               #nav ul li a.active span:before
               {
-                color: #E27689;
+                color: #FF0022;
               }
 
 /*********************************************************************************/
@@ -1067,7 +1070,8 @@
   {
     margin-right: 375px;
     text-align: center;
-    background-color: #dce3e2;
+    background-color: #C9FFFF;
+    color: #1CB4FA;
     padding: 3em 0 4em 0;
     box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.05), inset 0 0.1em 0.1em 0 rgba(0,0,0,0.025);
     font-size: 0.8em;
@@ -1120,15 +1124,20 @@
   
     #main > section.two
     {
-      background-color: #f5fafa;
+      background-color: #F5FFFF;
     }
   
     #main > section.three
     {
-      background-color: #ecf1f1;
+      background-color: #fff;
     }
   
     #main > section.four
     {
-      background-color: #e8edec;
+      background-color: #F5FFFF;
+    }
+
+    #main > section.five
+    {
+      background-color: #fff;
     }
