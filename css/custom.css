@@ -83,7 +83,10 @@ img.projects.pull-right {
   filter: grayscale(20%);
 }
 
-img.avatar80 {
+.image.avatar80 {
   width: 80px;
   height: 80px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
 }
