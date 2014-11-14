@@ -1,0 +1,16 @@
+<div class="highlight"><pre>  <span class="k">class</span> <span class="nc">SithLord</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+    <span class="n">validates</span> <span class="ss">:name</span><span class="p">,</span> 
+              <span class="ss">:format</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">with</span><span class="p">:</span> <span class="sr">/^Darth\ /</span><span class="p">}</span>
+
+    <span class="n">validates</span> <span class="ss">:lightsaber_color</span><span class="p">,</span>
+              <span class="ss">:exclusion</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">in</span><span class="p">:</span> <span class="sx">%w(green blue)</span> <span class="p">}</span>
+
+    <span class="n">validates</span> <span class="ss">:undercover</span><span class="p">,</span> 
+              <span class="ss">:inclusion</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">in</span><span class="p">:</span> <span class="o">[</span><span class="kp">true</span><span class="p">,</span> <span class="kp">false</span><span class="o">]</span> <span class="p">}</span>
+
+    <span class="n">validates</span> <span class="ss">:catchphrase</span><span class="p">,</span> <span class="ss">:length</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="ss">minimum</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="ss">too_short</span><span class="p">:</span> <span class="s2">&quot;must have at least %{count} characters&quot;</span>
+    <span class="p">}</span>
+  <span class="k">end</span>
+</pre></div>

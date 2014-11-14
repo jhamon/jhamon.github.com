@@ -18,12 +18,15 @@ body, html {
 @-webkit-keyframes FLASH {
   50% {
     opacity: 1; } }
+
 @-moz-keyframes FLASH {
   50% {
     opacity: 1; } }
+
 @keyframes FLASH {
   50% {
     opacity: 1; } }
+
 body, html {
   height: 100%;
   background: #FFF;
@@ -74,7 +77,7 @@ a, a:hover, a:visited, a:active {
 .hero {
   flex-grow: 1; }
   .hero .name {
-    color: #F40; }
+    color: #ff4400; }
   .hero .line {
     text-transform: uppercase;
     font-size: 3em;
@@ -96,7 +99,7 @@ a, a:hover, a:visited, a:active {
 .column {
   flex-grow: 1;
   height: 20vh;
-  color: #000;
+  color: black;
   transition: all 0.3s ease;
   text-align: center;
   padding-bottom: 40px;
@@ -106,7 +109,7 @@ a, a:hover, a:visited, a:active {
     top: -20px;
     cursor: pointer; }
   .column:after {
-    background: #F40;
+    background: #ff4400;
     width: 80%;
     height: 20px;
     position: absolute;
@@ -125,4 +128,4 @@ a, a:hover, a:visited, a:active {
     font-size: 1.5em;
     transition: all 1s ease; }
     .media i:hover {
-      color: #FFF; }
+      color: white; }

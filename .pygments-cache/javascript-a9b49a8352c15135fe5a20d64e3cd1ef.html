@@ -1,0 +1,18 @@
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">triggers</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="c1">// a giant list of icon image urls</span>
+<span class="p">]</span>
+
+<span class="kd">var</span> <span class="nx">actions</span> <span class="o">=</span> <span class="p">[</span>
+ <span class="c1">// another giant list of icon image urls</span>
+<span class="p">]</span>
+
+<span class="kd">function</span> <span class="nx">buildSlotItem</span> <span class="p">(</span><span class="nx">imgURL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;slottt-machine-recipe__item&#39;</span><span class="p">)</span>
+                      <span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="s1">&#39;background-image&#39;</span><span class="o">:</span> <span class="s1">&#39;url(&#39;</span> <span class="o">+</span> <span class="nx">imgURL</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">})</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">buildSlotContents</span> <span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="nx">imgURLArray</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$items</span> <span class="o">=</span> <span class="nx">imgURLArray</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">buildSlotItem</span><span class="p">);</span>
+  <span class="nx">$container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">$items</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>

@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rails | Jen Hamon]]></title>
+  <link href="http://jhamon.github.io/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://jhamon.github.io/"/>
+  <updated>2014-11-13T17:48:07-08:00</updated>
+  <id>http://jhamon.github.io/</id>
+  <author>
+    <name><![CDATA[Jen Hamon]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Enforcing Your Template Pattern Interface With RSpec Shared Examples]]></title>
+    <link href="http://jhamon.github.io/blog/2014/10/09/enforcing-your-template-pattern-interface-with-rspec/"/>
+    <updated>2014-10-09T18:00:35-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/10/09/enforcing-your-template-pattern-interface-with-rspec</id>
+    <content type="html"><![CDATA[<p>The template pattern comes into play when you have several different use cases that are mostly the same but differ in just a few ways.  Shared functionality and skeleton methods are defined in a base class, which will be overridden by each subclass.  Each subclass provides a different implementation for the skeleton functions, and because all these objects all share a common interface we can use them interchangeably in other parts of our code.</p>
+
+<h2>Using class inheritance</h2>
+
+<p>The simplest way of implementing the template pattern is to define a base class that your various implementations inherit from and override. All of the methods we want included in the template subclasses must raise errors if not overridden.  That way, if no implementation is present in a subclass we will see an error.</p>
+
+<p>Take these printer classes for example.</p>
+
+<pre><code class="ruby">class BasePrinter
+  def prepare_and_print(data)
+    print(magical_formatting(data))
+  end
+
+  def magical_formatting(data)
+    "Magical data: #{data}"
+  end
+
+  def print(data)
+    raise "Not implemented!"
+  end
+end
+
+class PlainPrinter &lt; BasePrinter
+  def print(data)
+    puts data
+  end
+end
+
+class ShufflePrinter &lt; BasePrinter
+  def print(data)
+    puts data.split("").shuffle.join
+  end
+end
+
+class BogusPrinter &lt; BasePrinter
+  def bogus_print
+    # whatever
+  end
+end
+</code></pre>
+
+<p>Now if we do <code>BogusPrinter.new.prepare_and_print(data)</code> we will see a &ldquo;Not impelmented!&rdquo; error because the expected <code>print</code> method was not defined in the subclass. A quick and easy fix.</p>
+
+<p>This gets the job done, but doesn&rsquo;t seem ideal.  What if we want to make a printer class that writes data to a PDF file?  We might need this class to inherit from another class providing complex PDF logic.</p>
+
+<pre><code class="ruby">class PDFPrinter &lt; BadassPDFLibrary
+  def print(data)
+    # do stuff
+  end
+end
+</code></pre>
+
+<h2>Wrap the base template into a module</h2>
+
+<p>Ruby only has single inheritance, so there&rsquo;s no way to subclass <code>BasePrinter</code> and <code>BadassPDFLibrary</code>.  One way around the single-inheritance problem is to wrap up our <code>BasePrinter</code> into a module to be included.</p>
+
+<pre><code class="ruby">module BasePrinter
+  def prepare_and_print(data)
+    print(magical_formatting(data))
+  end
+
+  def magical_formatting(data)
+    "Magical data: #{data}"
+  end
+
+  def print(data)
+    raise "not implemented"
+  end
+end
+
+class PlainPrinter
+  include BasePrinter
+
+  def print(data)
+    puts data
+  end
+end
+
+class ShufflePrinter
+  include BasePrinter
+
+  def print(data)
+    puts data.split("").shuffle.join
+  end
+end
+
+class BogusPrinter
+  include BasePrinter
+
+  def bogus_print
+    # whatever
+  end
+end
+
+class PDFPrinter &lt; BadassPDFLibrary
+  include BasePrinter
+
+  def print(data)
+    # do stuff
+  end
+end
+</code></pre>
+
+<h2>Leveraging RSpec <code>shared_examples</code></h2>
+
+<p>Using modules is a perfectly workable solution if we need to inherit from a different class.  But there&rsquo;s a third way we can enforce our expectations on the printer interface. That is to write some shared examples for this code that check for the presence of the expected methods.</p>
+
+<pre><code class="ruby">
+shared_examples "a printer class" do
+  let(:printer) { described_class.new }
+
+  it "should expose a #print method" do
+    expect(printer).to respond_to(:print)
+  end
+
+  describe "#print" do
+    it "should return nil" do
+      expect(printer.print("Hello, World!")).to be_nil
+    end
+  end
+end
+
+printers = [
+ PlainPrinter,
+ BogusPrinter,
+ ShufflePrinter,
+ PDFPrinter
+]
+
+printers.each do |printer_class|
+  describe printer_class do
+    it_behaves_like "a printer class"
+  end
+end
+</code></pre>
+
+<p>This approach goes beyond the error-raising we get from the module or base class and allows us to make stipulations about the return values from each template method.  With a few tests like this, we can dispense with the need for abstract base methods.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Keeping Your Secrets Safe With Figaro]]></title>
+    <link href="http://jhamon.github.io/blog/2014/01/08/keeping-your-secrets-safe/"/>
+    <updated>2014-01-08T21:22:01-08:00</updated>
+    <id>http://jhamon.github.io/blog/2014/01/08/keeping-your-secrets-safe</id>
+    <content type="html"><![CDATA[<p>While working on several of my side projects, I&rsquo;ve often had a need to store secret information in my project.  I need a way to make things like API keys available to my application without accidentally exposing them to others when, for instance, I push that code to Github or Bitbucket.</p>
+
+<p>Many people much smarter than myself have thought about the problem of managing secrets, and one the suggested solutions is to <a href="http://12factor.net/config">store configuration information in the environment</a>. The advantage of this approach, besides keeping your credentials out of your git history, is that it allows you to easily configure environment-specific as needed by keeping the things that change (the API keys) seperate from the application being deployed.</p>
+
+<p>An example of how this might come into play would be if your application was integrated with a third-party API, like a payment processor, operating on stateful resources.  You probably want to use different API keys for each environment to avoid accidentally charging your customers from dev or staging. Because even if you are writing a lot of tests, you never know for sure that something horrible and unexpected won&rsquo;t happen when you first roll out a new feature.</p>
+
+<p>Keeping environment-specific configuration seperate from the application makes avoiding a horror scenario relatively easy.</p>
+
+<h2>Configuration with Figaro</h2>
+
+<p>Fortunately for us, other people have done the necessary legwork to implement this.  In Rails 4.1, we should be using <a href="http://guides.rubyonrails.org/4_1_release_notes.html#config-secrets-yml"><code>secrets.yml</code></a> to hold confidential information.  But for those still on Rails 3, there&rsquo;s a nice gem called <a href="https://github.com/laserlemon/figaro"><code>figaro</code></a> that does the work of populating environment variables from a configuration file (not checked into version control) for us.</p>
+
+<p>First add the gem to your gemfile</p>
+
+<pre><code class="ruby">  # Gemfile
+  gem 'figaro'
+</code></pre>
+
+<p>And install it from the command line</p>
+
+<pre><code class="ruby">  bundle install &amp;&amp; figaro install
+</code></pre>
+
+<p>The <code>figaro install</code> command creates a <code>config/application.yml</code> file and adds it to <code>.gitignore</code> so that it cannot be checked into version control.</p>
+
+<p>Now we&rsquo;re ready to add some configuration.</p>
+
+<pre><code class="yaml"># config/application.yml
+
+staging:
+  twilio_account_sid: "not_a_real_account_sid_but_you_get_the_idea"
+  twilio_auth_token: "auth_auth_auth_auth_auth_auth_"
+
+production:
+  twilio_account_sid: "a_totally_different_fake_account_sid"
+  twilio_auth_token: "a_fake_auth_token"
+</code></pre>
+
+<p>When our rails application starts, figaro will make the appropriate credentials available in the <code>ENV</code> variable.  We can access these anyway, but often we&rsquo;ll do it in an initializer like this:</p>
+
+<pre><code class="ruby"># config/initializers/twilio.rb
+Twilio.configure do |config|
+  config.account_sid = ENV['twilio_account_sid']  
+  config.auth_token  = ENV['twilio_auth_token']
+end
+</code></pre>
+
+<h3>Don&rsquo;t get tripped up</h3>
+
+<p>One gotcha to keep in mind is that <code>ENV</code> is just a simple key value store holding strings. If you try to configure a variable to <code>false</code>, you&rsquo;ll run into trouble because <code>ENV['something_false']</code> will actually be the string <code>"false"</code>, which is truthy. Be vigilant.</p>
+
+<h2>Secure your application secret token, too</h2>
+
+<p>If you&rsquo;re publishing your application source code publically while also deploying it, you may have inadvertantly exposed your application&rsquo;s secret token. The token is used to sign cookies, so you have <a href="http://robertheaton.com/2013/07/22/how-to-hack-a-rails-app-using-its-secret-token/">opened yourself up to being hacked</a> if you publish a git repo with this information anywhere in its history.</p>
+
+<p>If you need to, generate a new secret token with <code>rake secret</code>. Then store that secret in your <code>config/application.yml</code> and update <code>config/initializers/secret_token.rb</code> accordingly.</p>
+
+<pre><code class="yaml"># config/application.yml
+secret_token_base: '63683ebbd2fe8a4cb670c727e84b6cc2b5efb5814374dd9299490217b84c4ca4e826094c1fcb34df3d66c902b659acfae1e79d0e912a0828c53f1be72fe6f5e0'
+</code></pre>
+
+<pre><code class="ruby"># config/initializers/secret_token.rb
+MyApp::Application.config.secret_key_base = ENV['secret_token_base']
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Don't Reinvent the Wheel :<br>Rails Validations Beyond the Basics]]></title>
+    <link href="http://jhamon.github.io/blog/2013/10/10/advanced-rails-validations/"/>
+    <updated>2013-10-10T23:43:11-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/10/10/advanced-rails-validations</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;ve gone through a Rails tutorial like the Hartl Rails Tutorial or Rails For Zombies, you&rsquo;ll be familiar with common model validations that prevent saving duplicate or incomplete records.  Throughout this piece I&rsquo;ll be talking about a <code>Padawan</code> class, that might begin looking something like this:</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  validates :age, :presence =&gt; true
+end
+</code></pre>
+
+<p>This is a fine first step, but it only goes a small distance toward verifying any records we might try to save are actual valid Padawans. There is a conspicuous lack of business logic. Right now anyone with an age can be saved into the database, even those who are too old to begin the training.</p>
+
+<h2>Custom validations</h2>
+
+<p>If we dig in a little further with documentation and Stack Overflow answers we begin to learn about defining custom validators that implement attribute checks that are tailored to our application.</p>
+
+<p>A custom validator is just a method that adds an error message if a given conditions is not met.  A validator method that does not add any error messages is considered to have passed.  So it&rsquo;s simple to begin writing code like this:</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  validates :age, :presence =&gt; true
+  validate :not_too_old_to_be_trained
+
+  def not_too_old_to_be_trained
+    errors.add(:age, "is too old to be trained") if age &gt; 9
+  end
+end
+</code></pre>
+
+<p>We can fire up the console and quickly verify this does what we expect</p>
+
+<pre><code class="ruby">2.0.0-p247 :008 &gt; luke = Padawan.create(name: "Luke Skywalker", age: 25)
+   (0.1ms)  begin transaction
+  Padawan Exists (0.1ms)  SELECT  1 AS one FROM "padawans"  WHERE "padawans"."name" = 'Luke Skywalker' LIMIT 1
+   (0.0ms)  rollback transaction
+ =&gt; #&lt;Padawan id: nil, age: 25, name: "Luke Skywalker", midichlorian_count: nil, created_at: nil, updated_at: nil&gt;
+2.0.0-p247 :009 &gt; luke.errors.full_messages
+ =&gt; ["Age is too old to be trained"]
+</code></pre>
+
+<p>Suck it, Luke Skywalker!  You&rsquo;re too old to be trained!</p>
+
+<h2>Not the refactor you were looking for</h2>
+
+<p>We&rsquo;re successfully keeping the old fogies out of the Jedi Academy now, but plenty of people would look at this new code and be like</p>
+
+<blockquote><p><em>Woah, <a href="http://stackoverflow.com/questions/47882/what-is-a-magic-number-and-why-is-it-bad">magic numbers</a>! This is not the refactor you were looking for.</em></p></blockquote>
+
+<p>Actually, they probably wouldn&rsquo;t say that. But they&rsquo;d be thinking it while they downgrade their opinion of you. So let&rsquo;s at least be a little more explicit with named constants and a bit of explanation for anybody who might work on this code after us.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training
+  MAX_AGE = 9
+
+  validates :age, :presence =&gt; true
+  validate :not_too_old_to_be_trained
+
+  def not_too_old_to_be_trained
+    errors.add(:age, "is too old to be trained") if age &gt; MAX_AGE
+  end
+end
+</code></pre>
+
+<h1>Babies with lightsabers? Oh my!</h1>
+
+<p>If we wrote a few specs against this code, we&rsquo;d realize that even babies in diapers are able to pass the validation, which doesn&rsquo;t seem like a great idea.  Imagine the trouble a baby with a lightsaber might get into! Or a toddler who can <em>use the Force</em> during tantrums! It won&rsquo;t do.</p>
+
+<p>Let&rsquo;s modify our validator to check against a range of ages, and give the validator a more appropriate name.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  validates :age, :presence =&gt; true
+  validate :is_an_acceptable_age_to_be_trained
+
+  def is_an_acceptable_age_to_be_trained
+    if age &gt; MAX_AGE
+     errors.add(:age, "is too old to be trained")
+    elsif age &lt; MIN_AGE
+     errors.add(:age, "is too young to be trained")
+    end
+  end
+end
+</code></pre>
+
+<p>Now that we have our age requirements down, we remember that <code>midichlorian_count</code> is also a factor when selecting Padawans for training.  To borrow a useful piece of Harry Potter argot, we don&rsquo;t want to waste time training squibs.  So we&rsquo;d better create a validation for midichlorians too.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  MIDICHLORIAN_THRESHOLD = 9000
+
+  validates :age, :presence =&gt; true
+  validate :is_an_acceptable_age_to_be_trained
+  validate :has_enough_midichlorians
+
+  def is_an_acceptable_age_to_be_trained
+    if age &gt; MAX_AGE
+     errors.add(:age, "is too old to be trained")
+    elsif age &lt; MIN_AGE
+     errors.add(:age, "is too young to be trained")
+    end
+  end
+
+  def has_enough_midichlorians
+    if midichlorian_count &lt; MIDICHLORIAN_THRESHOLD
+        errors.add(:midichlorian_count, "is too low to be trained") 
+      end
+  end
+end
+</code></pre>
+
+<p>If we were writing a whole application, we could continue on adding validations in this way for quite a while.  For very small apps we might never have a problem.</p>
+
+<h2>I felt a moderately-sized disturbance in the force</h2>
+
+<p>If you&rsquo;re like me you might start to cringe as requirements increase and we find ourselves maintaining dozens of lines of validation code to do things as basic as checking whether a value falls within a range.  As it is, we&rsquo;re nearly up to 40 lines and all we&rsquo;ve done is check that two properties fall within a particular range. Inconcievable!</p>
+
+<p>As we write more and more validations, patterns begin to emerge.  What&rsquo;s that, you say?  A <em>disturbance in the Force</em>? It&rsquo;s as if a thousand methods cried out all at once to be DRYed up.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  MIDICHLORIAN_THRESHOLD = 9000
+
+  validates :age, :presence =&gt; true
+  validate :is_an_acceptable_age_to_be_trained
+  validate :has_enough_midichlorians
+
+  def is_an_acceptable_age_to_be_trained
+    attribute_greater_than_or_equal_to :age, MIN_AGE
+    attribute_less_than_or_equal_to :age, MAX_AGE
+  end
+
+  def has_enough_midichlorians
+    attribute_greater_than_or_equal_to :midichlorian_count,
+                                        MIDICHLORIAN_THRESHOLD
+  end
+
+  def attribute_greater_than_or_equal_to(attribute_name, minimum)
+    unless self.send(attribute_name) &gt;= minimum
+      errors.add(attribute_name, "is smaller than #{minimum}")
+    end
+  end
+
+  def attribute_less_than_or_equal_to(attribute_name, maximum)
+    unless self.send(attribute_name) &lt;= maximum
+      errors.add(attribute_name, "is larger than #{maximum}")
+    end
+  end
+end
+</code></pre>
+
+<p>Is this better? Now our code is even longer than before (!), but we can see how the savings from abstracting these range checks into methods would compound as we validate more attributes in the future.</p>
+
+<p>This is a definite step in the right direction, but it&rsquo;s beginning to look like this validation logic could probably be further generalized and be pulled into a Concern; there&rsquo;s nothing inside <code>attribute_less_than_or_equal_to</code> or <code>attribute_greater_than_or_equal_to</code> that depends on <code>Padawan</code>. If any other ActiveRecord models have similar types of validations&mdash;and we have every reason to believe that they would&mdash;we don&rsquo;t want to duplicate and maintain that code in more than one place in our project.</p>
+
+<h1>A little knowledge is a dangerous thing</h1>
+
+<p>So what&rsquo;s a Rails Padawan on the path to mastery to do in this situation? It turns out that the Rails developers have already solved this problem for us.</p>
+
+<p>Custom validations are wonderful tools, but a little due diligence and study of the excellent <a href="http://guides.rubyonrails.org/active_record_validations.html">Rails Guide on ActiveRecord validations</a> at the beginning would have saved us a lot of effort in applying them in this situation. The docs show that ActiveRecord already ships with a large set of validation helpers that handle common scenarios like this.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  MIDICHLORIAN_THRESHOLD = 9000
+
+  validates :age, :presence =&gt; true, 
+                  :numericality =&gt; { greater_than: MIN_AGE, 
+                                     less_than: MAX_AGE }
+  validates :midichlorian_count, 
+            :presence =&gt; true,
+            :numericality =&gt; { greater_than: MIDICHLORIAN_THRESHOLD }
+end
+</code></pre>
+
+<p>And check these out:</p>
+
+<pre><code class="ruby">  class SithLord &lt; ActiveRecord::Base
+    validates :name, 
+              :format =&gt; { with: /^Darth\ /}
+
+    validates :lightsaber_color,
+              :exclusion =&gt; { in: %w(green blue) }
+
+    validates :undercover, 
+              :inclusion =&gt; { in: [true, false] }
+
+    validates :catchphrase, :length =&gt; {
+      minimum: 10,
+      too_short: "must have at least %{count} characters"
+    }
+  end
+</code></pre>
+
+<p>May the docs be with you!</p>
+]]></content>
+  </entry>
+  
+</feed>

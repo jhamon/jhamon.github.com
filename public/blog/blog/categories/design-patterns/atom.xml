@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Design-patterns | Jen Hamon]]></title>
+  <link href="http://jhamon.github.io/blog/categories/design-patterns/atom.xml" rel="self"/>
+  <link href="http://jhamon.github.io/"/>
+  <updated>2014-11-13T17:48:07-08:00</updated>
+  <id>http://jhamon.github.io/</id>
+  <author>
+    <name><![CDATA[Jen Hamon]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Enforcing Your Template Pattern Interface With RSpec Shared Examples]]></title>
+    <link href="http://jhamon.github.io/blog/2014/10/09/enforcing-your-template-pattern-interface-with-rspec/"/>
+    <updated>2014-10-09T18:00:35-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/10/09/enforcing-your-template-pattern-interface-with-rspec</id>
+    <content type="html"><![CDATA[<p>The template pattern comes into play when you have several different use cases that are mostly the same but differ in just a few ways.  Shared functionality and skeleton methods are defined in a base class, which will be overridden by each subclass.  Each subclass provides a different implementation for the skeleton functions, and because all these objects all share a common interface we can use them interchangeably in other parts of our code.</p>
+
+<h2>Using class inheritance</h2>
+
+<p>The simplest way of implementing the template pattern is to define a base class that your various implementations inherit from and override. All of the methods we want included in the template subclasses must raise errors if not overridden.  That way, if no implementation is present in a subclass we will see an error.</p>
+
+<p>Take these printer classes for example.</p>
+
+<pre><code class="ruby">class BasePrinter
+  def prepare_and_print(data)
+    print(magical_formatting(data))
+  end
+
+  def magical_formatting(data)
+    "Magical data: #{data}"
+  end
+
+  def print(data)
+    raise "Not implemented!"
+  end
+end
+
+class PlainPrinter &lt; BasePrinter
+  def print(data)
+    puts data
+  end
+end
+
+class ShufflePrinter &lt; BasePrinter
+  def print(data)
+    puts data.split("").shuffle.join
+  end
+end
+
+class BogusPrinter &lt; BasePrinter
+  def bogus_print
+    # whatever
+  end
+end
+</code></pre>
+
+<p>Now if we do <code>BogusPrinter.new.prepare_and_print(data)</code> we will see a &ldquo;Not impelmented!&rdquo; error because the expected <code>print</code> method was not defined in the subclass. A quick and easy fix.</p>
+
+<p>This gets the job done, but doesn&rsquo;t seem ideal.  What if we want to make a printer class that writes data to a PDF file?  We might need this class to inherit from another class providing complex PDF logic.</p>
+
+<pre><code class="ruby">class PDFPrinter &lt; BadassPDFLibrary
+  def print(data)
+    # do stuff
+  end
+end
+</code></pre>
+
+<h2>Wrap the base template into a module</h2>
+
+<p>Ruby only has single inheritance, so there&rsquo;s no way to subclass <code>BasePrinter</code> and <code>BadassPDFLibrary</code>.  One way around the single-inheritance problem is to wrap up our <code>BasePrinter</code> into a module to be included.</p>
+
+<pre><code class="ruby">module BasePrinter
+  def prepare_and_print(data)
+    print(magical_formatting(data))
+  end
+
+  def magical_formatting(data)
+    "Magical data: #{data}"
+  end
+
+  def print(data)
+    raise "not implemented"
+  end
+end
+
+class PlainPrinter
+  include BasePrinter
+
+  def print(data)
+    puts data
+  end
+end
+
+class ShufflePrinter
+  include BasePrinter
+
+  def print(data)
+    puts data.split("").shuffle.join
+  end
+end
+
+class BogusPrinter
+  include BasePrinter
+
+  def bogus_print
+    # whatever
+  end
+end
+
+class PDFPrinter &lt; BadassPDFLibrary
+  include BasePrinter
+
+  def print(data)
+    # do stuff
+  end
+end
+</code></pre>
+
+<h2>Leveraging RSpec <code>shared_examples</code></h2>
+
+<p>Using modules is a perfectly workable solution if we need to inherit from a different class.  But there&rsquo;s a third way we can enforce our expectations on the printer interface. That is to write some shared examples for this code that check for the presence of the expected methods.</p>
+
+<pre><code class="ruby">
+shared_examples "a printer class" do
+  let(:printer) { described_class.new }
+
+  it "should expose a #print method" do
+    expect(printer).to respond_to(:print)
+  end
+
+  describe "#print" do
+    it "should return nil" do
+      expect(printer.print("Hello, World!")).to be_nil
+    end
+  end
+end
+
+printers = [
+ PlainPrinter,
+ BogusPrinter,
+ ShufflePrinter,
+ PDFPrinter
+]
+
+printers.each do |printer_class|
+  describe printer_class do
+    it_behaves_like "a printer class"
+  end
+end
+</code></pre>
+
+<p>This approach goes beyond the error-raising we get from the module or base class and allows us to make stipulations about the return values from each template method.  With a few tests like this, we can dispense with the need for abstract base methods.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building Elementary Cellular Automata in Ruby]]></title>
+    <link href="http://jhamon.github.io/blog/2014/10/09/building-elementary-cellular-automata-in-ruby/"/>
+    <updated>2014-10-09T01:31:32-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/10/09/building-elementary-cellular-automata-in-ruby</id>
+    <content type="html"><![CDATA[<p>Cellular automata are simulations where each location in a space can have a finite number of states (usually <code>on</code> or <code>off</code>, or <code>0</code> and <code>1</code>). The state at a particular location can change through time according to specific rules. Most such systems are fairly boring, but some sets of rules can give rise to surprisingly complex behavior.  Whole branches of math and computer science are devoted to the study of these simulations.</p>
+
+<p>There&rsquo;s a good chance you&rsquo;ve seen an implementation of <em>Conway&rsquo;s Game of Life</em>, which is the most well-known example of cellular automation. <em>Life</em> is set on a two-dimensional grid, and self-replicating <a href="http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns">patterns</a> called <em>gliders</em> are a common occurance.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/e/e5/Gospers_glider_gun.gif" style="float: right"></p>
+
+<p>I am not a computer scientist, but I find the dancing patterns mesmerizing.  As a fun exercise, I decided to take my layman&rsquo;s knowledge of cellular automation and build my own implementation of the 256 different Elementary Cellular Automata. These are also very beautiful, but have so far made a much smaller pop culture splash than their cousin <em>Life</em>.</p>
+
+<h2>Elementary Cellular Automata</h2>
+
+<p>The <em>Elementary</em> in <em>Elementary Cellular Automata</em> comes from the fact that the model space is restricted to only one dimension.  The grid in this case is a single row of pixels.  Rather than animating a one-pixel row, most representations of ECAs show time on the vertical axis by printing a new row for each timestep.</p>
+
+<p>From one time-step to the next, a pixel will live or die according to rules that examine the state of a pixel and the state of its two neighboring pixels.
+For convenience, we might represent the pattern in a particular location as the a three-digit string like <code>101</code> or <code>001</code>.  Since a particular pixel and its two neighbors can each be either a <code>1</code> or a <code>0</code>, there are <code>2*2*2 = 8</code> different possible patterns at a particular location.  The <a href="http://en.wikipedia.org/wiki/Elementary_cellular_automaton">Wikipedia article</a> goes into a lot of detail about how these rules are derived.</p>
+
+<h2>Program organization</h2>
+
+<p>A principal in good object-oriented design is to separate things that change from things that don&rsquo;t change.  With that in mind, I decided to use the composite pattern for the main <code>ElementaryCellularAutomata</code> class and abstract the changeable portions of the simulation logic their own classes.</p>
+
+<p>The 256 different kinds of rules into a <code>Rule</code> class.  A factory method configures the rule class to have a different behavior depending on the rule number.</p>
+
+<p>I also handle print functions in a <code>Printer</code> class following a template pattern.  This is so I can easily print output to the console with one class, or save to png image with anohter.  And I could easily extend it to other types of printers in the future (PDF, jpg, etc) as long as those classes provide a <code>print</code> method.</p>
+
+<p>You can check out the finished code and a gallery of the output <a href="https://github.com/jhamon/elementary_cellular_automata">on github</a>.</p>
+
+<h2>JavaScript reboot</h2>
+
+<p>Just for fun, I decided to build an animated JavaScript version of this code.</p>
+
+<p data-height="463" data-theme-id="9963" data-slug-hash="ogvpxQ" data-default-tab="result" data-user="jhamon" class='codepen'>See the Pen <a href='http://codepen.io/jhamon/pen/ogvpxQ/'>Elementary Cellular Automata</a> by Jennifer Hamon (<a href='http://codepen.io/jhamon'>@jhamon</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+
+
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Refactoring | Jen Hamon]]></title>
+  <link href="http://jhamon.github.io/blog/categories/refactoring/atom.xml" rel="self"/>
+  <link href="http://jhamon.github.io/"/>
+  <updated>2014-11-13T17:48:07-08:00</updated>
+  <id>http://jhamon.github.io/</id>
+  <author>
+    <name><![CDATA[Jen Hamon]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Don't Reinvent the Wheel :<br>Rails Validations Beyond the Basics]]></title>
+    <link href="http://jhamon.github.io/blog/2013/10/10/advanced-rails-validations/"/>
+    <updated>2013-10-10T23:43:11-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/10/10/advanced-rails-validations</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;ve gone through a Rails tutorial like the Hartl Rails Tutorial or Rails For Zombies, you&rsquo;ll be familiar with common model validations that prevent saving duplicate or incomplete records.  Throughout this piece I&rsquo;ll be talking about a <code>Padawan</code> class, that might begin looking something like this:</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  validates :age, :presence =&gt; true
+end
+</code></pre>
+
+<p>This is a fine first step, but it only goes a small distance toward verifying any records we might try to save are actual valid Padawans. There is a conspicuous lack of business logic. Right now anyone with an age can be saved into the database, even those who are too old to begin the training.</p>
+
+<h2>Custom validations</h2>
+
+<p>If we dig in a little further with documentation and Stack Overflow answers we begin to learn about defining custom validators that implement attribute checks that are tailored to our application.</p>
+
+<p>A custom validator is just a method that adds an error message if a given conditions is not met.  A validator method that does not add any error messages is considered to have passed.  So it&rsquo;s simple to begin writing code like this:</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  validates :age, :presence =&gt; true
+  validate :not_too_old_to_be_trained
+
+  def not_too_old_to_be_trained
+    errors.add(:age, "is too old to be trained") if age &gt; 9
+  end
+end
+</code></pre>
+
+<p>We can fire up the console and quickly verify this does what we expect</p>
+
+<pre><code class="ruby">2.0.0-p247 :008 &gt; luke = Padawan.create(name: "Luke Skywalker", age: 25)
+   (0.1ms)  begin transaction
+  Padawan Exists (0.1ms)  SELECT  1 AS one FROM "padawans"  WHERE "padawans"."name" = 'Luke Skywalker' LIMIT 1
+   (0.0ms)  rollback transaction
+ =&gt; #&lt;Padawan id: nil, age: 25, name: "Luke Skywalker", midichlorian_count: nil, created_at: nil, updated_at: nil&gt;
+2.0.0-p247 :009 &gt; luke.errors.full_messages
+ =&gt; ["Age is too old to be trained"]
+</code></pre>
+
+<p>Suck it, Luke Skywalker!  You&rsquo;re too old to be trained!</p>
+
+<h2>Not the refactor you were looking for</h2>
+
+<p>We&rsquo;re successfully keeping the old fogies out of the Jedi Academy now, but plenty of people would look at this new code and be like</p>
+
+<blockquote><p><em>Woah, <a href="http://stackoverflow.com/questions/47882/what-is-a-magic-number-and-why-is-it-bad">magic numbers</a>! This is not the refactor you were looking for.</em></p></blockquote>
+
+<p>Actually, they probably wouldn&rsquo;t say that. But they&rsquo;d be thinking it while they downgrade their opinion of you. So let&rsquo;s at least be a little more explicit with named constants and a bit of explanation for anybody who might work on this code after us.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training
+  MAX_AGE = 9
+
+  validates :age, :presence =&gt; true
+  validate :not_too_old_to_be_trained
+
+  def not_too_old_to_be_trained
+    errors.add(:age, "is too old to be trained") if age &gt; MAX_AGE
+  end
+end
+</code></pre>
+
+<h1>Babies with lightsabers? Oh my!</h1>
+
+<p>If we wrote a few specs against this code, we&rsquo;d realize that even babies in diapers are able to pass the validation, which doesn&rsquo;t seem like a great idea.  Imagine the trouble a baby with a lightsaber might get into! Or a toddler who can <em>use the Force</em> during tantrums! It won&rsquo;t do.</p>
+
+<p>Let&rsquo;s modify our validator to check against a range of ages, and give the validator a more appropriate name.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  validates :age, :presence =&gt; true
+  validate :is_an_acceptable_age_to_be_trained
+
+  def is_an_acceptable_age_to_be_trained
+    if age &gt; MAX_AGE
+     errors.add(:age, "is too old to be trained")
+    elsif age &lt; MIN_AGE
+     errors.add(:age, "is too young to be trained")
+    end
+  end
+end
+</code></pre>
+
+<p>Now that we have our age requirements down, we remember that <code>midichlorian_count</code> is also a factor when selecting Padawans for training.  To borrow a useful piece of Harry Potter argot, we don&rsquo;t want to waste time training squibs.  So we&rsquo;d better create a validation for midichlorians too.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  MIDICHLORIAN_THRESHOLD = 9000
+
+  validates :age, :presence =&gt; true
+  validate :is_an_acceptable_age_to_be_trained
+  validate :has_enough_midichlorians
+
+  def is_an_acceptable_age_to_be_trained
+    if age &gt; MAX_AGE
+     errors.add(:age, "is too old to be trained")
+    elsif age &lt; MIN_AGE
+     errors.add(:age, "is too young to be trained")
+    end
+  end
+
+  def has_enough_midichlorians
+    if midichlorian_count &lt; MIDICHLORIAN_THRESHOLD
+        errors.add(:midichlorian_count, "is too low to be trained") 
+      end
+  end
+end
+</code></pre>
+
+<p>If we were writing a whole application, we could continue on adding validations in this way for quite a while.  For very small apps we might never have a problem.</p>
+
+<h2>I felt a moderately-sized disturbance in the force</h2>
+
+<p>If you&rsquo;re like me you might start to cringe as requirements increase and we find ourselves maintaining dozens of lines of validation code to do things as basic as checking whether a value falls within a range.  As it is, we&rsquo;re nearly up to 40 lines and all we&rsquo;ve done is check that two properties fall within a particular range. Inconcievable!</p>
+
+<p>As we write more and more validations, patterns begin to emerge.  What&rsquo;s that, you say?  A <em>disturbance in the Force</em>? It&rsquo;s as if a thousand methods cried out all at once to be DRYed up.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  MIDICHLORIAN_THRESHOLD = 9000
+
+  validates :age, :presence =&gt; true
+  validate :is_an_acceptable_age_to_be_trained
+  validate :has_enough_midichlorians
+
+  def is_an_acceptable_age_to_be_trained
+    attribute_greater_than_or_equal_to :age, MIN_AGE
+    attribute_less_than_or_equal_to :age, MAX_AGE
+  end
+
+  def has_enough_midichlorians
+    attribute_greater_than_or_equal_to :midichlorian_count,
+                                        MIDICHLORIAN_THRESHOLD
+  end
+
+  def attribute_greater_than_or_equal_to(attribute_name, minimum)
+    unless self.send(attribute_name) &gt;= minimum
+      errors.add(attribute_name, "is smaller than #{minimum}")
+    end
+  end
+
+  def attribute_less_than_or_equal_to(attribute_name, maximum)
+    unless self.send(attribute_name) &lt;= maximum
+      errors.add(attribute_name, "is larger than #{maximum}")
+    end
+  end
+end
+</code></pre>
+
+<p>Is this better? Now our code is even longer than before (!), but we can see how the savings from abstracting these range checks into methods would compound as we validate more attributes in the future.</p>
+
+<p>This is a definite step in the right direction, but it&rsquo;s beginning to look like this validation logic could probably be further generalized and be pulled into a Concern; there&rsquo;s nothing inside <code>attribute_less_than_or_equal_to</code> or <code>attribute_greater_than_or_equal_to</code> that depends on <code>Padawan</code>. If any other ActiveRecord models have similar types of validations&mdash;and we have every reason to believe that they would&mdash;we don&rsquo;t want to duplicate and maintain that code in more than one place in our project.</p>
+
+<h1>A little knowledge is a dangerous thing</h1>
+
+<p>So what&rsquo;s a Rails Padawan on the path to mastery to do in this situation? It turns out that the Rails developers have already solved this problem for us.</p>
+
+<p>Custom validations are wonderful tools, but a little due diligence and study of the excellent <a href="http://guides.rubyonrails.org/active_record_validations.html">Rails Guide on ActiveRecord validations</a> at the beginning would have saved us a lot of effort in applying them in this situation. The docs show that ActiveRecord already ships with a large set of validation helpers that handle common scenarios like this.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  MIDICHLORIAN_THRESHOLD = 9000
+
+  validates :age, :presence =&gt; true, 
+                  :numericality =&gt; { greater_than: MIN_AGE, 
+                                     less_than: MAX_AGE }
+  validates :midichlorian_count, 
+            :presence =&gt; true,
+            :numericality =&gt; { greater_than: MIDICHLORIAN_THRESHOLD }
+end
+</code></pre>
+
+<p>And check these out:</p>
+
+<pre><code class="ruby">  class SithLord &lt; ActiveRecord::Base
+    validates :name, 
+              :format =&gt; { with: /^Darth\ /}
+
+    validates :lightsaber_color,
+              :exclusion =&gt; { in: %w(green blue) }
+
+    validates :undercover, 
+              :inclusion =&gt; { in: [true, false] }
+
+    validates :catchphrase, :length =&gt; {
+      minimum: 10,
+      too_short: "must have at least %{count} characters"
+    }
+  end
+</code></pre>
+
+<p>May the docs be with you!</p>
+]]></content>
+  </entry>
+  
+</feed>

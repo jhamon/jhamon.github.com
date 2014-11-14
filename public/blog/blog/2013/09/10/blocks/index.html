@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Blocks, Procs, and Lamdas: A Tour of Anonymous Functions in Ruby - Jen Hamon</title>
+  <meta name="author" content="Jen Hamon">
+
+  
+  <meta name="description" content="Great news! Ruby has several ways of creating and passing around anonymous functions. Key language features like the Enumerable module would not be &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jhamon.github.io/blog/2013/09/10/blocks">
+  <link href="/blog/favicon.png" rel="icon">
+  <link href="/blog/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/blog/atom.xml" rel="alternate" title="Jen Hamon" type="application/atom+xml">
+  <script src="/blog/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/blog/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <nav id="main-nav" role="navigation">
+<ul class="main-navigation">
+  <li><a href="/blog/" class="nav-link">Blog</a></li>
+  <li><a href="/blog/blog/archives" class="nav-link">Archives</a></li>
+  <li><a href="/blog/atom.xml" class="nav-link">RSS</a></li>
+  <li><a href="http://www.hamon.io/portfolio.html" class="nav-link">Portfolio</a></li>
+</ul>
+
+</nav>
+  
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Blocks, Procs, and Lamdas: A Tour of Anonymous Functions in Ruby</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T12:27:47-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Great news! Ruby has several ways of creating and passing around anonymous functions.  Key language features like the <code>Enumerable</code> module would not be possible without this capability.</p>
+
+<p>You might not even realize that when you are using a function that takes a block, you have just written an anonymous function. An anonymous function is exactly what it sounds like: a function with no name.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="sx">%w(do re mi fa so la ti)</span><span class="o">.</span><span class="n">map!</span> <span class="p">{</span> <span class="o">|</span><span class="n">note</span><span class="o">|</span> <span class="n">note</span><span class="o">.</span><span class="n">capitalize</span> <span class="p">}</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;Do&quot;, &quot;Re&quot;, &quot;Mi&quot;, &quot;Fa&quot;, &quot;So&quot;, &quot;La&quot;, &quot;Ti&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example, the <code>{ |note| note.capitalize }</code> bit is the anonymous function. Used in this way the <code>{}</code> characters are block literals, passing function expecting one variable to the higher-order <code>map!</code> method.</p>
+
+<h2>Our own methods that take blocks</h2>
+
+<p>We can pretty easily write our own methods that accept blocks like this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">block_caller</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Hello from inside block_caller&quot;</span>
+</span><span class='line'>  <span class="n">block</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;About to leave block_caller&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which we can use like this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">block_caller</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Hello from inside the block&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1"># Hello from inside block_caller</span>
+</span><span class='line'><span class="c1"># Hello from inside the block</span>
+</span><span class='line'><span class="c1"># About to leave block_caller</span>
+</span><span class='line'><span class="c1"># =&gt; nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We use blocks expecting an argument in a very similar way.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">greeting</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">block</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">greeting</span><span class="p">(</span><span class="s2">&quot;Mao&quot;</span><span class="p">)</span>      <span class="p">{</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="s2">&quot;Ni hao, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="c1"># =&gt; &quot;Ni hao, Mao!&quot;</span>
+</span><span class='line'><span class="n">greeting</span><span class="p">(</span><span class="s2">&quot;Adolf&quot;</span><span class="p">)</span>    <span class="p">{</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="s2">&quot;Guten Tag, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="c1"># =&gt; &quot;Guten Tag, Adolf!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Use <code>yield</code> for a nice performance boost</h2>
+
+<p>There&rsquo;s an alternative syntax available to us when writing methods expecting blocks: the <code>yield</code> keyword.  We should prefer it because benchmarking shows that <code>yield</code> is about 5x faster than <code>block.call</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">greeting</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">yield</span> <span class="nb">name</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">greeting</span><span class="p">(</span><span class="s2">&quot;Mao&quot;</span><span class="p">)</span>      <span class="p">{</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="s2">&quot;Ni hao, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="c1"># =&gt; &quot;Ni hao, Mao!&quot;</span>
+</span><span class='line'><span class="n">greeting</span><span class="p">(</span><span class="s2">&quot;Adolf&quot;</span><span class="p">)</span>    <span class="p">{</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="s2">&quot;Guten Tag, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="c1"># =&gt; &quot;Guten Tag, Adolf!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Overcoming limitations of blocks with Proc</h2>
+
+<p>If you do a little experimentation, you might notice that this brace syntax is a syntactic sugar that can only be used after a method call.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{</span> <span class="o">|</span><span class="n">note</span><span class="o">|</span> <span class="n">note</span><span class="o">.</span><span class="n">capitalize</span> <span class="p">}</span>
+</span><span class='line'><span class="ss">SyntaxError</span><span class="p">:</span> <span class="n">unexpected</span> <span class="s1">&#39;}&#39;</span><span class="p">,</span> <span class="n">expecting</span> <span class="k">end</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">input</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There&rsquo;s also no way to pass multiple blocks to a single function.  So a very common idiom in other langauges like JavaScript is to pass multiple functions to be used in different circumstances.  For example, when making an Ajax call it&rsquo;s convenient to pass both a success and error callback so our code knows how to continue in both situations:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// example.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">successCallback</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Take care of business</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">errorCallback</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Do damage control</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;http://www.example.com/api/widgets&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">success</span><span class="o">:</span> <span class="nx">successCallback</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">error</span><span class="o">:</span> <span class="nx">errorCallback</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The equivalent ruby would be something like</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">ajax</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># ... where the magic happens</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can&rsquo;t use blocks to send <code>success</code> and <code>error</code> callbacks to this method. To accomplish this type of feat with Ruby, we have to use <code>Proc</code> objects, which Ruby provides as a way of wrapping a block into an object that may be passed around and used in multiple places. This is useful to use because methods can accept an arbitrary number of object parameters.</p>
+
+<p>The simplest possible example of a <code>Proc</code> would be something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">capitalizer</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="o">|</span><span class="n">str</span><span class="o">|</span> <span class="n">str</span><span class="o">.</span><span class="n">capitalize</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">capitalizer</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s2">&quot;obama&quot;</span><span class="p">)</span> <span class="c1"># =&gt; &quot;Obama&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using <code>Proc</code> and keeping in mind that blocks are closures, we can write functions that return Procs.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">make_counter</span><span class="p">()</span>
+</span><span class='line'>  <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">counter</span> <span class="o">=</span> <span class="n">make_counter</span><span class="p">()</span>
+</span><span class='line'><span class="n">counter</span><span class="o">.</span><span class="n">call</span><span class="p">()</span> <span class="c1"># =&gt; 1</span>
+</span><span class='line'><span class="n">counter</span><span class="o">.</span><span class="n">call</span><span class="p">()</span> <span class="c1"># =&gt; 2</span>
+</span><span class='line'><span class="n">counter</span><span class="o">.</span><span class="n">call</span><span class="p">()</span> <span class="c1"># =&gt; 3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Using a proc where a block is expected</h2>
+
+<p>If we need to use a proc where a block is expected, we can use the <code>&amp;</code> operator.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">add_five</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span> <span class="p">}</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="o">].</span><span class="n">map</span> <span class="o">&amp;</span><span class="n">add_five</span>
+</span><span class='line'><span class="c1"># =&gt; [6, 7, 8, 9]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Choose your own syntax</h2>
+
+<p>Because Ruby likes to have multiple ways to accomplish everything, we&rsquo;ve got several different sytnaxes available to us for constructing <code>Proc</code> objects.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="c1"># Create a Proc object directly</span>
+</span><span class='line'>  <span class="no">Proc</span><span class="o">.</span><span class="n">new</span>  <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Use this Kernal method</span>
+</span><span class='line'>  <span class="nb">proc</span>      <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Or this Kernal method</span>
+</span><span class='line'>  <span class="nb">lambda</span>    <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Or the &quot;stabby lambda&quot; syntax</span>
+</span><span class='line'>  <span class="o">-&gt;</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Proc methods and lambda methods are almost exactly the same except for the <a href="http://stackoverflow.com/questions/626/when-to-use-lambda-when-to-use-proc-new">strange way</a> the <code>return</code> keyword is handled in procs created with <code>Proc.new</code>.</p>
+
+<p>The &ldquo;stabby lambda&rdquo; syntax, though probably the ugliest of all, can do something that none of the others can and that is specify default parameters similar to a normal method declaration.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">adder</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span><span class='line'><span class="n">adder</span><span class="o">.</span><span class="n">call</span><span class="p">()</span> <span class="c1"># =&gt; 9</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Handy!</p>
+
+<h2>Gimme that method</h2>
+
+<p>One final trick to have up your sleeve it the ability to reach inside an object and turn any method into a <code>Proc</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Pig</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">oink</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Oink!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">wilbur</span> <span class="o">=</span> <span class="no">Pig</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">oinker</span> <span class="o">=</span> <span class="n">wilbur</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:oink</span><span class="p">)</span><span class="o">.</span><span class="n">to_proc</span>
+</span><span class='line'><span class="n">oinker</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'><span class="c1"># Oink!</span>
+</span><span class='line'><span class="c1"># =&gt; nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Summary</h2>
+
+<p>Amazing! That concludes the tour of ruby&rsquo;s blocks, procs, and lambdas.</p>
+
+<p>To summarize:</p>
+
+<ul>
+<li>Use blocks for one-off inline anonymous functions.</li>
+<li>Use <code>Proc.new</code> if you need to reuse a code multiple times or need to pass multiple functions as arguments to the same function.</li>
+<li>Use <code>-&gt;</code> if you want to specify default parameters for your anonymous function.</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jen Hamon</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T12:27:47-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jhamon.github.io/blog/2013/09/10/blocks/" data-via="jenplusplus" data-counturl="http://jhamon.github.io/blog/2013/09/10/blocks/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/blog/2013/02/28/why-i-quit-my-caltech-phd/" title="Previous Post: Why I'm quitting my Caltech PhD">&laquo; Why I&#8217;m quitting my Caltech PhD</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/blog/2013/10/10/advanced-rails-validations/" title="Next Post: Don't reinvent the wheel :<br>Rails validations beyond the basics&#8221;>Don&#8217;t reinvent the wheel :<br>Rails validations beyond the basics &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jen Hamon -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

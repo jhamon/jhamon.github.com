@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | Jen Hamon]]></title>
+  <link href="http://jhamon.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://jhamon.github.io/"/>
+  <updated>2014-11-13T17:48:07-08:00</updated>
+  <id>http://jhamon.github.io/</id>
+  <author>
+    <name><![CDATA[Jen Hamon]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A Few Debugging Tips for the Rails Console]]></title>
+    <link href="http://jhamon.github.io/blog/2014/10/09/a-few-debugging-tips-for-the-rails-console/"/>
+    <updated>2014-10-09T17:10:19-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/10/09/a-few-debugging-tips-for-the-rails-console</id>
+    <content type="html"><![CDATA[<p>This post will be a little less coherent than some of the others, but I wanted to write down a few things I&rsquo;ve found to be very helpful when trying to debug my Ruby code.</p>
+
+<h2>Quickly find syntax errors</h2>
+
+<p>A surprising number of people don&rsquo;t know that you can run ruby with <code>-c</code> from the command line to learn about syntax errors. Let&rsquo;s say I have a simple <code>Dog</code> class with an unclosed string.</p>
+
+<pre><code class="ruby"># dog.rb
+class Dog
+  def initialize(name)
+    @name = name
+  end
+
+  private
+  def woof
+    puts "woof
+  end
+end
+</code></pre>
+
+<p>This is a trivial example, but if I was having trouble tracking down the problem I&rsquo;d do something like this:</p>
+
+<pre><code>$ ruby -c dog.rb
+dog.rb:8: unterminated string meets end of file
+dog.rb:8: syntax error, unexpected end-of-input, expecting keyword_end
+</code></pre>
+
+<h2>Inspecting instance variables</h2>
+
+<p>From the console, we have the power to reach inside an object and see its instance variables even if there are no getter and setter methods defined on the object.</p>
+
+<pre><code class="ruby">[2] pry(main)&gt; d = Dog.new("Pluto")
+=&gt; #&lt;Dog:0x007f82aac977d0 @name="Pluto"&gt;
+[3] pry(main)&gt; d.name
+NoMethodError: undefined method `name' for #&lt;Dog:0x007f82aac977d0 @name="Pluto"&gt;
+from (pry):12:in `__pry__'
+[4] pry(main)&gt; d.instance_variable_get("@name")
+=&gt; "Pluto"
+</code></pre>
+
+<p>This slightly different syntax also works</p>
+
+<pre><code class="ruby">[5] pry(main)&gt; d.instance_variable_get(:@name)
+=&gt; "Pluto"
+</code></pre>
+
+<p>If we&rsquo;re not sure what state the object is holding on to, we can get a list of all the defined instance variables using <code>#instance_variables</code>.</p>
+
+<pre><code>[6] pry(main)&gt; d.instance_variables
+=&gt; [:@name]
+</code></pre>
+
+<h2>Calling private methods</h2>
+
+<p>If you want to call a private method from the command line, you can do so with <code>#send</code>.</p>
+
+<pre><code class="ruby">[7] pry(main)&gt; d.woof
+NoMethodError: private method `woof' called for #&lt;Dog:0x007fd65acfe9b8 @name="Pluto"&gt;
+from (pry):17:in `__pry__'
+[8] pry(main)&gt; d.send(:woof)
+woof
+=&gt; nil
+</code></pre>
+
+<h2>Discover where a method was defined</h2>
+
+<p>Sometimes, especially when working on a big application with other people, it&rsquo;s tricky to learn where a particular method is defined.  This is especially true when classes are being extended by gems that you did not write or install yourself.</p>
+
+<p>To track those down, you can do this in the console.</p>
+
+<pre><code class="ruby">instance.method(:method_name).source_location
+</code></pre>
+
+<p>For example, I might do something like this:</p>
+
+<pre><code>[25] pry(main)&gt; Rails.method(:cache).source_location
+=&gt; ["/Users/jhamon/.rvm/gems/ruby-2.0.0-p247/gems/railties-4.1.4/lib/rails.rb", 32]
+</code></pre>
+
+<p>If the <code>cache</code> method had been overridden, as it sometimes is by gems like <code>dalli_store</code>, I would see a reference to that gem instead of rails.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building Elementary Cellular Automata in Ruby]]></title>
+    <link href="http://jhamon.github.io/blog/2014/10/09/building-elementary-cellular-automata-in-ruby/"/>
+    <updated>2014-10-09T01:31:32-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/10/09/building-elementary-cellular-automata-in-ruby</id>
+    <content type="html"><![CDATA[<p>Cellular automata are simulations where each location in a space can have a finite number of states (usually <code>on</code> or <code>off</code>, or <code>0</code> and <code>1</code>). The state at a particular location can change through time according to specific rules. Most such systems are fairly boring, but some sets of rules can give rise to surprisingly complex behavior.  Whole branches of math and computer science are devoted to the study of these simulations.</p>
+
+<p>There&rsquo;s a good chance you&rsquo;ve seen an implementation of <em>Conway&rsquo;s Game of Life</em>, which is the most well-known example of cellular automation. <em>Life</em> is set on a two-dimensional grid, and self-replicating <a href="http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns">patterns</a> called <em>gliders</em> are a common occurance.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/e/e5/Gospers_glider_gun.gif" style="float: right"></p>
+
+<p>I am not a computer scientist, but I find the dancing patterns mesmerizing.  As a fun exercise, I decided to take my layman&rsquo;s knowledge of cellular automation and build my own implementation of the 256 different Elementary Cellular Automata. These are also very beautiful, but have so far made a much smaller pop culture splash than their cousin <em>Life</em>.</p>
+
+<h2>Elementary Cellular Automata</h2>
+
+<p>The <em>Elementary</em> in <em>Elementary Cellular Automata</em> comes from the fact that the model space is restricted to only one dimension.  The grid in this case is a single row of pixels.  Rather than animating a one-pixel row, most representations of ECAs show time on the vertical axis by printing a new row for each timestep.</p>
+
+<p>From one time-step to the next, a pixel will live or die according to rules that examine the state of a pixel and the state of its two neighboring pixels.
+For convenience, we might represent the pattern in a particular location as the a three-digit string like <code>101</code> or <code>001</code>.  Since a particular pixel and its two neighbors can each be either a <code>1</code> or a <code>0</code>, there are <code>2*2*2 = 8</code> different possible patterns at a particular location.  The <a href="http://en.wikipedia.org/wiki/Elementary_cellular_automaton">Wikipedia article</a> goes into a lot of detail about how these rules are derived.</p>
+
+<h2>Program organization</h2>
+
+<p>A principal in good object-oriented design is to separate things that change from things that don&rsquo;t change.  With that in mind, I decided to use the composite pattern for the main <code>ElementaryCellularAutomata</code> class and abstract the changeable portions of the simulation logic their own classes.</p>
+
+<p>The 256 different kinds of rules into a <code>Rule</code> class.  A factory method configures the rule class to have a different behavior depending on the rule number.</p>
+
+<p>I also handle print functions in a <code>Printer</code> class following a template pattern.  This is so I can easily print output to the console with one class, or save to png image with anohter.  And I could easily extend it to other types of printers in the future (PDF, jpg, etc) as long as those classes provide a <code>print</code> method.</p>
+
+<p>You can check out the finished code and a gallery of the output <a href="https://github.com/jhamon/elementary_cellular_automata">on github</a>.</p>
+
+<h2>JavaScript reboot</h2>
+
+<p>Just for fun, I decided to build an animated JavaScript version of this code.</p>
+
+<p data-height="463" data-theme-id="9963" data-slug-hash="ogvpxQ" data-default-tab="result" data-user="jhamon" class='codepen'>See the Pen <a href='http://codepen.io/jhamon/pen/ogvpxQ/'>Elementary Cellular Automata</a> by Jennifer Hamon (<a href='http://codepen.io/jhamon'>@jhamon</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+
+
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Don't Reinvent the Wheel :<br>Rails Validations Beyond the Basics]]></title>
+    <link href="http://jhamon.github.io/blog/2013/10/10/advanced-rails-validations/"/>
+    <updated>2013-10-10T23:43:11-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/10/10/advanced-rails-validations</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;ve gone through a Rails tutorial like the Hartl Rails Tutorial or Rails For Zombies, you&rsquo;ll be familiar with common model validations that prevent saving duplicate or incomplete records.  Throughout this piece I&rsquo;ll be talking about a <code>Padawan</code> class, that might begin looking something like this:</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  validates :age, :presence =&gt; true
+end
+</code></pre>
+
+<p>This is a fine first step, but it only goes a small distance toward verifying any records we might try to save are actual valid Padawans. There is a conspicuous lack of business logic. Right now anyone with an age can be saved into the database, even those who are too old to begin the training.</p>
+
+<h2>Custom validations</h2>
+
+<p>If we dig in a little further with documentation and Stack Overflow answers we begin to learn about defining custom validators that implement attribute checks that are tailored to our application.</p>
+
+<p>A custom validator is just a method that adds an error message if a given conditions is not met.  A validator method that does not add any error messages is considered to have passed.  So it&rsquo;s simple to begin writing code like this:</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  validates :age, :presence =&gt; true
+  validate :not_too_old_to_be_trained
+
+  def not_too_old_to_be_trained
+    errors.add(:age, "is too old to be trained") if age &gt; 9
+  end
+end
+</code></pre>
+
+<p>We can fire up the console and quickly verify this does what we expect</p>
+
+<pre><code class="ruby">2.0.0-p247 :008 &gt; luke = Padawan.create(name: "Luke Skywalker", age: 25)
+   (0.1ms)  begin transaction
+  Padawan Exists (0.1ms)  SELECT  1 AS one FROM "padawans"  WHERE "padawans"."name" = 'Luke Skywalker' LIMIT 1
+   (0.0ms)  rollback transaction
+ =&gt; #&lt;Padawan id: nil, age: 25, name: "Luke Skywalker", midichlorian_count: nil, created_at: nil, updated_at: nil&gt;
+2.0.0-p247 :009 &gt; luke.errors.full_messages
+ =&gt; ["Age is too old to be trained"]
+</code></pre>
+
+<p>Suck it, Luke Skywalker!  You&rsquo;re too old to be trained!</p>
+
+<h2>Not the refactor you were looking for</h2>
+
+<p>We&rsquo;re successfully keeping the old fogies out of the Jedi Academy now, but plenty of people would look at this new code and be like</p>
+
+<blockquote><p><em>Woah, <a href="http://stackoverflow.com/questions/47882/what-is-a-magic-number-and-why-is-it-bad">magic numbers</a>! This is not the refactor you were looking for.</em></p></blockquote>
+
+<p>Actually, they probably wouldn&rsquo;t say that. But they&rsquo;d be thinking it while they downgrade their opinion of you. So let&rsquo;s at least be a little more explicit with named constants and a bit of explanation for anybody who might work on this code after us.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training
+  MAX_AGE = 9
+
+  validates :age, :presence =&gt; true
+  validate :not_too_old_to_be_trained
+
+  def not_too_old_to_be_trained
+    errors.add(:age, "is too old to be trained") if age &gt; MAX_AGE
+  end
+end
+</code></pre>
+
+<h1>Babies with lightsabers? Oh my!</h1>
+
+<p>If we wrote a few specs against this code, we&rsquo;d realize that even babies in diapers are able to pass the validation, which doesn&rsquo;t seem like a great idea.  Imagine the trouble a baby with a lightsaber might get into! Or a toddler who can <em>use the Force</em> during tantrums! It won&rsquo;t do.</p>
+
+<p>Let&rsquo;s modify our validator to check against a range of ages, and give the validator a more appropriate name.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  validates :age, :presence =&gt; true
+  validate :is_an_acceptable_age_to_be_trained
+
+  def is_an_acceptable_age_to_be_trained
+    if age &gt; MAX_AGE
+     errors.add(:age, "is too old to be trained")
+    elsif age &lt; MIN_AGE
+     errors.add(:age, "is too young to be trained")
+    end
+  end
+end
+</code></pre>
+
+<p>Now that we have our age requirements down, we remember that <code>midichlorian_count</code> is also a factor when selecting Padawans for training.  To borrow a useful piece of Harry Potter argot, we don&rsquo;t want to waste time training squibs.  So we&rsquo;d better create a validation for midichlorians too.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  MIDICHLORIAN_THRESHOLD = 9000
+
+  validates :age, :presence =&gt; true
+  validate :is_an_acceptable_age_to_be_trained
+  validate :has_enough_midichlorians
+
+  def is_an_acceptable_age_to_be_trained
+    if age &gt; MAX_AGE
+     errors.add(:age, "is too old to be trained")
+    elsif age &lt; MIN_AGE
+     errors.add(:age, "is too young to be trained")
+    end
+  end
+
+  def has_enough_midichlorians
+    if midichlorian_count &lt; MIDICHLORIAN_THRESHOLD
+        errors.add(:midichlorian_count, "is too low to be trained") 
+      end
+  end
+end
+</code></pre>
+
+<p>If we were writing a whole application, we could continue on adding validations in this way for quite a while.  For very small apps we might never have a problem.</p>
+
+<h2>I felt a moderately-sized disturbance in the force</h2>
+
+<p>If you&rsquo;re like me you might start to cringe as requirements increase and we find ourselves maintaining dozens of lines of validation code to do things as basic as checking whether a value falls within a range.  As it is, we&rsquo;re nearly up to 40 lines and all we&rsquo;ve done is check that two properties fall within a particular range. Inconcievable!</p>
+
+<p>As we write more and more validations, patterns begin to emerge.  What&rsquo;s that, you say?  A <em>disturbance in the Force</em>? It&rsquo;s as if a thousand methods cried out all at once to be DRYed up.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  MIDICHLORIAN_THRESHOLD = 9000
+
+  validates :age, :presence =&gt; true
+  validate :is_an_acceptable_age_to_be_trained
+  validate :has_enough_midichlorians
+
+  def is_an_acceptable_age_to_be_trained
+    attribute_greater_than_or_equal_to :age, MIN_AGE
+    attribute_less_than_or_equal_to :age, MAX_AGE
+  end
+
+  def has_enough_midichlorians
+    attribute_greater_than_or_equal_to :midichlorian_count,
+                                        MIDICHLORIAN_THRESHOLD
+  end
+
+  def attribute_greater_than_or_equal_to(attribute_name, minimum)
+    unless self.send(attribute_name) &gt;= minimum
+      errors.add(attribute_name, "is smaller than #{minimum}")
+    end
+  end
+
+  def attribute_less_than_or_equal_to(attribute_name, maximum)
+    unless self.send(attribute_name) &lt;= maximum
+      errors.add(attribute_name, "is larger than #{maximum}")
+    end
+  end
+end
+</code></pre>
+
+<p>Is this better? Now our code is even longer than before (!), but we can see how the savings from abstracting these range checks into methods would compound as we validate more attributes in the future.</p>
+
+<p>This is a definite step in the right direction, but it&rsquo;s beginning to look like this validation logic could probably be further generalized and be pulled into a Concern; there&rsquo;s nothing inside <code>attribute_less_than_or_equal_to</code> or <code>attribute_greater_than_or_equal_to</code> that depends on <code>Padawan</code>. If any other ActiveRecord models have similar types of validations&mdash;and we have every reason to believe that they would&mdash;we don&rsquo;t want to duplicate and maintain that code in more than one place in our project.</p>
+
+<h1>A little knowledge is a dangerous thing</h1>
+
+<p>So what&rsquo;s a Rails Padawan on the path to mastery to do in this situation? It turns out that the Rails developers have already solved this problem for us.</p>
+
+<p>Custom validations are wonderful tools, but a little due diligence and study of the excellent <a href="http://guides.rubyonrails.org/active_record_validations.html">Rails Guide on ActiveRecord validations</a> at the beginning would have saved us a lot of effort in applying them in this situation. The docs show that ActiveRecord already ships with a large set of validation helpers that handle common scenarios like this.</p>
+
+<pre><code class="ruby">class Padawan &lt; ActiveRecord::Base
+  # Master Yoda says people over a certain age are 
+  # too old to begin the training...
+  MAX_AGE = 9
+  # ...but we can't safely put lightsabers in the 
+  # hands of babes, so we need this floor threshold too.
+  MIN_AGE = 5
+
+  MIDICHLORIAN_THRESHOLD = 9000
+
+  validates :age, :presence =&gt; true, 
+                  :numericality =&gt; { greater_than: MIN_AGE, 
+                                     less_than: MAX_AGE }
+  validates :midichlorian_count, 
+            :presence =&gt; true,
+            :numericality =&gt; { greater_than: MIDICHLORIAN_THRESHOLD }
+end
+</code></pre>
+
+<p>And check these out:</p>
+
+<pre><code class="ruby">  class SithLord &lt; ActiveRecord::Base
+    validates :name, 
+              :format =&gt; { with: /^Darth\ /}
+
+    validates :lightsaber_color,
+              :exclusion =&gt; { in: %w(green blue) }
+
+    validates :undercover, 
+              :inclusion =&gt; { in: [true, false] }
+
+    validates :catchphrase, :length =&gt; {
+      minimum: 10,
+      too_short: "must have at least %{count} characters"
+    }
+  end
+</code></pre>
+
+<p>May the docs be with you!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Blocks, Procs, and Lamdas: A Tour of Anonymous Functions in Ruby]]></title>
+    <link href="http://jhamon.github.io/blog/2013/09/10/blocks/"/>
+    <updated>2013-09-10T12:27:47-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/09/10/blocks</id>
+    <content type="html"><![CDATA[<p>Great news! Ruby has several ways of creating and passing around anonymous functions.  Key language features like the <code>Enumerable</code> module would not be possible without this capability.</p>
+
+<p>You might not even realize that when you are using a function that takes a block, you have just written an anonymous function. An anonymous function is exactly what it sounds like: a function with no name.</p>
+
+<pre><code class="ruby">  %w(do re mi fa so la ti).map! { |note| note.capitalize }
+  # =&gt; ["Do", "Re", "Mi", "Fa", "So", "La", "Ti"]
+</code></pre>
+
+<p>In this example, the <code>{ |note| note.capitalize }</code> bit is the anonymous function. Used in this way the <code>{}</code> characters are block literals, passing function expecting one variable to the higher-order <code>map!</code> method.</p>
+
+<h2>Our own methods that take blocks</h2>
+
+<p>We can pretty easily write our own methods that accept blocks like this.</p>
+
+<pre><code class="ruby">def block_caller(&amp;block)
+  puts "Hello from inside block_caller"
+  block.call
+  puts "About to leave block_caller"
+end
+</code></pre>
+
+<p>Which we can use like this</p>
+
+<pre><code class="ruby">block_caller do
+  puts "Hello from inside the block"
+end
+# Hello from inside block_caller
+# Hello from inside the block
+# About to leave block_caller
+# =&gt; nil
+</code></pre>
+
+<p>We use blocks expecting an argument in a very similar way.</p>
+
+<pre><code class="ruby">def greeting(name, &amp;block)
+    block.call(name)
+end
+
+greeting("Mao")      { |name| "Ni hao, #{name}!"}
+# =&gt; "Ni hao, Mao!"
+greeting("Adolf")    { |name| "Guten Tag, #{name}!"}
+# =&gt; "Guten Tag, Adolf!"
+</code></pre>
+
+<h2>Use <code>yield</code> for a nice performance boost</h2>
+
+<p>There&rsquo;s an alternative syntax available to us when writing methods expecting blocks: the <code>yield</code> keyword.  We should prefer it because benchmarking shows that <code>yield</code> is about 5x faster than <code>block.call</code>.</p>
+
+<pre><code class="ruby">def greeting(name)
+    yield name
+end
+
+greeting("Mao")      { |name| "Ni hao, #{name}!"}
+# =&gt; "Ni hao, Mao!"
+greeting("Adolf")    { |name| "Guten Tag, #{name}!"}
+# =&gt; "Guten Tag, Adolf!"
+</code></pre>
+
+<h2>Overcoming limitations of blocks with Proc</h2>
+
+<p>If you do a little experimentation, you might notice that this brace syntax is a syntactic sugar that can only be used after a method call.</p>
+
+<pre><code class="ruby">[2] pry(main)&gt; { |note| note.capitalize }
+SyntaxError: unexpected '}', expecting end-of-input
+</code></pre>
+
+<p>There&rsquo;s also no way to pass multiple blocks to a single function.  So a very common idiom in other langauges like JavaScript is to pass multiple functions to be used in different circumstances.  For example, when making an Ajax call it&rsquo;s convenient to pass both a success and error callback so our code knows how to continue in both situations:</p>
+
+<pre><code class="javascript">// example.js
+
+function successCallback() {
+  // Take care of business
+}
+function errorCallback() {
+  // Do damage control
+}
+
+$.ajax({
+  url: 'http://www.example.com/api/widgets',
+  type: 'GET',
+  success: successCallback,
+  error: errorCallback
+})
+</code></pre>
+
+<p>The equivalent ruby would be something like</p>
+
+<pre><code class="ruby">def ajax(url, type, success, error)
+  # ... where the magic happens
+end
+</code></pre>
+
+<p>We can&rsquo;t use blocks to send <code>success</code> and <code>error</code> callbacks to this method. To accomplish this type of feat with Ruby, we have to use <code>Proc</code> objects, which Ruby provides as a way of wrapping a block into an object that may be passed around and used in multiple places. This is useful to use because methods can accept an arbitrary number of object parameters.</p>
+
+<p>The simplest possible example of a <code>Proc</code> would be something like this:</p>
+
+<pre><code class="ruby">  capitalizer = Proc.new { |str| str.capitalize }
+  capitalizer.call("obama") # =&gt; "Obama"
+</code></pre>
+
+<p>Using <code>Proc</code> and keeping in mind that blocks are closures, we can write functions that return Procs.</p>
+
+<pre><code class="ruby">def make_counter()
+  x = 0
+  Proc.new { x += 1 }
+end
+
+
+counter = make_counter()
+counter.call() # =&gt; 1
+counter.call() # =&gt; 2
+counter.call() # =&gt; 3
+</code></pre>
+
+<h2>Using a proc where a block is expected</h2>
+
+<p>If we need to use a proc where a block is expected, we can use the <code>&amp;</code> operator.</p>
+
+<pre><code class="ruby">add_five = Proc.new { |x| x + 5 }
+[1, 2, 3, 4].map &amp;add_five
+# =&gt; [6, 7, 8, 9]
+</code></pre>
+
+<h2>Choose your own syntax</h2>
+
+<p>Because Ruby likes to have multiple ways to accomplish everything, we&rsquo;ve got several different sytnaxes available to us for constructing <code>Proc</code> objects.</p>
+
+<pre><code class="ruby">  # Create a Proc object directly
+  Proc.new  { |x, y| x + y }
+
+  # Use this Kernal method
+  proc      { |x, y| x + y }
+
+  # Or this Kernal method
+  lambda    { |x, y| x + y }
+
+  # Or the "stabby lambda" syntax
+  -&gt; (x, y) { x + y }
+</code></pre>
+
+<p>The Proc methods and lambda methods are almost exactly the same except for the <a href="http://stackoverflow.com/questions/626/when-to-use-lambda-when-to-use-proc-new">strange way</a> the <code>return</code> keyword is handled in procs created with <code>Proc.new</code>.</p>
+
+<p>The &ldquo;stabby lambda&rdquo; syntax, though probably the ugliest of all, can do something that none of the others can and that is specify default parameters similar to a normal method declaration.</p>
+
+<pre><code class="ruby">adder = -&gt; (x=5, y=4) { x + y }
+adder.call() # =&gt; 9
+</code></pre>
+
+<p>Handy!</p>
+
+<h2>Gimme that method</h2>
+
+<p>One final trick to have up your sleeve it the ability to reach inside an object and turn any method into a <code>Proc</code>.</p>
+
+<pre><code class="ruby">class Pig
+  def oink
+    puts "Oink!"
+  end
+end
+
+wilbur = Pig.new
+oinker = wilbur.method(:oink).to_proc
+oinker.call
+# Oink!
+# =&gt; nil
+</code></pre>
+
+<h2>Summary</h2>
+
+<p>Amazing! That concludes the tour of ruby&rsquo;s blocks, procs, and lambdas.</p>
+
+<p>To summarize:</p>
+
+<ul>
+<li>Use blocks for one-off inline anonymous functions.</li>
+<li>Use <code>Proc.new</code> if you need to reuse a code multiple times or need to pass multiple functions as arguments to the same function.</li>
+<li>Use <code>-&gt;</code> if you want to specify default parameters for your anonymous function.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

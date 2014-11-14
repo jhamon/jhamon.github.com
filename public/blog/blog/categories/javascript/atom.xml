@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Javascript | Jen Hamon]]></title>
+  <link href="http://jhamon.github.io/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://jhamon.github.io/"/>
+  <updated>2014-11-13T17:48:07-08:00</updated>
+  <id>http://jhamon.github.io/</id>
+  <author>
+    <name><![CDATA[Jen Hamon]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using JavaScript Animation to Communicate IFTTT at a Glance]]></title>
+    <link href="http://jhamon.github.io/blog/2014/08/11/communicating-ifttt-at-a-glance/"/>
+    <updated>2014-08-11T16:11:20-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/08/11/communicating-ifttt-at-a-glance</id>
+    <content type="html"><![CDATA[<p data-height="268" data-theme-id="0" data-slug-hash="GhrjF" data-default-tab="result" data-user="jhamon" class='codepen'>See the Pen <a href='http://codepen.io/jhamon/pen/GhrjF/'>IFTTT Slottt Machine</a> by Jennifer Hamon (<a href='http://codepen.io/jhamon'>@jhamon</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+
+
+<script async src="//codepen.io/assets/embed/ei.js"></script>
+
+
+<p>At IFTTT we&rsquo;re always looking for better ways to communicate what our service is and how people can use us to connect the services they love together in powerful ways.  One idea I had for this was to create an animation based on the if-logo-then-logo style presentation of recipes used on the <a href="http://www.ifttt.com/wtf">WTF page</a> and elsewhere throughout the site.  With 442 triggers and 172 actions available at the time of this writing, there are over 76,000 distinct recipes you can make on IFTTT.  I really wanted to make something that would convey the wonderful variety of combinations that IFTTT makes possible.</p>
+
+<!--
+![if-logo-then-logo-animation](https://gist.github.com/jhamon/19da977e9fe095e9601c/raw/c3830dcd563427effc867a44e249ada0a1e64d3f/slottt-fixed-short-scroll.gif)
+-->
+
+
+<p>The animation I was imaginging takes some visual inspiration from the spinners on a slot machine.  After a little planning, I realized it wouldn&rsquo;t be too difficult to pull off with some CSS sleight of hand and a bit of JavaScript.  If you exclude the long list of asset urls, the finished JavaScript only weighs in around 50 lines.  In this article, I&rsquo;m going to explain how I was able to combine absolute positioning with <code>overlow:hidden</code> and a small amount of jQuery to build a neat slot machine effect that works in all major browsers.</p>
+
+<h2>Game plan</h2>
+
+<p>I decided that one easy approach would be to have three types of elements:</p>
+
+<ul>
+<li><strong>A mask</strong>: a wrapper div (or mask div) with a fixed size, <code>position: relative</code> and <code>overflow: hidden</code>.  For this project, I chose the class name <code>slottt-machine-recipe__mask</code>.</li>
+<li><strong>An inner container to hold the icons</strong>: an inner div to hold the icon images with <code>position: absolute</code>.  For this project I chose the class name <code>slottt-machine-recipe__items_container</code>.</li>
+<li><strong>The actual icons</strong>: I&rsquo;m fortunate that IFTTT&rsquo;s great design team had already done the work of preparing nice looking assets in standard sizes for each <a href="http://www.ifttt.com/channels">channel</a> supported on our platform.  To get around some weird issues I was having with unwanted extra spacing below <code>img</code> elements, I chose to make square divs with the icon images set as their backgrounds. I marked each icon div with the class <code>slottt-machine-recipe__item</code></li>
+</ul>
+
+
+<p>This setup is sufficient to conceal all but the &ldquo;current&rdquo; icon. The animation is achieved by manipulating the <code>top</code> property on the absolutely positioned container. To drive home the CSS setup, you can see what this arrangement looks like with <code>overflow: hidden</code> commented out and some extra border styles turned on:</p>
+
+<p><img src="https://gist.githubusercontent.com/jhamon/19da977e9fe095e9601c/raw/50094976d831bd44561857efb0150d387450754d/IFTTT%20slot%20machine.png" alt="CSS setup" /></p>
+
+<h2>Writing the CSS</h2>
+
+<p>All together, the CSS for those different elements looks something like this:</p>
+
+<pre><code class="css">.slottt-machine-recipe__mask {
+    position: relative;
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+    display: inline-block;
+
+    // These make the icons look better while
+    // sitting inline with the if/then text.
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: -20px;
+
+    // This border style is shown in the screenshot
+    // but is not used in the final effect.
+    /* border: 2px solid red; */
+}
+
+.slottt-machine-recipe__items_container {
+    position: absolute;
+
+    // This border style is shown in the screenshot
+    // but is not used in the final effect.
+    /* border: 2px dotted green; */
+}
+
+// The actual icon images will be set as
+// backgrounds on divs of this class.
+.slottt-machine-recipe__item {
+    width: 150px;
+    height: 150px;
+    margin: 0px;
+    padding: 0px;
+    background-size: contain;
+}
+</code></pre>
+
+<h2>Building the HTML</h2>
+
+<p>&#8220;`html</p>
+
+<div class="slottt-machine-recipe">
+  <span class="recipe_if">if</span>
+  <div class="slottt-machine-recipe__mask" id="trigger_slot">
+      <div class="slottt-machine-recipe__items_container">
+      </div>
+  </div>
+
+  <span class="recipe_then">then</span>
+  <div class="slottt-machine-recipe__mask" id="action_slot">
+      <div class="slottt-machine-recipe__items_container">
+      </div>
+  </div>
+</div>
+
+
+<pre><code>
+Starting with this basic skeleton, I still needed to add the divs for each icon.  Since I had such a large number of icons to display and I wanted to be able to easily change them in the future without crawling through the raw html, I chose to build the innermost icon divs programmatically from a list of urls. I omitted the list to save space, but want to show the general approach:
+</code></pre>
+
+<p>var triggers = [
+  // a giant list of icon image urls
+]</p>
+
+<p>var actions = [
+ // another giant list of icon image urls
+]</p>
+
+<p>function buildSlotItem (imgURL) {
+    return $(&lsquo;<div>&rsquo;).addClass(&lsquo;slottt-machine-recipe__item&rsquo;)
+                      .css({&lsquo;background-image&rsquo;: &lsquo;url(&rsquo; + imgURL + &lsquo;)&rsquo;})
+}</p>
+
+<p>function buildSlotContents ($container, imgURLArray) {
+  $items = imgURLArray.map(buildSlotItem);
+  $container.append($items);
+}
+&#8220;`</p>
+
+<p>This code gets invoked to build a div for each icon after the page is loaded:</p>
+
+<pre><code class="javascript">$(document).ready( function () {
+  $trigger = $('#trigger_slot .slottt-machine-recipe__items_container');
+  buildSlotContents($trigger, triggers);
+
+  $action = $('#action_slot .slottt-machine-recipe__items_container');
+  buildSlotContents($action, actions);
+
+  setInterval(animate, 3500); // I'll talk about this later.
+});
+</code></pre>
+
+<h2>Basic Animation</h2>
+
+<p>Since the inner div has <code>position: absolute</code> we can position it precisely with respect to the parent div as long as the parent has <code>position: relative</code>.  This means that changing which icon is displayed in the non-hidden area of the mask div can be done by setting the <code>top</code> position property on the inner container div to a multiple of the image size (150 pixels in this case).</p>
+
+<p>From there, making a &ldquo;sliding&rdquo; effect is just a matter of animating the change of the <code>top</code> property with jQuery&rsquo;s <code>animate</code> function <a href="http://api.jquery.com/animate/">(docs here)</a>.  We could have written our own loop to take care of this, but jQuery has already done a nice job of implementing different easing functions, like <code>swing</code>, that specify a property&rsquo;s rate of change over time. Using non-linear easing gives the animation a nice polished feel.</p>
+
+<pre><code class="javascript">function animate() {
+  var triggerIndex = randomSlotttIndex(triggers.length);
+  $trigger.animate({top: -triggerIndex*150}, 500, 'swing');
+
+  var actionIndex = randomSlotttIndex(actions.length);
+  $action.animate({top: -actionIndex*150}, 700, 'swing');
+}
+</code></pre>
+
+<p><img src="https://gist.github.com/jhamon/19da977e9fe095e9601c/raw/427c34b8526ada47a1d94db62e37911ffcb2b02c/slottt-v1.gif" alt="" /></p>
+
+<h2>Forever upward</h2>
+
+<p>By now we are 90% to the finished result.  But instead of randomly scrolling the icons up or down, I really wanted them to scroll infinitely in the same direction. To pull this off we need to do a small amount of extra work to pop elements off the top of our inner container and push them onto the end.  By doing this, we can always scroll in the same direction without running out of icons to display.</p>
+
+<pre><code class="javascript">// Take the first n child elements from the $container and move them
+// to the end.
+function popPushNItems ($container, n) {
+    $children = $container.find('.slottt-machine-recipe__item');
+    $children.slice(0, n).insertAfter($children.last());
+
+    if (n === $children.length) {
+      popPushNItems($container, 1);
+    }
+}
+
+// After the slide animation is complete, we want to pop some items off
+// the front of the container and push them onto the end. This is
+// so the animation can slide upward infinitely without adding
+// inifinte div elements inside the container.
+function rotateContents ($container, n) {
+    setTimeout(function () {
+      popPushNItems($container, n);
+      $container.css({top: 0});
+    }, 300);
+}
+
+function animate() {
+  var triggerIndex = randomSlotttIndex(triggers.length);
+  var actionIndex = randomSlotttIndex(actions.length);
+
+  $trigger.animate({top: -triggerIndex*150}, 500, 'swing', function () {
+    rotateContents($trigger, triggerIndex);
+  });
+
+  $action.animate({top: -actionIndex*150}, 700, 'swing', function () {
+    rotateContents($action, actionIndex);
+  });
+}
+</code></pre>
+
+<p>You can see the resultant effect best by turning off the mask div&rsquo;s <code>overflow:hidden</code> property:</p>
+
+<p><img src="https://gist.github.com/jhamon/19da977e9fe095e9601c/raw/905d842398735d5522a59768742847535f61b1d9/pushpop.gif" alt="" /></p>
+
+<h2>Fine-tuning slide distance</h2>
+
+<p>For the basic version of the animation, I was just choosing a random icon to scroll to with a function like this:</p>
+
+<pre><code class="javascript">function randomSlotttIndex(max) {
+  return (Math.random() * max | 0);
+}
+</code></pre>
+
+<p>This was sufficient to test other aspects of the project, but in the finished product I really want to ensure that the icon we&rsquo;re spinning to is sufficiently &ldquo;far&rdquo; away that the random slot machine feel is preserved; randomly choosing to stay at the current position or roll to an icon only a few notches away just isn&rsquo;t as satisfying.  So, we modify our random index selection to account for that and reject small index choices.</p>
+
+<pre><code class="javascript">function randomSlotttIndex(max) {
+  var randIndex = (Math.random() * max | 0);
+  return (randIndex &gt; 10) ? randIndex : randomSlotttIndex(max);
+}
+</code></pre>
+
+<p>It&rsquo;s not a problem to reject these small indices as slide targets because of the way we are popping elements off and pushing them onto the end.  All the icons will be cycled through the different positions and will eventually be selected for display.</p>
+
+<h2>Conclusion</h2>
+
+<p>That about wraps it up, and I hope you learned something that will be useful to you in your future projects.  You can view and tinker with the finished result on <a href="http://codepen.io/jhamon/pen/GhrjF">codepen.io</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Improve Your Animation Performance With requestAnimationFrame]]></title>
+    <link href="http://jhamon.github.io/blog/2014/05/03/requestanimationframe/"/>
+    <updated>2014-05-03T07:09:19-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/05/03/requestanimationframe</id>
+    <content type="html"><![CDATA[<p>At their most basic core, browser animations have the following structure:</p>
+
+<ol>
+<li> Make some calculations</li>
+<li> Update the plot</li>
+<li> Goto 1.</li>
+</ol>
+
+
+<p>A not-great way of doing this is with the timer functions provided by the browser:</p>
+
+<pre><code class="javascript">function animate() {
+  makeCalculations();
+  updatePlot();
+}
+var timestep = 50 // 50 ms, e.g. 20 fps;
+window.setInterval(animate, timestep);
+</code></pre>
+
+<h2>When timers aren&rsquo;t on time</h2>
+
+<p>This will get the job done, but the results often leave much to be desired.  The animation may be choppy and uneven because timers are handled <a href="http://ejohn.org/blog/how-javascript-timers-work/">in the same thread of execution as other asynchronous browser events</a>, and may not fire precisely when you&rsquo;d like.</p>
+
+<p>For the smoothest animations, we&rsquo;d like to use a very small timestep between frames.  This is a bit of a conundrum because decreasing the size of the timestep makes deviations from perfect timing the most noticeable.  This is because the same amount of absolute error in our timing function will represent a larger precentage of a smaller interval.</p>
+
+<h2>Monitor refresh effect</h2>
+
+<p>Crazy things can happen when the rate of change in a phenomenon (in the browser, or in life) is happening at a different rate than we can percieve it.  In the study of optical illusions, the <a href="http://en.wikipedia.org/wiki/Wagon-wheel_effect">wagon-wheel effect</a> is when we percieve motion to be slowed or even reversed from the true direction of motion. This occurs because of &ldquo;temporal aliasing&rdquo; by the recording medium into discrete frames.</p>
+
+<p>For browser animations, the lesson to take from this is that the difference between our animation&rsquo;s fps and the monitor&rsquo;s refresh fps can have a big impact on the percieved smoothness of our animation.  Nat Duca and Tom Wilzius discussed this form of &ldquo;jank&rdquo; in their Google I/O presentation <a href="http://www.youtube.com/watch?v=n8ep4leoN9A">Jank Free: Chrome Rendering Performance</a>.</p>
+
+<h2>Render performance with requestAnimationFrame</h2>
+
+<p>Browser developers have given us a better alternative for animations called <code>requestAnimationFrame</code>.  rAF should get called when you are ready to draw another frame, and the browser will know to update before it&rsquo;s next repaint to give you the best possible render performance.</p>
+
+<p>Our simple example above becomes</p>
+
+<pre><code class="javascript">
+function animate() {
+  makeCalculations();
+  updatePlot();
+  requestAnimationFrame(animate);
+}
+
+requestAnimationFrame(animate);
+</code></pre>
+
+<p>Browser support is getting <a href="http://caniuse.com/#feat=requestanimationframe">pretty good</a>, and there are <a href="https://gist.github.com/paulirish/1579671">polyfills available</a> that will fall back to <code>setInterval</code> where it&rsquo;s unsupported.</p>
+
+<p>Now go forth and <code>requestAnimationFrame</code>!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Prototypical Inheritance With Asteroids]]></title>
+    <link href="http://jhamon.github.io/blog/2013/10/12/asteroids/"/>
+    <updated>2013-10-12T17:28:49-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/10/12/asteroids</id>
+    <content type="html"><![CDATA[<p>Asteroids is more experiment than finished game since there are no win conditions. It&rsquo;s one of the first things I made using JavaScript, and it was a great way to wrap my head around JavaScript&rsquo;s prototypical inheritance. The game has several different types of objects (the spaceship, bullets, asteroids) that have specific behaviors but have a common need to know where they are, move around, etc. This is easily accomplished by having a base object, MovingObject.prototype, that all other objects delegate to (a.k.a. &ldquo;inherit from&rdquo;).</p>
+
+<p>Here&rsquo;s a simplified snippet showing the inheritance pattern:</p>
+
+<pre><code class="javascript">(function () {
+    var Asteroids = window.Asteroids = (window.Asteroids || {});
+
+    var MovingObject = Asteroids.MovingObject = function (options) {
+      // initialization code to set up position, speed, etc.
+    }
+    MovingObject.prototype.move = function () {
+      // complex logic to update object's position
+      // based on position, speed, angular velocity, 
+      // direction, acceleration, etc.
+    }
+
+    var Ship = Asteroids.Ship = function (options) {
+      // Ship-specific initialization would go here
+      Asteroids.MovingObject.call(this, options)
+    };
+    Ship.prototype = new MovingObject();
+    Ship.prototype.constructor = Ship;
+
+    // Repeat a similar procedure for Asteroid and Bullet constructors.
+})();
+</code></pre>
+
+<p>To understand what&rsquo;s happening here, you have to know that every object has a hidden <code>[[Prototype]]</code> property that is set by the constructor function at creation time to whatever is at the constructor&rsquo;s <code>.prototype</code> property. Whenever we try to access a property that an object doesn&rsquo;t have, it defers to its prototype. So when we try to access a property on an object, the interpreter will check that object, then the object&rsquo;s prototype, then the prototype&rsquo;s prototype, etc until it finds a defined property with that name or reaches the end of the prototype chain and returns undefined. This is exactly what people are talking about when they refer to the &ldquo;prototype chain&rdquo;.</p>
+
+<p>As a more concrete example, let&rsquo;s say I want to call ship.move() on a Ship instance that I create with <code>var ship = new Asteroids.Ship()</code>. Well, ship doesn&rsquo;t have a property called move and neither does the prototype of ship (e.g. <code>Ship.prototype</code>) which was an instance of <code>MovingObject</code>. But the prototype&rsquo;s prototype, e.g. <code>MovingObject.prototype</code> will have a function under the move property name.</p>
+
+<p>I want to give a shoutout to Kyle Simpson for explaining prototypical inheritance (better known as &ldquo;behavior delegation&rdquo;) in a way that actually makes sense.</p>
+]]></content>
+  </entry>
+  
+</feed>

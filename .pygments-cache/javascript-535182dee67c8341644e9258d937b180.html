@@ -1,0 +1,5 @@
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">max</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">randIndex</span> <span class="o">=</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">max</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="k">return</span> <span class="p">(</span><span class="nx">randIndex</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="o">?</span> <span class="nx">randIndex</span> <span class="o">:</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">max</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>

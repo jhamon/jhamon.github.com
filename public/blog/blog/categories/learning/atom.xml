@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Learning | Jen Hamon]]></title>
+  <link href="http://jhamon.github.io/blog/categories/learning/atom.xml" rel="self"/>
+  <link href="http://jhamon.github.io/"/>
+  <updated>2014-11-13T17:48:07-08:00</updated>
+  <id>http://jhamon.github.io/</id>
+  <author>
+    <name><![CDATA[Jen Hamon]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Not Your Grandmother's Flashcards]]></title>
+    <link href="http://jhamon.github.io/blog/2012/01/17/not-your-grandmothers-flashcards/"/>
+    <updated>2012-01-17T02:43:01-08:00</updated>
+    <id>http://jhamon.github.io/blog/2012/01/17/not-your-grandmothers-flashcards</id>
+    <content type="html"><![CDATA[<p>Richard Feynmann famously bemoaned the way that too many students memorized
+instead of thought their way through problems.  Over the years the pendulum has swung very far in the othe direction, to the point that the only time I remember anyone being asked to perform moderate feats of memorization were for Organic Chemistry.</p>
+
+<p>But it seems like that laizze faire approach to memorization has not been carried through all the way to graduate school and into academic life.  It seems that memorizing things is a  too-often neglected part of developing expertise.  Sure, it&rsquo;s great to be <em>smart</em>, but if at the end of the day you
+don&rsquo;t really <em>know things</em> then what kind of expert are you, really?</p>
+
+<p>This reality about the need to know things cold is one of the first hard truths
+I ran into during graduate school.  Being clever enough to <em>figure things out</em>
+was enough to get by as an undergraduate.  But I&rsquo;m certain that anybody who has
+worked on a science PhD would agree that no amount of cleverness will save you
+when the committee in your qualifying exam uncovers the gaping holes in your factual recall that keep you from tackling their problems spontaneously and fluidly.  Suddenly, all those <em>details</em> I &ldquo;learned&rdquo; and subsequently forgot as an undergradute seem like a collasal missed opportunity.</p>
+
+<p>Just today I was in a lecture class where a professor walked up to the
+blackboard and asked the class, <em>&ldquo;Who remembers the mineral formula for
+olivine?&rdquo;</em>  Later, <em>&ldquo;Can anyone tell me the difference between a clinopyroxene
+and an orthopyroxene?&rdquo;</em> Jargon aside, these are extremely common minerals that
+any good geology student should be well acquainted with.  But other than a few
+mubles there wasn&rsquo;t much response from the class. Usually there will be silence
+when these type of questions are posed because very few people are confident in
+their knowledge of the answer and none percieve an incentive that outweights the potential embarassment of getting such a basic question wrong. I sat there
+feeling pretty sure but not certain that I knew the answer as the professor gave a gruff admonition that, &ldquo;You should all really know this for your quals.&rdquo;</p>
+
+<p>To those who&rsquo;ve been to grad school this might feel like a familiar scenario.
+It&rsquo;s one that nearly caused me to drop out of graduate school, and I know it is
+a source of anxiety for many of my fellow students.  The mixture of shame,
+frustration, and anxiety that comes from not being able to remember those things that are simultaneously fundamental, familiar, and easy to understand cannot be overstated.</p>
+
+<p>I, and I&rsquo;m sure others, blame ourselves for these feelings, but the truth is
+that nobody in our educational legacy ever gave us the tools to learn and retain
+information.  Memorization as a teaching philosophy has been out of fashion for
+many years now, so that the current products of the public education system have
+never been asked to actually <em>memorize</em> anything.  The sad truth of it is,
+though, that if you aren&rsquo;t being asked to memorize anything while moving through
+a content-based educational curriculum (e.g. history, social studies, etc), then
+you aren&rsquo;t really being asked to do anything at all of lasting educational
+value.</p>
+
+<h1>Embracing memorization</h1>
+
+<p>Many people, including myself in the past, hate being asked to memorize things
+because it seems boring and frustrating to go over the same material again and
+again. But it doesn&rsquo;t have to be quite so bleak.  I have recently learned about
+a study technique called <a href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak?currentPage=all"><em>spaced
+repetition</em></a>
+which memory experts say will help us to memorize more efficiently.  The
+research suggests that memories decay exponentially if they are not systematically
+reinforced.  The brain essentially garbage collects all the information it soaks
+up and hasn&rsquo;t used in a while.  Without systematic review eventually everything
+of substance just evaporates leaving nothing but the vague feeling of having
+seen something before.</p>
+
+<p>Flashcards are an obvious tool for reviews, but I find them difficult
+to make by hand and annoying to carry around.  Fortunately, in the last decade
+or so several bits of software have been written to help people manage large
+digital collections of electronic flashcards.  These applications, termed
+<a href="http://en.wikipedia.org/wiki/Spaced_repetition">&ldquo;Spaced Repetition Systems,&rdquo;</a>
+help you schedule reviews to maximize learning over the long term.</p>
+
+<p>Some of the most popular are:</p>
+
+<ul>
+<li><strong><a href="http://ankisrs.net/">Anki</a></strong> (free, cross platform)</li>
+<li><a href="http://www.mnemosyne-proj.org/">Mnemosyne</a> (free, cross platform)</li>
+<li><a href="http://www.supermemo.com/">SuperMemo</a> (paid, Windows only)</li>
+<li><a href="http://orgmode.org/worg/org-contrib/org-drill.html">Org-Drill</a>,</li>
+<li>part of Org-Mode in Emacs (free, cross platform)</li>
+</ul>
+
+
+<p>These systems have the user rate themselves on how well they know each card and
+then uses an algorithm to figure out when they should study the card again.  The
+best time to study a card is right before you forget it.  Each time the user
+answers a card correctly the interval gets a little longer, until pretty soon a
+card only needs one or two reps per year to be maintained in memory. Forgetting
+a card resets the interval to daily reviews.</p>
+
+<p>Even if you think you hate flashcards, I&rsquo;d recommend giving this method of study
+a fresh look.  Really knowing things is such a high, I think you&rsquo;ll quickly come
+around to liking them.</p>
+]]></content>
+  </entry>
+  
+</feed>

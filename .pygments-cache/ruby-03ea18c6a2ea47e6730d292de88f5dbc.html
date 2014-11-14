@@ -1,0 +1,27 @@
+<div class="highlight"><pre><span class="n">shared_examples</span> <span class="s2">&quot;a printer class&quot;</span> <span class="k">do</span>
+  <span class="n">let</span><span class="p">(</span><span class="ss">:printer</span><span class="p">)</span> <span class="p">{</span> <span class="n">described_class</span><span class="o">.</span><span class="n">new</span> <span class="p">}</span>
+
+  <span class="n">it</span> <span class="s2">&quot;should expose a #print method&quot;</span> <span class="k">do</span>
+    <span class="n">expect</span><span class="p">(</span><span class="n">printer</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">respond_to</span><span class="p">(</span><span class="ss">:print</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="n">describe</span> <span class="s2">&quot;#print&quot;</span> <span class="k">do</span>
+    <span class="n">it</span> <span class="s2">&quot;should return nil&quot;</span> <span class="k">do</span>
+      <span class="n">expect</span><span class="p">(</span><span class="n">printer</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Hello, World!&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">be_nil</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">printers</span> <span class="o">=</span> <span class="o">[</span>
+ <span class="no">PlainPrinter</span><span class="p">,</span>
+ <span class="no">BogusPrinter</span><span class="p">,</span>
+ <span class="no">ShufflePrinter</span><span class="p">,</span>
+ <span class="no">PDFPrinter</span>
+<span class="o">]</span>
+
+<span class="n">printers</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">printer_class</span><span class="o">|</span>
+  <span class="n">describe</span> <span class="n">printer_class</span> <span class="k">do</span>
+    <span class="n">it_behaves_like</span> <span class="s2">&quot;a printer class&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>

@@ -1,0 +1,10 @@
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">$trigger</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#trigger_slot .slottt-machine-recipe__items_container&#39;</span><span class="p">);</span>
+  <span class="nx">buildSlotContents</span><span class="p">(</span><span class="nx">$trigger</span><span class="p">,</span> <span class="nx">triggers</span><span class="p">);</span>
+
+  <span class="nx">$action</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#action_slot .slottt-machine-recipe__items_container&#39;</span><span class="p">);</span>
+  <span class="nx">buildSlotContents</span><span class="p">(</span><span class="nx">$action</span><span class="p">,</span> <span class="nx">actions</span><span class="p">);</span>
+
+  <span class="nx">setInterval</span><span class="p">(</span><span class="nx">animate</span><span class="p">,</span> <span class="mi">3500</span><span class="p">);</span> <span class="c1">// I&#39;ll talk about this later.</span>
+<span class="p">});</span>
+</pre></div>

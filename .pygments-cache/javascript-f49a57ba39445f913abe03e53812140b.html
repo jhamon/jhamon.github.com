@@ -1,0 +1,22 @@
+<div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">Asteroids</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Asteroids</span> <span class="o">=</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">Asteroids</span> <span class="o">||</span> <span class="p">{});</span>
+
+    <span class="kd">var</span> <span class="nx">MovingObject</span> <span class="o">=</span> <span class="nx">Asteroids</span><span class="p">.</span><span class="nx">MovingObject</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// initialization code to set up position, speed, etc.</span>
+    <span class="p">}</span>
+    <span class="nx">MovingObject</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">move</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// complex logic to update object&#39;s position</span>
+      <span class="c1">// based on position, speed, angular velocity, </span>
+      <span class="c1">// direction, acceleration, etc.</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">Ship</span> <span class="o">=</span> <span class="nx">Asteroids</span><span class="p">.</span><span class="nx">Ship</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Ship-specific initialization would go here</span>
+      <span class="nx">Asteroids</span><span class="p">.</span><span class="nx">MovingObject</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
+    <span class="p">};</span>
+    <span class="nx">Ship</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MovingObject</span><span class="p">();</span>
+    <span class="nx">Ship</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">Ship</span><span class="p">;</span>
+
+    <span class="c1">// Repeat a similar procedure for Asteroid and Bullet constructors.</span>
+<span class="p">})();</span>
+</pre></div>

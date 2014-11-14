@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Projects | Jen Hamon]]></title>
+  <link href="http://jhamon.github.io/blog/categories/projects/atom.xml" rel="self"/>
+  <link href="http://jhamon.github.io/"/>
+  <updated>2014-11-13T17:48:07-08:00</updated>
+  <id>http://jhamon.github.io/</id>
+  <author>
+    <name><![CDATA[Jen Hamon]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Building Elementary Cellular Automata in Ruby]]></title>
+    <link href="http://jhamon.github.io/blog/2014/10/09/building-elementary-cellular-automata-in-ruby/"/>
+    <updated>2014-10-09T01:31:32-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/10/09/building-elementary-cellular-automata-in-ruby</id>
+    <content type="html"><![CDATA[<p>Cellular automata are simulations where each location in a space can have a finite number of states (usually <code>on</code> or <code>off</code>, or <code>0</code> and <code>1</code>). The state at a particular location can change through time according to specific rules. Most such systems are fairly boring, but some sets of rules can give rise to surprisingly complex behavior.  Whole branches of math and computer science are devoted to the study of these simulations.</p>
+
+<p>There&rsquo;s a good chance you&rsquo;ve seen an implementation of <em>Conway&rsquo;s Game of Life</em>, which is the most well-known example of cellular automation. <em>Life</em> is set on a two-dimensional grid, and self-replicating <a href="http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns">patterns</a> called <em>gliders</em> are a common occurance.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/e/e5/Gospers_glider_gun.gif" style="float: right"></p>
+
+<p>I am not a computer scientist, but I find the dancing patterns mesmerizing.  As a fun exercise, I decided to take my layman&rsquo;s knowledge of cellular automation and build my own implementation of the 256 different Elementary Cellular Automata. These are also very beautiful, but have so far made a much smaller pop culture splash than their cousin <em>Life</em>.</p>
+
+<h2>Elementary Cellular Automata</h2>
+
+<p>The <em>Elementary</em> in <em>Elementary Cellular Automata</em> comes from the fact that the model space is restricted to only one dimension.  The grid in this case is a single row of pixels.  Rather than animating a one-pixel row, most representations of ECAs show time on the vertical axis by printing a new row for each timestep.</p>
+
+<p>From one time-step to the next, a pixel will live or die according to rules that examine the state of a pixel and the state of its two neighboring pixels.
+For convenience, we might represent the pattern in a particular location as the a three-digit string like <code>101</code> or <code>001</code>.  Since a particular pixel and its two neighbors can each be either a <code>1</code> or a <code>0</code>, there are <code>2*2*2 = 8</code> different possible patterns at a particular location.  The <a href="http://en.wikipedia.org/wiki/Elementary_cellular_automaton">Wikipedia article</a> goes into a lot of detail about how these rules are derived.</p>
+
+<h2>Program organization</h2>
+
+<p>A principal in good object-oriented design is to separate things that change from things that don&rsquo;t change.  With that in mind, I decided to use the composite pattern for the main <code>ElementaryCellularAutomata</code> class and abstract the changeable portions of the simulation logic their own classes.</p>
+
+<p>The 256 different kinds of rules into a <code>Rule</code> class.  A factory method configures the rule class to have a different behavior depending on the rule number.</p>
+
+<p>I also handle print functions in a <code>Printer</code> class following a template pattern.  This is so I can easily print output to the console with one class, or save to png image with anohter.  And I could easily extend it to other types of printers in the future (PDF, jpg, etc) as long as those classes provide a <code>print</code> method.</p>
+
+<p>You can check out the finished code and a gallery of the output <a href="https://github.com/jhamon/elementary_cellular_automata">on github</a>.</p>
+
+<h2>JavaScript reboot</h2>
+
+<p>Just for fun, I decided to build an animated JavaScript version of this code.</p>
+
+<p data-height="463" data-theme-id="9963" data-slug-hash="ogvpxQ" data-default-tab="result" data-user="jhamon" class='codepen'>See the Pen <a href='http://codepen.io/jhamon/pen/ogvpxQ/'>Elementary Cellular Automata</a> by Jennifer Hamon (<a href='http://codepen.io/jhamon'>@jhamon</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+
+
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using JavaScript Animation to Communicate IFTTT at a Glance]]></title>
+    <link href="http://jhamon.github.io/blog/2014/08/11/communicating-ifttt-at-a-glance/"/>
+    <updated>2014-08-11T16:11:20-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/08/11/communicating-ifttt-at-a-glance</id>
+    <content type="html"><![CDATA[<p data-height="268" data-theme-id="0" data-slug-hash="GhrjF" data-default-tab="result" data-user="jhamon" class='codepen'>See the Pen <a href='http://codepen.io/jhamon/pen/GhrjF/'>IFTTT Slottt Machine</a> by Jennifer Hamon (<a href='http://codepen.io/jhamon'>@jhamon</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+
+
+<script async src="//codepen.io/assets/embed/ei.js"></script>
+
+
+<p>At IFTTT we&rsquo;re always looking for better ways to communicate what our service is and how people can use us to connect the services they love together in powerful ways.  One idea I had for this was to create an animation based on the if-logo-then-logo style presentation of recipes used on the <a href="http://www.ifttt.com/wtf">WTF page</a> and elsewhere throughout the site.  With 442 triggers and 172 actions available at the time of this writing, there are over 76,000 distinct recipes you can make on IFTTT.  I really wanted to make something that would convey the wonderful variety of combinations that IFTTT makes possible.</p>
+
+<!--
+![if-logo-then-logo-animation](https://gist.github.com/jhamon/19da977e9fe095e9601c/raw/c3830dcd563427effc867a44e249ada0a1e64d3f/slottt-fixed-short-scroll.gif)
+-->
+
+
+<p>The animation I was imaginging takes some visual inspiration from the spinners on a slot machine.  After a little planning, I realized it wouldn&rsquo;t be too difficult to pull off with some CSS sleight of hand and a bit of JavaScript.  If you exclude the long list of asset urls, the finished JavaScript only weighs in around 50 lines.  In this article, I&rsquo;m going to explain how I was able to combine absolute positioning with <code>overlow:hidden</code> and a small amount of jQuery to build a neat slot machine effect that works in all major browsers.</p>
+
+<h2>Game plan</h2>
+
+<p>I decided that one easy approach would be to have three types of elements:</p>
+
+<ul>
+<li><strong>A mask</strong>: a wrapper div (or mask div) with a fixed size, <code>position: relative</code> and <code>overflow: hidden</code>.  For this project, I chose the class name <code>slottt-machine-recipe__mask</code>.</li>
+<li><strong>An inner container to hold the icons</strong>: an inner div to hold the icon images with <code>position: absolute</code>.  For this project I chose the class name <code>slottt-machine-recipe__items_container</code>.</li>
+<li><strong>The actual icons</strong>: I&rsquo;m fortunate that IFTTT&rsquo;s great design team had already done the work of preparing nice looking assets in standard sizes for each <a href="http://www.ifttt.com/channels">channel</a> supported on our platform.  To get around some weird issues I was having with unwanted extra spacing below <code>img</code> elements, I chose to make square divs with the icon images set as their backgrounds. I marked each icon div with the class <code>slottt-machine-recipe__item</code></li>
+</ul>
+
+
+<p>This setup is sufficient to conceal all but the &ldquo;current&rdquo; icon. The animation is achieved by manipulating the <code>top</code> property on the absolutely positioned container. To drive home the CSS setup, you can see what this arrangement looks like with <code>overflow: hidden</code> commented out and some extra border styles turned on:</p>
+
+<p><img src="https://gist.githubusercontent.com/jhamon/19da977e9fe095e9601c/raw/50094976d831bd44561857efb0150d387450754d/IFTTT%20slot%20machine.png" alt="CSS setup" /></p>
+
+<h2>Writing the CSS</h2>
+
+<p>All together, the CSS for those different elements looks something like this:</p>
+
+<pre><code class="css">.slottt-machine-recipe__mask {
+    position: relative;
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+    display: inline-block;
+
+    // These make the icons look better while
+    // sitting inline with the if/then text.
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: -20px;
+
+    // This border style is shown in the screenshot
+    // but is not used in the final effect.
+    /* border: 2px solid red; */
+}
+
+.slottt-machine-recipe__items_container {
+    position: absolute;
+
+    // This border style is shown in the screenshot
+    // but is not used in the final effect.
+    /* border: 2px dotted green; */
+}
+
+// The actual icon images will be set as
+// backgrounds on divs of this class.
+.slottt-machine-recipe__item {
+    width: 150px;
+    height: 150px;
+    margin: 0px;
+    padding: 0px;
+    background-size: contain;
+}
+</code></pre>
+
+<h2>Building the HTML</h2>
+
+<p>&#8220;`html</p>
+
+<div class="slottt-machine-recipe">
+  <span class="recipe_if">if</span>
+  <div class="slottt-machine-recipe__mask" id="trigger_slot">
+      <div class="slottt-machine-recipe__items_container">
+      </div>
+  </div>
+
+  <span class="recipe_then">then</span>
+  <div class="slottt-machine-recipe__mask" id="action_slot">
+      <div class="slottt-machine-recipe__items_container">
+      </div>
+  </div>
+</div>
+
+
+<pre><code>
+Starting with this basic skeleton, I still needed to add the divs for each icon.  Since I had such a large number of icons to display and I wanted to be able to easily change them in the future without crawling through the raw html, I chose to build the innermost icon divs programmatically from a list of urls. I omitted the list to save space, but want to show the general approach:
+</code></pre>
+
+<p>var triggers = [
+  // a giant list of icon image urls
+]</p>
+
+<p>var actions = [
+ // another giant list of icon image urls
+]</p>
+
+<p>function buildSlotItem (imgURL) {
+    return $(&lsquo;<div>&rsquo;).addClass(&lsquo;slottt-machine-recipe__item&rsquo;)
+                      .css({&lsquo;background-image&rsquo;: &lsquo;url(&rsquo; + imgURL + &lsquo;)&rsquo;})
+}</p>
+
+<p>function buildSlotContents ($container, imgURLArray) {
+  $items = imgURLArray.map(buildSlotItem);
+  $container.append($items);
+}
+&#8220;`</p>
+
+<p>This code gets invoked to build a div for each icon after the page is loaded:</p>
+
+<pre><code class="javascript">$(document).ready( function () {
+  $trigger = $('#trigger_slot .slottt-machine-recipe__items_container');
+  buildSlotContents($trigger, triggers);
+
+  $action = $('#action_slot .slottt-machine-recipe__items_container');
+  buildSlotContents($action, actions);
+
+  setInterval(animate, 3500); // I'll talk about this later.
+});
+</code></pre>
+
+<h2>Basic Animation</h2>
+
+<p>Since the inner div has <code>position: absolute</code> we can position it precisely with respect to the parent div as long as the parent has <code>position: relative</code>.  This means that changing which icon is displayed in the non-hidden area of the mask div can be done by setting the <code>top</code> position property on the inner container div to a multiple of the image size (150 pixels in this case).</p>
+
+<p>From there, making a &ldquo;sliding&rdquo; effect is just a matter of animating the change of the <code>top</code> property with jQuery&rsquo;s <code>animate</code> function <a href="http://api.jquery.com/animate/">(docs here)</a>.  We could have written our own loop to take care of this, but jQuery has already done a nice job of implementing different easing functions, like <code>swing</code>, that specify a property&rsquo;s rate of change over time. Using non-linear easing gives the animation a nice polished feel.</p>
+
+<pre><code class="javascript">function animate() {
+  var triggerIndex = randomSlotttIndex(triggers.length);
+  $trigger.animate({top: -triggerIndex*150}, 500, 'swing');
+
+  var actionIndex = randomSlotttIndex(actions.length);
+  $action.animate({top: -actionIndex*150}, 700, 'swing');
+}
+</code></pre>
+
+<p><img src="https://gist.github.com/jhamon/19da977e9fe095e9601c/raw/427c34b8526ada47a1d94db62e37911ffcb2b02c/slottt-v1.gif" alt="" /></p>
+
+<h2>Forever upward</h2>
+
+<p>By now we are 90% to the finished result.  But instead of randomly scrolling the icons up or down, I really wanted them to scroll infinitely in the same direction. To pull this off we need to do a small amount of extra work to pop elements off the top of our inner container and push them onto the end.  By doing this, we can always scroll in the same direction without running out of icons to display.</p>
+
+<pre><code class="javascript">// Take the first n child elements from the $container and move them
+// to the end.
+function popPushNItems ($container, n) {
+    $children = $container.find('.slottt-machine-recipe__item');
+    $children.slice(0, n).insertAfter($children.last());
+
+    if (n === $children.length) {
+      popPushNItems($container, 1);
+    }
+}
+
+// After the slide animation is complete, we want to pop some items off
+// the front of the container and push them onto the end. This is
+// so the animation can slide upward infinitely without adding
+// inifinte div elements inside the container.
+function rotateContents ($container, n) {
+    setTimeout(function () {
+      popPushNItems($container, n);
+      $container.css({top: 0});
+    }, 300);
+}
+
+function animate() {
+  var triggerIndex = randomSlotttIndex(triggers.length);
+  var actionIndex = randomSlotttIndex(actions.length);
+
+  $trigger.animate({top: -triggerIndex*150}, 500, 'swing', function () {
+    rotateContents($trigger, triggerIndex);
+  });
+
+  $action.animate({top: -actionIndex*150}, 700, 'swing', function () {
+    rotateContents($action, actionIndex);
+  });
+}
+</code></pre>
+
+<p>You can see the resultant effect best by turning off the mask div&rsquo;s <code>overflow:hidden</code> property:</p>
+
+<p><img src="https://gist.github.com/jhamon/19da977e9fe095e9601c/raw/905d842398735d5522a59768742847535f61b1d9/pushpop.gif" alt="" /></p>
+
+<h2>Fine-tuning slide distance</h2>
+
+<p>For the basic version of the animation, I was just choosing a random icon to scroll to with a function like this:</p>
+
+<pre><code class="javascript">function randomSlotttIndex(max) {
+  return (Math.random() * max | 0);
+}
+</code></pre>
+
+<p>This was sufficient to test other aspects of the project, but in the finished product I really want to ensure that the icon we&rsquo;re spinning to is sufficiently &ldquo;far&rdquo; away that the random slot machine feel is preserved; randomly choosing to stay at the current position or roll to an icon only a few notches away just isn&rsquo;t as satisfying.  So, we modify our random index selection to account for that and reject small index choices.</p>
+
+<pre><code class="javascript">function randomSlotttIndex(max) {
+  var randIndex = (Math.random() * max | 0);
+  return (randIndex &gt; 10) ? randIndex : randomSlotttIndex(max);
+}
+</code></pre>
+
+<p>It&rsquo;s not a problem to reject these small indices as slide targets because of the way we are popping elements off and pushing them onto the end.  All the icons will be cycled through the different positions and will eventually be selected for display.</p>
+
+<h2>Conclusion</h2>
+
+<p>That about wraps it up, and I hope you learned something that will be useful to you in your future projects.  You can view and tinker with the finished result on <a href="http://codepen.io/jhamon/pen/GhrjF">codepen.io</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Serpent.io]]></title>
+    <link href="http://jhamon.github.io/blog/2014/03/14/serpent-dot-io/"/>
+    <updated>2014-03-14T17:24:12-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/03/14/serpent-dot-io</id>
+    <content type="html"><![CDATA[<p>When I first wrote this game I was still learning the &ldquo;JavaScript way&rdquo; of doing object-oriented programming with prototypical inheritance. I more or less succeeded in that aspect, but the code responsible for rendering the view and managing user interactions was a huge ball of mud. At that time I knew just enough jQuery to be dangerous, and while the basic mechanics seemed to work I had all my truth in the DOM and ran into a wall while trying to extend it to have more features. I wasn&rsquo;t unbinding events properly, so chaos ensued when I tried to reset the game for another play without a hard refresh. It was a mess, but I had other things I wanted to work on.</p>
+
+<h2>Backbone reboot</h2>
+
+<p>I recently revisted the project for a couple of days to apply what I&rsquo;d learned in the intervening months about keeping a clean separation between the <code>DOM</code> and my data with the help of a client-side framework called Backbone.js. I did an almost complete rewrite, and the game is now primarily driven by cascading events. The cell is the fundamental model of the game, which may belong to any of several different collections (<code>snakeSegments</code>, <code>apples</code>, <code>obstacles</code>) depending on the current state of that cell; these collections publish appropriate events when cells are added or removed, which trigger changes elsewhere in the game. For example, when an apple is eaten the game view hears the &ldquo;appleEaten&rdquo; event and knows to update the score and make a new apple.</p>
+
+<p>Each square is a <code>div</code> with <code>display:inline-block</code> and special classes providing styles for each possible state. The squares each have an associated Backbone view that listens for change events on the cell data model. When the Backbone cell model changes, the cell view updates the CSS classes applied to its div element, creating the illusion of objects moving across the board. The game state is now maintained completely separate from the DOM&rsquo;s appearance thanks to views that listen only to data models.</p>
+
+<h2>Rails backend</h2>
+
+<p>This was primarily a JavaScript project, but as a finishing touch I whipped up a simple Ruby on Rails backend to allow users to save scores to a scoreboard. A <code>HighScore</code> model is created when the Backbone app POSTs one to the <code>/high_scores</code> url. I originally fetched the scores with a GET request to <code>/high_scores</code>, but eventually moved to bootstrapping the high score data with the page delivering the Backbone app to avoid an unnecessary XHR request.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AdoptMeme:<br>Meme Generator Meets petfinder.com]]></title>
+    <link href="http://jhamon.github.io/blog/2013/11/15/adoptmeme/"/>
+    <updated>2013-11-15T16:05:44-08:00</updated>
+    <id>http://jhamon.github.io/blog/2013/11/15/adoptmeme</id>
+    <content type="html"><![CDATA[<p>When I began <a href="http://www.adoptme.me">AdoptMe.me</a>, I knew it was an ambitious project because of the many moving parts involved.  I learned a lot from the process, both successes and failures, but the project is currently on inedefinite hiatus. You can view the bones live on the web at <a href="http://www.adoptme.me">AdoptMe.me</a>.  </p>
+
+
+
+
+<p>I originally conceived of the site as a cat meme generator in the same vein as icanhascheezburger, but with a social mission of bringing visibility to cats languishing in animal shelters. I thought that if a person is going to spend their time making funny captions for cat images and sharing them around, they might as well give the visibility to a cat that needs it.  </p>
+
+
+<p><a href="http://www.adoptme.me"><img class="projects pull-left" src="images/AdoptMeme.png" alt="AdoptMe.me meme editor"></a></p>
+
+<p>The technical vision was that I would pull images and data from the free petfinder.com API, push them into my Amazon S3 bucket, let users caption them with a canvas-based JavaScript editor, and then send the resulting image off to my Amazon S3 bucket.  The image would be watermarked with a generated shortlink that viewers of the image could follow to learn more about how to adopt that animal should they be interested in doing so.</p>
+
+
+
+
+<h3>Rails Backend</h3>
+
+
+
+
+<p>A lot needs to happen behind the scenes to create a site handling image media and integrating with third-party APIs.  Since I was deploying on Heroku, first order of business was to find a third-party provider of storage for all my image assets.  Amazon S3 was the obvious choice because it is cheap, fast, and reliable.  Amazon provides an official <span class="code">aws-sdk</span> gem for interacting with their web services, but it contains hundreds of methods for dozens of services so I ended up writing my own <span class="code">Storable</span> module that extends <span class="code">ActiveSupport::Concerns</span> to wrap just the functionality I needed with a simpler API.  My <span class="code">Storable</span> module follows a template pattern, allowing me to easily store and retrieve image data associated with any of my ActiveRecord models by specifying a filename root and including the module.</p>
+
+
+
+
+<p>The backend included models for <span class="code">Pet</span>, <span class="code">Image</span>, and <span class="code">Caption</span>.  Pet models were created and populated using data fetched from the Petfinder JSON API.  I quickly discovered that their free API is worth about what I paid for it (i.e. not much), and I spent a lot of time writing code to clean or discard bogus responses.  <span class="code">Image</span> tracked the metadata for unaltered images associated with a <span class="code">Pet</span>, and <span class="code">Caption</span> tracked metadata for each user-created meme.  Having separate <span class="code">Image</span> and <span class="code">Caption</span> made the associations clear and easily extensible should I want to find, say, all memes with common text content or all memes derived from a particular animal or photo.</p>
+
+
+<p></p>
+
+<p>I decided not to build views on the server side, because I knew the image editor I wanted to write would involve heavy JavaScript.  So the data in my models is all exposed via a JSON API for consumption by a client-side application I would develop with Backbone.js.</p>
+
+
+
+
+<p>Finally, I used <span class="code">figaro</span> to manage my third-party credentials.  The <span class="code">figaro</span> gem allows me to store my private credentials in an initialization file that is not checked into source control, but the gem will load them into an environment variable for you when the app boots up.</p>
+
+
+
+
+<h3>Backbone.js, HTML5 Canvas Frontend</h3>
+
+
+
+
+<p>Visiting the site you will be served a static page with the Backbone application.  Much of the data is bootstrapped into the page to avoid unnecessary calls to my JSON API.  I made Backbone views for an index page, a meme creation editor, and a show pet/meme page where viewers could learn more about adopting.  Each of these views is complex, and involves one or more sub-views.</p>
+
+
+
+
+<p>Coding an MVP version of the canvas-based meme editor was a straightforward task after some of my other Canvas projects.  A cat image is set as the background for the canvas element.  As the user types, the editor listens to keypress events and updates the overlayed text.  I wanted each image to have a shortlink-style url in the corner where a viewer of the image could visit and learn more about adopting the pet.  So I wrote the shortlink and watermarking logic on the backend, and was nearing the last piece of the MVP puzzle: uploading my newly captioned images.</p>
+
+
+
+
+<h3> Problems with the Same-Origin Policy</h3>
+
+
+
+
+<p>It is at that moment that I ran head-on into a Same-Origin security error.  I learned, painfully, that the browser&#8217;s Same-Origin Policy was not going to let me save any of my users meme images directly to S3 because the background cat image was not coming from the same origin as the page I was serving from Heroku.  What I thought was going to be as easy as a call to <span class="code">canvas.toDataURL()</span> ended up being a much bigger problem.</p>
+
+
+
+
+<p>I fiddled with server side generation of the captioned images using <span class="code">imagemagick</span> via the <span class="code">rmagick</span> gem.  I actually got this to work and its what you will experience if you try to use the live version of the site at this time.  This backend image manipulation is why the actual results do not match the editor preview. I realized quickly, however, that <span class="code">imagemagick</span> was slow, and I knew that blocking my Rails application with big image processing jobs was going to be unacceptably slow with more than one or two concurrent users.  And the image work wasn&#8217;t a candidate to be a deferred job because the user is waiting to see their creation and share it around on the web.  </p>
+
+
+
+
+<h3> Hiatus </h3>
+
+
+
+
+<p>Given my knowledge at the time, the whole thing seemed unsalvageable at that point.  I made the decision to put the project on hold while I kept learning and working on other things, hoping to get back to it one day and do the job right.  Since then I&#8217;ve learned that what I originally intended may be possible with CORS, Cross-Origin Resource Sharing, so I&#8217;m excited to pick up again where I left off.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Prototypical Inheritance With Asteroids]]></title>
+    <link href="http://jhamon.github.io/blog/2013/10/12/asteroids/"/>
+    <updated>2013-10-12T17:28:49-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/10/12/asteroids</id>
+    <content type="html"><![CDATA[<p>Asteroids is more experiment than finished game since there are no win conditions. It&rsquo;s one of the first things I made using JavaScript, and it was a great way to wrap my head around JavaScript&rsquo;s prototypical inheritance. The game has several different types of objects (the spaceship, bullets, asteroids) that have specific behaviors but have a common need to know where they are, move around, etc. This is easily accomplished by having a base object, MovingObject.prototype, that all other objects delegate to (a.k.a. &ldquo;inherit from&rdquo;).</p>
+
+<p>Here&rsquo;s a simplified snippet showing the inheritance pattern:</p>
+
+<pre><code class="javascript">(function () {
+    var Asteroids = window.Asteroids = (window.Asteroids || {});
+
+    var MovingObject = Asteroids.MovingObject = function (options) {
+      // initialization code to set up position, speed, etc.
+    }
+    MovingObject.prototype.move = function () {
+      // complex logic to update object's position
+      // based on position, speed, angular velocity, 
+      // direction, acceleration, etc.
+    }
+
+    var Ship = Asteroids.Ship = function (options) {
+      // Ship-specific initialization would go here
+      Asteroids.MovingObject.call(this, options)
+    };
+    Ship.prototype = new MovingObject();
+    Ship.prototype.constructor = Ship;
+
+    // Repeat a similar procedure for Asteroid and Bullet constructors.
+})();
+</code></pre>
+
+<p>To understand what&rsquo;s happening here, you have to know that every object has a hidden <code>[[Prototype]]</code> property that is set by the constructor function at creation time to whatever is at the constructor&rsquo;s <code>.prototype</code> property. Whenever we try to access a property that an object doesn&rsquo;t have, it defers to its prototype. So when we try to access a property on an object, the interpreter will check that object, then the object&rsquo;s prototype, then the prototype&rsquo;s prototype, etc until it finds a defined property with that name or reaches the end of the prototype chain and returns undefined. This is exactly what people are talking about when they refer to the &ldquo;prototype chain&rdquo;.</p>
+
+<p>As a more concrete example, let&rsquo;s say I want to call ship.move() on a Ship instance that I create with <code>var ship = new Asteroids.Ship()</code>. Well, ship doesn&rsquo;t have a property called move and neither does the prototype of ship (e.g. <code>Ship.prototype</code>) which was an instance of <code>MovingObject</code>. But the prototype&rsquo;s prototype, e.g. <code>MovingObject.prototype</code> will have a function under the move property name.</p>
+
+<p>I want to give a shoutout to Kyle Simpson for explaining prototypical inheritance (better known as &ldquo;behavior delegation&rdquo;) in a way that actually makes sense.</p>
+]]></content>
+  </entry>
+  
+</feed>

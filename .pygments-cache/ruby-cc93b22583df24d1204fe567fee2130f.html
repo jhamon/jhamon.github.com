@@ -1,0 +1,29 @@
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Padawan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="c1"># Master Yoda says people over a certain age are </span>
+  <span class="c1"># too old to begin the training...</span>
+  <span class="no">MAX_AGE</span> <span class="o">=</span> <span class="mi">9</span>
+  <span class="c1"># ...but we can&#39;t safely put lightsabers in the </span>
+  <span class="c1"># hands of babes, so we need this floor threshold too.</span>
+  <span class="no">MIN_AGE</span> <span class="o">=</span> <span class="mi">5</span>
+  
+  <span class="no">MIDICHLORIAN_THRESHOLD</span> <span class="o">=</span> <span class="mi">9000</span>
+  
+  <span class="n">validates</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+  <span class="n">validate</span> <span class="ss">:is_an_acceptable_age_to_be_trained</span>
+  <span class="n">validate</span> <span class="ss">:has_enough_midichlorians</span>
+  
+  <span class="k">def</span> <span class="nf">is_an_acceptable_age_to_be_trained</span>
+    <span class="k">if</span> <span class="n">age</span> <span class="o">&gt;</span> <span class="no">MAX_AGE</span>
+     <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:age</span><span class="p">,</span> <span class="s2">&quot;is too old to be trained&quot;</span><span class="p">)</span>
+    <span class="k">elsif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="no">MIN_AGE</span>
+     <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:age</span><span class="p">,</span> <span class="s2">&quot;is too young to be trained&quot;</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">has_enough_midichlorians</span>
+    <span class="k">if</span> <span class="n">midichlorian_count</span> <span class="o">&lt;</span> <span class="no">MIDICHLORIAN_THRESHOLD</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:midichlorian_count</span><span class="p">,</span> <span class="s2">&quot;is too low to be trained&quot;</span><span class="p">)</span> 
+      <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>

@@ -1,0 +1,1976 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Jen Hamon]]></title>
+  <link href="http://jhamon.github.io/atom.xml" rel="self"/>
+  <link href="http://jhamon.github.io/"/>
+  <updated>2014-11-13T17:48:07-08:00</updated>
+  <id>http://jhamon.github.io/</id>
+  <author>
+    <name><![CDATA[Jen Hamon]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Enforcing Your Template Pattern Interface With RSpec Shared Examples]]></title>
+    <link href="http://jhamon.github.io/blog/2014/10/09/enforcing-your-template-pattern-interface-with-rspec/"/>
+    <updated>2014-10-09T18:00:35-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/10/09/enforcing-your-template-pattern-interface-with-rspec</id>
+    <content type="html"><![CDATA[<p>The template pattern comes into play when you have several different use cases that are mostly the same but differ in just a few ways.  Shared functionality and skeleton methods are defined in a base class, which will be overridden by each subclass.  Each subclass provides a different implementation for the skeleton functions, and because all these objects all share a common interface we can use them interchangeably in other parts of our code.</p>
+
+<h2>Using class inheritance</h2>
+
+<p>The simplest way of implementing the template pattern is to define a base class that your various implementations inherit from and override. All of the methods we want included in the template subclasses must raise errors if not overridden.  That way, if no implementation is present in a subclass we will see an error.</p>
+
+<p>Take these printer classes for example.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">BasePrinter</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prepare_and_print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">print</span><span class="p">(</span><span class="n">magical_formatting</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">magical_formatting</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="s2">&quot;Magical data: </span><span class="si">#{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="s2">&quot;Not implemented!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">PlainPrinter</span> <span class="o">&lt;</span> <span class="no">BasePrinter</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="n">data</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ShufflePrinter</span> <span class="o">&lt;</span> <span class="no">BasePrinter</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">shuffle</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">BogusPrinter</span> <span class="o">&lt;</span> <span class="no">BasePrinter</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bogus_print</span>
+</span><span class='line'>    <span class="c1"># whatever</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now if we do <code>BogusPrinter.new.prepare_and_print(data)</code> we will see a &ldquo;Not impelmented!&rdquo; error because the expected <code>print</code> method was not defined in the subclass. A quick and easy fix.</p>
+
+<p>This gets the job done, but doesn&rsquo;t seem ideal.  What if we want to make a printer class that writes data to a PDF file?  We might need this class to inherit from another class providing complex PDF logic.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">PDFPrinter</span> <span class="o">&lt;</span> <span class="no">BadassPDFLibrary</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># do stuff</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Wrap the base template into a module</h2>
+
+<p>Ruby only has single inheritance, so there&rsquo;s no way to subclass <code>BasePrinter</code> and <code>BadassPDFLibrary</code>.  One way around the single-inheritance problem is to wrap up our <code>BasePrinter</code> into a module to be included.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">BasePrinter</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prepare_and_print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">print</span><span class="p">(</span><span class="n">magical_formatting</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">magical_formatting</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="s2">&quot;Magical data: </span><span class="si">#{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="s2">&quot;not implemented&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">PlainPrinter</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">BasePrinter</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="n">data</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ShufflePrinter</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">BasePrinter</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">shuffle</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">BogusPrinter</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">BasePrinter</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bogus_print</span>
+</span><span class='line'>    <span class="c1"># whatever</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">PDFPrinter</span> <span class="o">&lt;</span> <span class="no">BadassPDFLibrary</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">BasePrinter</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># do stuff</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Leveraging RSpec <code>shared_examples</code></h2>
+
+<p>Using modules is a perfectly workable solution if we need to inherit from a different class.  But there&rsquo;s a third way we can enforce our expectations on the printer interface. That is to write some shared examples for this code that check for the presence of the expected methods.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">shared_examples</span> <span class="s2">&quot;a printer class&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:printer</span><span class="p">)</span> <span class="p">{</span> <span class="n">described_class</span><span class="o">.</span><span class="n">new</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;should expose a #print method&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">printer</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">respond_to</span><span class="p">(</span><span class="ss">:print</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;#print&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;should return nil&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">printer</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Hello, World!&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">be_nil</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">printers</span> <span class="o">=</span> <span class="o">[</span>
+</span><span class='line'> <span class="no">PlainPrinter</span><span class="p">,</span>
+</span><span class='line'> <span class="no">BogusPrinter</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ShufflePrinter</span><span class="p">,</span>
+</span><span class='line'> <span class="no">PDFPrinter</span>
+</span><span class='line'><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">printers</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">printer_class</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">describe</span> <span class="n">printer_class</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it_behaves_like</span> <span class="s2">&quot;a printer class&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This approach goes beyond the error-raising we get from the module or base class and allows us to make stipulations about the return values from each template method.  With a few tests like this, we can dispense with the need for abstract base methods.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Few Debugging Tips for the Rails Console]]></title>
+    <link href="http://jhamon.github.io/blog/2014/10/09/a-few-debugging-tips-for-the-rails-console/"/>
+    <updated>2014-10-09T17:10:19-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/10/09/a-few-debugging-tips-for-the-rails-console</id>
+    <content type="html"><![CDATA[<p>This post will be a little less coherent than some of the others, but I wanted to write down a few things I&rsquo;ve found to be very helpful when trying to debug my Ruby code.</p>
+
+<h2>Quickly find syntax errors</h2>
+
+<p>A surprising number of people don&rsquo;t know that you can run ruby with <code>-c</code> from the command line to learn about syntax errors. Let&rsquo;s say I have a simple <code>Dog</code> class with an unclosed string.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># dog.rb</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">woof</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;woof</span>
+</span><span class='line'><span class="s2">  end</span>
+</span><span class='line'><span class="s2">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a trivial example, but if I was having trouble tracking down the problem I&rsquo;d do something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="err">$</span> <span class="n">ruby</span> <span class="o">-</span><span class="n">c</span> <span class="n">dog</span><span class="o">.</span><span class="n">rb</span>
+</span><span class='line'><span class="n">dog</span><span class="o">.</span><span class="n">rb</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span> <span class="n">unterminated</span> <span class="n">string</span> <span class="n">meets</span> <span class="k">end</span> <span class="n">of</span> <span class="n">file</span>
+</span><span class='line'><span class="n">dog</span><span class="o">.</span><span class="n">rb</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span> <span class="n">syntax</span> <span class="n">error</span><span class="p">,</span> <span class="n">unexpected</span> <span class="k">end</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">input</span><span class="p">,</span> <span class="n">expecting</span> <span class="n">keyword_end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Inspecting instance variables</h2>
+
+<p>From the console, we have the power to reach inside an object and see its instance variables even if there are no getter and setter methods defined on the object.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Pluto&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Dog:0x007f82aac977d0 @name=&quot;Pluto&quot;&gt;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span>
+</span><span class='line'><span class="ss">NoMethodError</span><span class="p">:</span> <span class="n">undefined</span> <span class="nb">method</span> <span class="sb">`name&#39; for #&lt;Dog:0x007f82aac977d0 @name=&quot;Pluto&quot;&gt;</span>
+</span><span class='line'><span class="sb">from (pry):12:in `</span><span class="n">__pry__</span><span class="err">&#39;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">4</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">d</span><span class="o">.</span><span class="n">instance_variable_get</span><span class="p">(</span><span class="s2">&quot;@name&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;Pluto&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This slightly different syntax also works</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">d</span><span class="o">.</span><span class="n">instance_variable_get</span><span class="p">(</span><span class="ss">:@name</span><span class="p">)</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;Pluto&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If we&rsquo;re not sure what state the object is holding on to, we can get a list of all the defined instance variables using <code>#instance_variables</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">6</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">d</span><span class="o">.</span><span class="n">instance_variables</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:@name</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Calling private methods</h2>
+
+<p>If you want to call a private method from the command line, you can do so with <code>#send</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">7</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">d</span><span class="o">.</span><span class="n">woof</span>
+</span><span class='line'><span class="ss">NoMethodError</span><span class="p">:</span> <span class="kp">private</span> <span class="nb">method</span> <span class="sb">`woof&#39; called for #&lt;Dog:0x007fd65acfe9b8 @name=&quot;Pluto&quot;&gt;</span>
+</span><span class='line'><span class="sb">from (pry):17:in `</span><span class="n">__pry__</span><span class="err">&#39;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">8</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">d</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:woof</span><span class="p">)</span>
+</span><span class='line'><span class="n">woof</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="kp">nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Discover where a method was defined</h2>
+
+<p>Sometimes, especially when working on a big application with other people, it&rsquo;s tricky to learn where a particular method is defined.  This is especially true when classes are being extended by gems that you did not write or install yourself.</p>
+
+<p>To track those down, you can do this in the console.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">instance</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_name</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For example, I might do something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">25</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:cache</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;/Users/jhamon/.rvm/gems/ruby-2.0.0-p247/gems/railties-4.1.4/lib/rails.rb&quot;</span><span class="p">,</span> <span class="mi">32</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If the <code>cache</code> method had been overridden, as it sometimes is by gems like <code>dalli_store</code>, I would see a reference to that gem instead of rails.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building Elementary Cellular Automata in Ruby]]></title>
+    <link href="http://jhamon.github.io/blog/2014/10/09/building-elementary-cellular-automata-in-ruby/"/>
+    <updated>2014-10-09T01:31:32-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/10/09/building-elementary-cellular-automata-in-ruby</id>
+    <content type="html"><![CDATA[<p>Cellular automata are simulations where each location in a space can have a finite number of states (usually <code>on</code> or <code>off</code>, or <code>0</code> and <code>1</code>). The state at a particular location can change through time according to specific rules. Most such systems are fairly boring, but some sets of rules can give rise to surprisingly complex behavior.  Whole branches of math and computer science are devoted to the study of these simulations.</p>
+
+<p>There&rsquo;s a good chance you&rsquo;ve seen an implementation of <em>Conway&rsquo;s Game of Life</em>, which is the most well-known example of cellular automation. <em>Life</em> is set on a two-dimensional grid, and self-replicating <a href="http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns">patterns</a> called <em>gliders</em> are a common occurance.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/e/e5/Gospers_glider_gun.gif" style="float: right"></p>
+
+<p>I am not a computer scientist, but I find the dancing patterns mesmerizing.  As a fun exercise, I decided to take my layman&rsquo;s knowledge of cellular automation and build my own implementation of the 256 different Elementary Cellular Automata. These are also very beautiful, but have so far made a much smaller pop culture splash than their cousin <em>Life</em>.</p>
+
+<h2>Elementary Cellular Automata</h2>
+
+<p>The <em>Elementary</em> in <em>Elementary Cellular Automata</em> comes from the fact that the model space is restricted to only one dimension.  The grid in this case is a single row of pixels.  Rather than animating a one-pixel row, most representations of ECAs show time on the vertical axis by printing a new row for each timestep.</p>
+
+<p>From one time-step to the next, a pixel will live or die according to rules that examine the state of a pixel and the state of its two neighboring pixels.
+For convenience, we might represent the pattern in a particular location as the a three-digit string like <code>101</code> or <code>001</code>.  Since a particular pixel and its two neighbors can each be either a <code>1</code> or a <code>0</code>, there are <code>2*2*2 = 8</code> different possible patterns at a particular location.  The <a href="http://en.wikipedia.org/wiki/Elementary_cellular_automaton">Wikipedia article</a> goes into a lot of detail about how these rules are derived.</p>
+
+<h2>Program organization</h2>
+
+<p>A principal in good object-oriented design is to separate things that change from things that don&rsquo;t change.  With that in mind, I decided to use the composite pattern for the main <code>ElementaryCellularAutomata</code> class and abstract the changeable portions of the simulation logic their own classes.</p>
+
+<p>The 256 different kinds of rules into a <code>Rule</code> class.  A factory method configures the rule class to have a different behavior depending on the rule number.</p>
+
+<p>I also handle print functions in a <code>Printer</code> class following a template pattern.  This is so I can easily print output to the console with one class, or save to png image with anohter.  And I could easily extend it to other types of printers in the future (PDF, jpg, etc) as long as those classes provide a <code>print</code> method.</p>
+
+<p>You can check out the finished code and a gallery of the output <a href="https://github.com/jhamon/elementary_cellular_automata">on github</a>.</p>
+
+<h2>JavaScript reboot</h2>
+
+<p>Just for fun, I decided to build an animated JavaScript version of this code.</p>
+
+<p data-height="463" data-theme-id="9963" data-slug-hash="ogvpxQ" data-default-tab="result" data-user="jhamon" class='codepen'>See the Pen <a href='http://codepen.io/jhamon/pen/ogvpxQ/'>Elementary Cellular Automata</a> by Jennifer Hamon (<a href='http://codepen.io/jhamon'>@jhamon</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+
+
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using JavaScript Animation to Communicate IFTTT at a Glance]]></title>
+    <link href="http://jhamon.github.io/blog/2014/08/11/communicating-ifttt-at-a-glance/"/>
+    <updated>2014-08-11T16:11:20-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/08/11/communicating-ifttt-at-a-glance</id>
+    <content type="html"><![CDATA[<p data-height="268" data-theme-id="0" data-slug-hash="GhrjF" data-default-tab="result" data-user="jhamon" class='codepen'>See the Pen <a href='http://codepen.io/jhamon/pen/GhrjF/'>IFTTT Slottt Machine</a> by Jennifer Hamon (<a href='http://codepen.io/jhamon'>@jhamon</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+
+
+<script async src="//codepen.io/assets/embed/ei.js"></script>
+
+
+<p>At IFTTT we&rsquo;re always looking for better ways to communicate what our service is and how people can use us to connect the services they love together in powerful ways.  One idea I had for this was to create an animation based on the if-logo-then-logo style presentation of recipes used on the <a href="http://www.ifttt.com/wtf">WTF page</a> and elsewhere throughout the site.  With 442 triggers and 172 actions available at the time of this writing, there are over 76,000 distinct recipes you can make on IFTTT.  I really wanted to make something that would convey the wonderful variety of combinations that IFTTT makes possible.</p>
+
+<!--
+![if-logo-then-logo-animation](https://gist.github.com/jhamon/19da977e9fe095e9601c/raw/c3830dcd563427effc867a44e249ada0a1e64d3f/slottt-fixed-short-scroll.gif)
+-->
+
+
+<p>The animation I was imaginging takes some visual inspiration from the spinners on a slot machine.  After a little planning, I realized it wouldn&rsquo;t be too difficult to pull off with some CSS sleight of hand and a bit of JavaScript.  If you exclude the long list of asset urls, the finished JavaScript only weighs in around 50 lines.  In this article, I&rsquo;m going to explain how I was able to combine absolute positioning with <code>overlow:hidden</code> and a small amount of jQuery to build a neat slot machine effect that works in all major browsers.</p>
+
+<h2>Game plan</h2>
+
+<p>I decided that one easy approach would be to have three types of elements:</p>
+
+<ul>
+<li><strong>A mask</strong>: a wrapper div (or mask div) with a fixed size, <code>position: relative</code> and <code>overflow: hidden</code>.  For this project, I chose the class name <code>slottt-machine-recipe__mask</code>.</li>
+<li><strong>An inner container to hold the icons</strong>: an inner div to hold the icon images with <code>position: absolute</code>.  For this project I chose the class name <code>slottt-machine-recipe__items_container</code>.</li>
+<li><strong>The actual icons</strong>: I&rsquo;m fortunate that IFTTT&rsquo;s great design team had already done the work of preparing nice looking assets in standard sizes for each <a href="http://www.ifttt.com/channels">channel</a> supported on our platform.  To get around some weird issues I was having with unwanted extra spacing below <code>img</code> elements, I chose to make square divs with the icon images set as their backgrounds. I marked each icon div with the class <code>slottt-machine-recipe__item</code></li>
+</ul>
+
+
+<p>This setup is sufficient to conceal all but the &ldquo;current&rdquo; icon. The animation is achieved by manipulating the <code>top</code> property on the absolutely positioned container. To drive home the CSS setup, you can see what this arrangement looks like with <code>overflow: hidden</code> commented out and some extra border styles turned on:</p>
+
+<p><img src="https://gist.githubusercontent.com/jhamon/19da977e9fe095e9601c/raw/50094976d831bd44561857efb0150d387450754d/IFTTT%20slot%20machine.png" alt="CSS setup" /></p>
+
+<h2>Writing the CSS</h2>
+
+<p>All together, the CSS for those different elements looks something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.slottt-machine-recipe__mask</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">150px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">150px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">//</span> <span class="n">These</span> <span class="n">make</span> <span class="n">the</span> <span class="n">icons</span> <span class="n">look</span> <span class="n">better</span> <span class="n">while</span>
+</span><span class='line'>    <span class="o">//</span> <span class="n">sitting</span> <span class="k">inline</span> <span class="n">with</span> <span class="n">the</span> <span class="n">if</span><span class="o">/</span><span class="n">then</span> <span class="k">text</span><span class="o">.</span>
+</span><span class='line'>    <span class="k">margin-left</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin-right</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">-20px</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">//</span> <span class="n">This</span> <span class="k">border</span> <span class="n">style</span> <span class="n">is</span> <span class="n">shown</span> <span class="n">in</span> <span class="n">the</span> <span class="n">screenshot</span>
+</span><span class='line'>    <span class="o">//</span> <span class="n">but</span> <span class="n">is</span> <span class="n">not</span> <span class="n">used</span> <span class="n">in</span> <span class="n">the</span> <span class="n">final</span> <span class="n">effect</span><span class="o">.</span>
+</span><span class='line'>    <span class="c">/* border: 2px solid red; */</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.slottt-machine-recipe__items_container</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">//</span> <span class="n">This</span> <span class="k">border</span> <span class="n">style</span> <span class="n">is</span> <span class="n">shown</span> <span class="n">in</span> <span class="n">the</span> <span class="n">screenshot</span>
+</span><span class='line'>    <span class="o">//</span> <span class="n">but</span> <span class="n">is</span> <span class="n">not</span> <span class="n">used</span> <span class="n">in</span> <span class="n">the</span> <span class="n">final</span> <span class="n">effect</span><span class="o">.</span>
+</span><span class='line'>    <span class="c">/* border: 2px dotted green; */</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">//</span> <span class="nt">The</span> <span class="nt">actual</span> <span class="nt">icon</span> <span class="nt">images</span> <span class="nt">will</span> <span class="nt">be</span> <span class="nt">set</span> <span class="nt">as</span>
+</span><span class='line'><span class="o">//</span> <span class="nt">backgrounds</span> <span class="nt">on</span> <span class="nt">divs</span> <span class="nt">of</span> <span class="nt">this</span> <span class="nt">class</span><span class="o">.</span>
+</span><span class='line'><span class="nc">.slottt-machine-recipe__item</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">150px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">150px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">background</span><span class="o">-</span><span class="k">size</span><span class="o">:</span> <span class="n">contain</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Building the HTML</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;slottt-machine-recipe&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;recipe_if&quot;</span><span class="nt">&gt;</span>if<span class="nt">&lt;/span&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;slottt-machine-recipe__mask&quot;</span> <span class="na">id=</span><span class="s">&quot;trigger_slot&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;slottt-machine-recipe__items_container&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;recipe_then&quot;</span><span class="nt">&gt;</span>then<span class="nt">&lt;/span&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;slottt-machine-recipe__mask&quot;</span> <span class="na">id=</span><span class="s">&quot;action_slot&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;slottt-machine-recipe__items_container&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Starting with this basic skeleton, I still needed to add the divs for each icon.  Since I had such a large number of icons to display and I wanted to be able to easily change them in the future without crawling through the raw html, I chose to build the innermost icon divs programmatically from a list of urls. I omitted the list to save space, but want to show the general approach:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">triggers</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>  <span class="c1">// a giant list of icon image urls</span>
+</span><span class='line'><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">actions</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'> <span class="c1">// another giant list of icon image urls</span>
+</span><span class='line'><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">buildSlotItem</span> <span class="p">(</span><span class="nx">imgURL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;slottt-machine-recipe__item&#39;</span><span class="p">)</span>
+</span><span class='line'>                      <span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="s1">&#39;background-image&#39;</span><span class="o">:</span> <span class="s1">&#39;url(&#39;</span> <span class="o">+</span> <span class="nx">imgURL</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">})</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">buildSlotContents</span> <span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="nx">imgURLArray</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$items</span> <span class="o">=</span> <span class="nx">imgURLArray</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">buildSlotItem</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">$container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">$items</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code gets invoked to build a div for each icon after the page is loaded:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$trigger</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#trigger_slot .slottt-machine-recipe__items_container&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">buildSlotContents</span><span class="p">(</span><span class="nx">$trigger</span><span class="p">,</span> <span class="nx">triggers</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$action</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#action_slot .slottt-machine-recipe__items_container&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">buildSlotContents</span><span class="p">(</span><span class="nx">$action</span><span class="p">,</span> <span class="nx">actions</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">setInterval</span><span class="p">(</span><span class="nx">animate</span><span class="p">,</span> <span class="mi">3500</span><span class="p">);</span> <span class="c1">// I&#39;ll talk about this later.</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Basic Animation</h2>
+
+<p>Since the inner div has <code>position: absolute</code> we can position it precisely with respect to the parent div as long as the parent has <code>position: relative</code>.  This means that changing which icon is displayed in the non-hidden area of the mask div can be done by setting the <code>top</code> position property on the inner container div to a multiple of the image size (150 pixels in this case).</p>
+
+<p>From there, making a &ldquo;sliding&rdquo; effect is just a matter of animating the change of the <code>top</code> property with jQuery&rsquo;s <code>animate</code> function <a href="http://api.jquery.com/animate/">(docs here)</a>.  We could have written our own loop to take care of this, but jQuery has already done a nice job of implementing different easing functions, like <code>swing</code>, that specify a property&rsquo;s rate of change over time. Using non-linear easing gives the animation a nice polished feel.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">animate</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">triggerIndex</span> <span class="o">=</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">triggers</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">$trigger</span><span class="p">.</span><span class="nx">animate</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="o">-</span><span class="nx">triggerIndex</span><span class="o">*</span><span class="mi">150</span><span class="p">},</span> <span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;swing&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">actionIndex</span> <span class="o">=</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">actions</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">$action</span><span class="p">.</span><span class="nx">animate</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="o">-</span><span class="nx">actionIndex</span><span class="o">*</span><span class="mi">150</span><span class="p">},</span> <span class="mi">700</span><span class="p">,</span> <span class="s1">&#39;swing&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://gist.github.com/jhamon/19da977e9fe095e9601c/raw/427c34b8526ada47a1d94db62e37911ffcb2b02c/slottt-v1.gif" alt="" /></p>
+
+<h2>Forever upward</h2>
+
+<p>By now we are 90% to the finished result.  But instead of randomly scrolling the icons up or down, I really wanted them to scroll infinitely in the same direction. To pull this off we need to do a small amount of extra work to pop elements off the top of our inner container and push them onto the end.  By doing this, we can always scroll in the same direction without running out of icons to display.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Take the first n child elements from the $container and move them</span>
+</span><span class='line'><span class="c1">// to the end.</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">popPushNItems</span> <span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$children</span> <span class="o">=</span> <span class="nx">$container</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.slottt-machine-recipe__item&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">$children</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">n</span><span class="p">).</span><span class="nx">insertAfter</span><span class="p">(</span><span class="nx">$children</span><span class="p">.</span><span class="nx">last</span><span class="p">());</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="nx">$children</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">popPushNItems</span><span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// After the slide animation is complete, we want to pop some items off</span>
+</span><span class='line'><span class="c1">// the front of the container and push them onto the end. This is</span>
+</span><span class='line'><span class="c1">// so the animation can slide upward infinitely without adding</span>
+</span><span class='line'><span class="c1">// inifinte div elements inside the container.</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">rotateContents</span> <span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">popPushNItems</span><span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="nx">n</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">$container</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="mi">0</span><span class="p">});</span>
+</span><span class='line'>    <span class="p">},</span> <span class="mi">300</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">animate</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">triggerIndex</span> <span class="o">=</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">triggers</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">actionIndex</span> <span class="o">=</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">actions</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$trigger</span><span class="p">.</span><span class="nx">animate</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="o">-</span><span class="nx">triggerIndex</span><span class="o">*</span><span class="mi">150</span><span class="p">},</span> <span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;swing&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">rotateContents</span><span class="p">(</span><span class="nx">$trigger</span><span class="p">,</span> <span class="nx">triggerIndex</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$action</span><span class="p">.</span><span class="nx">animate</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="o">-</span><span class="nx">actionIndex</span><span class="o">*</span><span class="mi">150</span><span class="p">},</span> <span class="mi">700</span><span class="p">,</span> <span class="s1">&#39;swing&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">rotateContents</span><span class="p">(</span><span class="nx">$action</span><span class="p">,</span> <span class="nx">actionIndex</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can see the resultant effect best by turning off the mask div&rsquo;s <code>overflow:hidden</code> property:</p>
+
+<p><img src="https://gist.github.com/jhamon/19da977e9fe095e9601c/raw/905d842398735d5522a59768742847535f61b1d9/pushpop.gif" alt="" /></p>
+
+<h2>Fine-tuning slide distance</h2>
+
+<p>For the basic version of the animation, I was just choosing a random icon to scroll to with a function like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">max</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">max</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This was sufficient to test other aspects of the project, but in the finished product I really want to ensure that the icon we&rsquo;re spinning to is sufficiently &ldquo;far&rdquo; away that the random slot machine feel is preserved; randomly choosing to stay at the current position or roll to an icon only a few notches away just isn&rsquo;t as satisfying.  So, we modify our random index selection to account for that and reject small index choices.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">max</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">randIndex</span> <span class="o">=</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">max</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">(</span><span class="nx">randIndex</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="o">?</span> <span class="nx">randIndex</span> <span class="o">:</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">max</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;s not a problem to reject these small indices as slide targets because of the way we are popping elements off and pushing them onto the end.  All the icons will be cycled through the different positions and will eventually be selected for display.</p>
+
+<h2>Conclusion</h2>
+
+<p>That about wraps it up, and I hope you learned something that will be useful to you in your future projects.  You can view and tinker with the finished result on <a href="http://codepen.io/jhamon/pen/GhrjF">codepen.io</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Improve Your Animation Performance With requestAnimationFrame]]></title>
+    <link href="http://jhamon.github.io/blog/2014/05/03/requestanimationframe/"/>
+    <updated>2014-05-03T07:09:19-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/05/03/requestanimationframe</id>
+    <content type="html"><![CDATA[<p>At their most basic core, browser animations have the following structure:</p>
+
+<ol>
+<li> Make some calculations</li>
+<li> Update the plot</li>
+<li> Goto 1.</li>
+</ol>
+
+
+<p>A not-great way of doing this is with the timer functions provided by the browser:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">animate</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">makeCalculations</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">updatePlot</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">timestep</span> <span class="o">=</span> <span class="mi">50</span> <span class="c1">// 50 ms, e.g. 20 fps;</span>
+</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">setInterval</span><span class="p">(</span><span class="nx">animate</span><span class="p">,</span> <span class="nx">timestep</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>When timers aren&rsquo;t on time</h2>
+
+<p>This will get the job done, but the results often leave much to be desired.  The animation may be choppy and uneven because timers are handled <a href="http://ejohn.org/blog/how-javascript-timers-work/">in the same thread of execution as other asynchronous browser events</a>, and may not fire precisely when you&rsquo;d like.</p>
+
+<p>For the smoothest animations, we&rsquo;d like to use a very small timestep between frames.  This is a bit of a conundrum because decreasing the size of the timestep makes deviations from perfect timing the most noticeable.  This is because the same amount of absolute error in our timing function will represent a larger precentage of a smaller interval.</p>
+
+<h2>Monitor refresh effect</h2>
+
+<p>Crazy things can happen when the rate of change in a phenomenon (in the browser, or in life) is happening at a different rate than we can percieve it.  In the study of optical illusions, the <a href="http://en.wikipedia.org/wiki/Wagon-wheel_effect">wagon-wheel effect</a> is when we percieve motion to be slowed or even reversed from the true direction of motion. This occurs because of &ldquo;temporal aliasing&rdquo; by the recording medium into discrete frames.</p>
+
+<p>For browser animations, the lesson to take from this is that the difference between our animation&rsquo;s fps and the monitor&rsquo;s refresh fps can have a big impact on the percieved smoothness of our animation.  Nat Duca and Tom Wilzius discussed this form of &ldquo;jank&rdquo; in their Google I/O presentation <a href="http://www.youtube.com/watch?v=n8ep4leoN9A">Jank Free: Chrome Rendering Performance</a>.</p>
+
+<h2>Render performance with requestAnimationFrame</h2>
+
+<p>Browser developers have given us a better alternative for animations called <code>requestAnimationFrame</code>.  rAF should get called when you are ready to draw another frame, and the browser will know to update before it&rsquo;s next repaint to give you the best possible render performance.</p>
+
+<p>Our simple example above becomes</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">animate</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">makeCalculations</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">updatePlot</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">animate</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">animate</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Browser support is getting <a href="http://caniuse.com/#feat=requestanimationframe">pretty good</a>, and there are <a href="https://gist.github.com/paulirish/1579671">polyfills available</a> that will fall back to <code>setInterval</code> where it&rsquo;s unsupported.</p>
+
+<p>Now go forth and <code>requestAnimationFrame</code>!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Conway's Game of Life:<br>My Favorite Code Kata]]></title>
+    <link href="http://jhamon.github.io/blog/2014/04/03/conways-game-of-life-my-favorite-code-kata/"/>
+    <updated>2014-04-03T15:59:24-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/04/03/conways-game-of-life-my-favorite-code-kata</id>
+    <content type="html"><![CDATA[<p>Conway&#8217;s Game of Life holds a special place in my heart.  The first non-trivial program I ever wrote was a simple version of the game implemented in Python, and when I decided to learn JavaScript I began by coding up Life.  Life makes a great code kata because it is relatively quick and easy to get a basic version going, but it also leaves a lot of room for experimentation and improvement.</p>
+
+
+<p><a href="http://www.hamon.io/conway.js"><img class="projects pull-right" src="images/conway_controls.png" alt="User controls for Conway's Game of Life"></a></p>
+
+<p>I&#8217;ve now done this several times in JavaScript, each time learning something new.  My first implementation was to learn basic JavaScript syntax  and the HTML5 Canvas API, but the code was pretty terrible by my current standards. A second implementation went after the low-hanging fruit by improving the separation of concerns between view rendering and game calculations.  </p>
+
+
+
+
+<p>My third JavaScript implementation was to learn more about event-driven programming with Backbone.js.  In the Backbone version, each cell was represented as a Backbone model listening for changes in all its neighbors.  Each div element in the page was bound to a Backbone view that was listening for changes in a cell model.  The Backbone view automatically changed the div&#8217;s CSS styling when the underlying data model fired a change event.</p>
+
+
+
+
+<p>Though by no means &#8220;fast&#8221; compared to other implementations (see the memoized <a href="http://en.wikipedia.org/wiki/Hashlife">Hashlife</a> algorithm to have your mind blown), my latest rendition of the game adds several improvements.  Most important of these is my use of the HTML5 Web Workers API to offload heavy calculations to another thread.  This allows the UI thread responsible for rendering everything the user sees in the active tab to continue unimpeded while the Life code runs the simluation in the background thread. </p>
+
+
+
+
+<p>
+Now that the UI thread is not saturated by Life&#8217;s iterative calculations, I have added a simple web form to allow users to adjust the game&#8217;s parameters.  When users interact with the form, a jQuery click handler sends a message to the background process to adjust the game&#8217;s state.</p>
+
+
+
+
+<p>
+I have also improved the algorithmic efficiency in the latest version.  Instead of visiting every cell during every iteration, I now keep track of a &#8220;change list&#8221;.  Since the only thing that can change a cell&#8217;s status is a change in its number of immediate living neighbors, I only need to check the cells that have changed and or whose neighbors have changed.  This is a huge savings in computational expense after the first few chaotic iterations.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Serpent.io]]></title>
+    <link href="http://jhamon.github.io/blog/2014/03/14/serpent-dot-io/"/>
+    <updated>2014-03-14T17:24:12-07:00</updated>
+    <id>http://jhamon.github.io/blog/2014/03/14/serpent-dot-io</id>
+    <content type="html"><![CDATA[<p>When I first wrote this game I was still learning the &ldquo;JavaScript way&rdquo; of doing object-oriented programming with prototypical inheritance. I more or less succeeded in that aspect, but the code responsible for rendering the view and managing user interactions was a huge ball of mud. At that time I knew just enough jQuery to be dangerous, and while the basic mechanics seemed to work I had all my truth in the DOM and ran into a wall while trying to extend it to have more features. I wasn&rsquo;t unbinding events properly, so chaos ensued when I tried to reset the game for another play without a hard refresh. It was a mess, but I had other things I wanted to work on.</p>
+
+<h2>Backbone reboot</h2>
+
+<p>I recently revisted the project for a couple of days to apply what I&rsquo;d learned in the intervening months about keeping a clean separation between the <code>DOM</code> and my data with the help of a client-side framework called Backbone.js. I did an almost complete rewrite, and the game is now primarily driven by cascading events. The cell is the fundamental model of the game, which may belong to any of several different collections (<code>snakeSegments</code>, <code>apples</code>, <code>obstacles</code>) depending on the current state of that cell; these collections publish appropriate events when cells are added or removed, which trigger changes elsewhere in the game. For example, when an apple is eaten the game view hears the &ldquo;appleEaten&rdquo; event and knows to update the score and make a new apple.</p>
+
+<p>Each square is a <code>div</code> with <code>display:inline-block</code> and special classes providing styles for each possible state. The squares each have an associated Backbone view that listens for change events on the cell data model. When the Backbone cell model changes, the cell view updates the CSS classes applied to its div element, creating the illusion of objects moving across the board. The game state is now maintained completely separate from the DOM&rsquo;s appearance thanks to views that listen only to data models.</p>
+
+<h2>Rails backend</h2>
+
+<p>This was primarily a JavaScript project, but as a finishing touch I whipped up a simple Ruby on Rails backend to allow users to save scores to a scoreboard. A <code>HighScore</code> model is created when the Backbone app POSTs one to the <code>/high_scores</code> url. I originally fetched the scores with a GET request to <code>/high_scores</code>, but eventually moved to bootstrapping the high score data with the page delivering the Backbone app to avoid an unnecessary XHR request.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Keeping Your Secrets Safe With Figaro]]></title>
+    <link href="http://jhamon.github.io/blog/2014/01/08/keeping-your-secrets-safe/"/>
+    <updated>2014-01-08T21:22:01-08:00</updated>
+    <id>http://jhamon.github.io/blog/2014/01/08/keeping-your-secrets-safe</id>
+    <content type="html"><![CDATA[<p>While working on several of my side projects, I&rsquo;ve often had a need to store secret information in my project.  I need a way to make things like API keys available to my application without accidentally exposing them to others when, for instance, I push that code to Github or Bitbucket.</p>
+
+<p>Many people much smarter than myself have thought about the problem of managing secrets, and one the suggested solutions is to <a href="http://12factor.net/config">store configuration information in the environment</a>. The advantage of this approach, besides keeping your credentials out of your git history, is that it allows you to easily configure environment-specific as needed by keeping the things that change (the API keys) seperate from the application being deployed.</p>
+
+<p>An example of how this might come into play would be if your application was integrated with a third-party API, like a payment processor, operating on stateful resources.  You probably want to use different API keys for each environment to avoid accidentally charging your customers from dev or staging. Because even if you are writing a lot of tests, you never know for sure that something horrible and unexpected won&rsquo;t happen when you first roll out a new feature.</p>
+
+<p>Keeping environment-specific configuration seperate from the application makes avoiding a horror scenario relatively easy.</p>
+
+<h2>Configuration with Figaro</h2>
+
+<p>Fortunately for us, other people have done the necessary legwork to implement this.  In Rails 4.1, we should be using <a href="http://guides.rubyonrails.org/4_1_release_notes.html#config-secrets-yml"><code>secrets.yml</code></a> to hold confidential information.  But for those still on Rails 3, there&rsquo;s a nice gem called <a href="https://github.com/laserlemon/figaro"><code>figaro</code></a> that does the work of populating environment variables from a configuration file (not checked into version control) for us.</p>
+
+<p>First add the gem to your gemfile</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="c1"># Gemfile</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;figaro&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And install it from the command line</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">bundle</span> <span class="n">install</span> <span class="o">&amp;&amp;</span> <span class="n">figaro</span> <span class="n">install</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>figaro install</code> command creates a <code>config/application.yml</code> file and adds it to <code>.gitignore</code> so that it cannot be checked into version control.</p>
+
+<p>Now we&rsquo;re ready to add some configuration.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># config/application.yml</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">staging</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">twilio_account_sid</span><span class="p-Indicator">:</span> <span class="s">&quot;not_a_real_account_sid_but_you_get_the_idea&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">twilio_auth_token</span><span class="p-Indicator">:</span> <span class="s">&quot;auth_auth_auth_auth_auth_auth_&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">twilio_account_sid</span><span class="p-Indicator">:</span> <span class="s">&quot;a_totally_different_fake_account_sid&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">twilio_auth_token</span><span class="p-Indicator">:</span> <span class="s">&quot;a_fake_auth_token&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When our rails application starts, figaro will make the appropriate credentials available in the <code>ENV</code> variable.  We can access these anyway, but often we&rsquo;ll do it in an initializer like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/twilio.rb</span>
+</span><span class='line'><span class="no">Twilio</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">account_sid</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;twilio_account_sid&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">auth_token</span>  <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;twilio_auth_token&#39;</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Don&rsquo;t get tripped up</h3>
+
+<p>One gotcha to keep in mind is that <code>ENV</code> is just a simple key value store holding strings. If you try to configure a variable to <code>false</code>, you&rsquo;ll run into trouble because <code>ENV['something_false']</code> will actually be the string <code>"false"</code>, which is truthy. Be vigilant.</p>
+
+<h2>Secure your application secret token, too</h2>
+
+<p>If you&rsquo;re publishing your application source code publically while also deploying it, you may have inadvertantly exposed your application&rsquo;s secret token. The token is used to sign cookies, so you have <a href="http://robertheaton.com/2013/07/22/how-to-hack-a-rails-app-using-its-secret-token/">opened yourself up to being hacked</a> if you publish a git repo with this information anywhere in its history.</p>
+
+<p>If you need to, generate a new secret token with <code>rake secret</code>. Then store that secret in your <code>config/application.yml</code> and update <code>config/initializers/secret_token.rb</code> accordingly.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># config/application.yml</span>
+</span><span class='line'><span class="l-Scalar-Plain">secret_token_base</span><span class="p-Indicator">:</span> <span class="s">&#39;63683ebbd2fe8a4cb670c727e84b6cc2b5efb5814374dd9299490217b84c4ca4e826094c1fcb34df3d66c902b659acfae1e79d0e912a0828c53f1be72fe6f5e0&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/secret_token.rb</span>
+</span><span class='line'><span class="no">MyApp</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">secret_key_base</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;secret_token_base&#39;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AdoptMeme:<br>Meme Generator Meets petfinder.com]]></title>
+    <link href="http://jhamon.github.io/blog/2013/11/15/adoptmeme/"/>
+    <updated>2013-11-15T16:05:44-08:00</updated>
+    <id>http://jhamon.github.io/blog/2013/11/15/adoptmeme</id>
+    <content type="html"><![CDATA[<p>When I began <a href="http://www.adoptme.me">AdoptMe.me</a>, I knew it was an ambitious project because of the many moving parts involved.  I learned a lot from the process, both successes and failures, but the project is currently on inedefinite hiatus. You can view the bones live on the web at <a href="http://www.adoptme.me">AdoptMe.me</a>.  </p>
+
+
+
+
+<p>I originally conceived of the site as a cat meme generator in the same vein as icanhascheezburger, but with a social mission of bringing visibility to cats languishing in animal shelters. I thought that if a person is going to spend their time making funny captions for cat images and sharing them around, they might as well give the visibility to a cat that needs it.  </p>
+
+
+<p><a href="http://www.adoptme.me"><img class="projects pull-left" src="images/AdoptMeme.png" alt="AdoptMe.me meme editor"></a></p>
+
+<p>The technical vision was that I would pull images and data from the free petfinder.com API, push them into my Amazon S3 bucket, let users caption them with a canvas-based JavaScript editor, and then send the resulting image off to my Amazon S3 bucket.  The image would be watermarked with a generated shortlink that viewers of the image could follow to learn more about how to adopt that animal should they be interested in doing so.</p>
+
+
+
+
+<h3>Rails Backend</h3>
+
+
+
+
+<p>A lot needs to happen behind the scenes to create a site handling image media and integrating with third-party APIs.  Since I was deploying on Heroku, first order of business was to find a third-party provider of storage for all my image assets.  Amazon S3 was the obvious choice because it is cheap, fast, and reliable.  Amazon provides an official <span class="code">aws-sdk</span> gem for interacting with their web services, but it contains hundreds of methods for dozens of services so I ended up writing my own <span class="code">Storable</span> module that extends <span class="code">ActiveSupport::Concerns</span> to wrap just the functionality I needed with a simpler API.  My <span class="code">Storable</span> module follows a template pattern, allowing me to easily store and retrieve image data associated with any of my ActiveRecord models by specifying a filename root and including the module.</p>
+
+
+
+
+<p>The backend included models for <span class="code">Pet</span>, <span class="code">Image</span>, and <span class="code">Caption</span>.  Pet models were created and populated using data fetched from the Petfinder JSON API.  I quickly discovered that their free API is worth about what I paid for it (i.e. not much), and I spent a lot of time writing code to clean or discard bogus responses.  <span class="code">Image</span> tracked the metadata for unaltered images associated with a <span class="code">Pet</span>, and <span class="code">Caption</span> tracked metadata for each user-created meme.  Having separate <span class="code">Image</span> and <span class="code">Caption</span> made the associations clear and easily extensible should I want to find, say, all memes with common text content or all memes derived from a particular animal or photo.</p>
+
+
+<p></p>
+
+<p>I decided not to build views on the server side, because I knew the image editor I wanted to write would involve heavy JavaScript.  So the data in my models is all exposed via a JSON API for consumption by a client-side application I would develop with Backbone.js.</p>
+
+
+
+
+<p>Finally, I used <span class="code">figaro</span> to manage my third-party credentials.  The <span class="code">figaro</span> gem allows me to store my private credentials in an initialization file that is not checked into source control, but the gem will load them into an environment variable for you when the app boots up.</p>
+
+
+
+
+<h3>Backbone.js, HTML5 Canvas Frontend</h3>
+
+
+
+
+<p>Visiting the site you will be served a static page with the Backbone application.  Much of the data is bootstrapped into the page to avoid unnecessary calls to my JSON API.  I made Backbone views for an index page, a meme creation editor, and a show pet/meme page where viewers could learn more about adopting.  Each of these views is complex, and involves one or more sub-views.</p>
+
+
+
+
+<p>Coding an MVP version of the canvas-based meme editor was a straightforward task after some of my other Canvas projects.  A cat image is set as the background for the canvas element.  As the user types, the editor listens to keypress events and updates the overlayed text.  I wanted each image to have a shortlink-style url in the corner where a viewer of the image could visit and learn more about adopting the pet.  So I wrote the shortlink and watermarking logic on the backend, and was nearing the last piece of the MVP puzzle: uploading my newly captioned images.</p>
+
+
+
+
+<h3> Problems with the Same-Origin Policy</h3>
+
+
+
+
+<p>It is at that moment that I ran head-on into a Same-Origin security error.  I learned, painfully, that the browser&#8217;s Same-Origin Policy was not going to let me save any of my users meme images directly to S3 because the background cat image was not coming from the same origin as the page I was serving from Heroku.  What I thought was going to be as easy as a call to <span class="code">canvas.toDataURL()</span> ended up being a much bigger problem.</p>
+
+
+
+
+<p>I fiddled with server side generation of the captioned images using <span class="code">imagemagick</span> via the <span class="code">rmagick</span> gem.  I actually got this to work and its what you will experience if you try to use the live version of the site at this time.  This backend image manipulation is why the actual results do not match the editor preview. I realized quickly, however, that <span class="code">imagemagick</span> was slow, and I knew that blocking my Rails application with big image processing jobs was going to be unacceptably slow with more than one or two concurrent users.  And the image work wasn&#8217;t a candidate to be a deferred job because the user is waiting to see their creation and share it around on the web.  </p>
+
+
+
+
+<h3> Hiatus </h3>
+
+
+
+
+<p>Given my knowledge at the time, the whole thing seemed unsalvageable at that point.  I made the decision to put the project on hold while I kept learning and working on other things, hoping to get back to it one day and do the job right.  Since then I&#8217;ve learned that what I originally intended may be possible with CORS, Cross-Origin Resource Sharing, so I&#8217;m excited to pick up again where I left off.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Avoiding the Female Programmer Ghetto]]></title>
+    <link href="http://jhamon.github.io/blog/2013/10/31/how-i-feel-about-girls-only-programming-events/"/>
+    <updated>2013-10-31T17:04:38-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/10/31/how-i-feel-about-girls-only-programming-events</id>
+    <content type="html"><![CDATA[<p>Today I met somebody doing the <a href="http://www.hackbrightacademy.com/">Hackbright Academy</a> bootcamp. I remember looking at that program earlier this year when I was evaluating the available paths through my career change from science into software development. Even though Hackbright has a shiny website and a decent reputation, I ruled them out quickly because I don’t want to be a <em>female programmer</em>. I don’t want to get hired as a <em>female programmer</em>, and I definitely don&rsquo;t want to be the token female filling out a company’s diversity quota. It seems as if Hackbright and similar women-only programs, though well-intentioned, should be a magnet for companies looking to pad their gender ratio, and I just don’t want to be recruited on that basis.</p>
+
+<p>Honestly, I just want to keep learning and working on interesting problems. Code is code, and I don&rsquo;t want any well-meaning developer-mentors using their kid gloves to take what should be a sink-or-swim extreme learning situation and turn it into happy fun play time. I’m sure the program is probably very good, but I couldn’t suppress my horror-fantasy about it being a programming sorority.</p>
+
+<p>I also worry that women-only events make the problem worse by reinforcing stereotypes and segregating women from the rest of the developer community. I don’t see how it helps women get over their impostor syndrome and take up the programmer identity if women-only events are always emphasizing the fact that they aren’t regular programmers—they’re female programmers.</p>
+
+<p>I haven’t had any problems with the atmosphere or men at App Academy; the program is about 80% male. I would recommend that any women considering bootcamps try not to be intimidated by the ratio. Unless you’re going on to a female-only job in a female-only company (you’re not), you’re eventually going to have to deal with working in a male-heavy professional environment. Might as well do it sooner than later and avoid the female programmer ghetto.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Prototypical Inheritance With Asteroids]]></title>
+    <link href="http://jhamon.github.io/blog/2013/10/12/asteroids/"/>
+    <updated>2013-10-12T17:28:49-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/10/12/asteroids</id>
+    <content type="html"><![CDATA[<p>Asteroids is more experiment than finished game since there are no win conditions. It&rsquo;s one of the first things I made using JavaScript, and it was a great way to wrap my head around JavaScript&rsquo;s prototypical inheritance. The game has several different types of objects (the spaceship, bullets, asteroids) that have specific behaviors but have a common need to know where they are, move around, etc. This is easily accomplished by having a base object, MovingObject.prototype, that all other objects delegate to (a.k.a. &ldquo;inherit from&rdquo;).</p>
+
+<p>Here&rsquo;s a simplified snippet showing the inheritance pattern:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">Asteroids</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Asteroids</span> <span class="o">=</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">Asteroids</span> <span class="o">||</span> <span class="p">{});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">MovingObject</span> <span class="o">=</span> <span class="nx">Asteroids</span><span class="p">.</span><span class="nx">MovingObject</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// initialization code to set up position, speed, etc.</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">MovingObject</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">move</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// complex logic to update object&#39;s position</span>
+</span><span class='line'>      <span class="c1">// based on position, speed, angular velocity, </span>
+</span><span class='line'>      <span class="c1">// direction, acceleration, etc.</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">Ship</span> <span class="o">=</span> <span class="nx">Asteroids</span><span class="p">.</span><span class="nx">Ship</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Ship-specific initialization would go here</span>
+</span><span class='line'>      <span class="nx">Asteroids</span><span class="p">.</span><span class="nx">MovingObject</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="nx">Ship</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MovingObject</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">Ship</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">Ship</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Repeat a similar procedure for Asteroid and Bullet constructors.</span>
+</span><span class='line'><span class="p">})();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To understand what&rsquo;s happening here, you have to know that every object has a hidden <code>[[Prototype]]</code> property that is set by the constructor function at creation time to whatever is at the constructor&rsquo;s <code>.prototype</code> property. Whenever we try to access a property that an object doesn&rsquo;t have, it defers to its prototype. So when we try to access a property on an object, the interpreter will check that object, then the object&rsquo;s prototype, then the prototype&rsquo;s prototype, etc until it finds a defined property with that name or reaches the end of the prototype chain and returns undefined. This is exactly what people are talking about when they refer to the &ldquo;prototype chain&rdquo;.</p>
+
+<p>As a more concrete example, let&rsquo;s say I want to call ship.move() on a Ship instance that I create with <code>var ship = new Asteroids.Ship()</code>. Well, ship doesn&rsquo;t have a property called move and neither does the prototype of ship (e.g. <code>Ship.prototype</code>) which was an instance of <code>MovingObject</code>. But the prototype&rsquo;s prototype, e.g. <code>MovingObject.prototype</code> will have a function under the move property name.</p>
+
+<p>I want to give a shoutout to Kyle Simpson for explaining prototypical inheritance (better known as &ldquo;behavior delegation&rdquo;) in a way that actually makes sense.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Don't Reinvent the Wheel :<br>Rails Validations Beyond the Basics]]></title>
+    <link href="http://jhamon.github.io/blog/2013/10/10/advanced-rails-validations/"/>
+    <updated>2013-10-10T23:43:11-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/10/10/advanced-rails-validations</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;ve gone through a Rails tutorial like the Hartl Rails Tutorial or Rails For Zombies, you&rsquo;ll be familiar with common model validations that prevent saving duplicate or incomplete records.  Throughout this piece I&rsquo;ll be talking about a <code>Padawan</code> class, that might begin looking something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Padawan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a fine first step, but it only goes a small distance toward verifying any records we might try to save are actual valid Padawans. There is a conspicuous lack of business logic. Right now anyone with an age can be saved into the database, even those who are too old to begin the training.</p>
+
+<h2>Custom validations</h2>
+
+<p>If we dig in a little further with documentation and Stack Overflow answers we begin to learn about defining custom validators that implement attribute checks that are tailored to our application.</p>
+
+<p>A custom validator is just a method that adds an error message if a given conditions is not met.  A validator method that does not add any error messages is considered to have passed.  So it&rsquo;s simple to begin writing code like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Padawan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:not_too_old_to_be_trained</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">not_too_old_to_be_trained</span>
+</span><span class='line'>    <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:age</span><span class="p">,</span> <span class="s2">&quot;is too old to be trained&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">age</span> <span class="o">&gt;</span> <span class="mi">9</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can fire up the console and quickly verify this does what we expect</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">p247</span> <span class="p">:</span><span class="mo">00</span><span class="mi">8</span> <span class="o">&gt;</span> <span class="n">luke</span> <span class="o">=</span> <span class="no">Padawan</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Luke Skywalker&quot;</span><span class="p">,</span> <span class="ss">age</span><span class="p">:</span> <span class="mi">25</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="k">begin</span> <span class="n">transaction</span>
+</span><span class='line'>  <span class="no">Padawan</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span>  <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;padawans&quot;</span>  <span class="no">WHERE</span> <span class="s2">&quot;padawans&quot;</span><span class="o">.</span><span class="s2">&quot;name&quot;</span> <span class="o">=</span> <span class="s1">&#39;Luke Skywalker&#39;</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="n">rollback</span> <span class="n">transaction</span>
+</span><span class='line'> <span class="o">=&gt;</span> <span class="c1">#&lt;Padawan id: nil, age: 25, name: &quot;Luke Skywalker&quot;, midichlorian_count: nil, created_at: nil, updated_at: nil&gt;</span>
+</span><span class='line'><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">p247</span> <span class="p">:</span><span class="mo">00</span><span class="mi">9</span> <span class="o">&gt;</span> <span class="n">luke</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">full_messages</span>
+</span><span class='line'> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;Age is too old to be trained&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Suck it, Luke Skywalker!  You&rsquo;re too old to be trained!</p>
+
+<h2>Not the refactor you were looking for</h2>
+
+<p>We&rsquo;re successfully keeping the old fogies out of the Jedi Academy now, but plenty of people would look at this new code and be like</p>
+
+<blockquote><p><em>Woah, <a href="http://stackoverflow.com/questions/47882/what-is-a-magic-number-and-why-is-it-bad">magic numbers</a>! This is not the refactor you were looking for.</em></p></blockquote>
+
+<p>Actually, they probably wouldn&rsquo;t say that. But they&rsquo;d be thinking it while they downgrade their opinion of you. So let&rsquo;s at least be a little more explicit with named constants and a bit of explanation for anybody who might work on this code after us.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Padawan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="c1"># Master Yoda says people over a certain age are </span>
+</span><span class='line'>  <span class="c1"># too old to begin the training</span>
+</span><span class='line'>  <span class="no">MAX_AGE</span> <span class="o">=</span> <span class="mi">9</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:not_too_old_to_be_trained</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">not_too_old_to_be_trained</span>
+</span><span class='line'>    <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:age</span><span class="p">,</span> <span class="s2">&quot;is too old to be trained&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">age</span> <span class="o">&gt;</span> <span class="no">MAX_AGE</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Babies with lightsabers? Oh my!</h1>
+
+<p>If we wrote a few specs against this code, we&rsquo;d realize that even babies in diapers are able to pass the validation, which doesn&rsquo;t seem like a great idea.  Imagine the trouble a baby with a lightsaber might get into! Or a toddler who can <em>use the Force</em> during tantrums! It won&rsquo;t do.</p>
+
+<p>Let&rsquo;s modify our validator to check against a range of ages, and give the validator a more appropriate name.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Padawan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="c1"># Master Yoda says people over a certain age are </span>
+</span><span class='line'>  <span class="c1"># too old to begin the training...</span>
+</span><span class='line'>  <span class="no">MAX_AGE</span> <span class="o">=</span> <span class="mi">9</span>
+</span><span class='line'>  <span class="c1"># ...but we can&#39;t safely put lightsabers in the </span>
+</span><span class='line'>  <span class="c1"># hands of babes, so we need this floor threshold too.</span>
+</span><span class='line'>  <span class="no">MIN_AGE</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:is_an_acceptable_age_to_be_trained</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">is_an_acceptable_age_to_be_trained</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">age</span> <span class="o">&gt;</span> <span class="no">MAX_AGE</span>
+</span><span class='line'>     <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:age</span><span class="p">,</span> <span class="s2">&quot;is too old to be trained&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="no">MIN_AGE</span>
+</span><span class='line'>     <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:age</span><span class="p">,</span> <span class="s2">&quot;is too young to be trained&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we have our age requirements down, we remember that <code>midichlorian_count</code> is also a factor when selecting Padawans for training.  To borrow a useful piece of Harry Potter argot, we don&rsquo;t want to waste time training squibs.  So we&rsquo;d better create a validation for midichlorians too.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Padawan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="c1"># Master Yoda says people over a certain age are </span>
+</span><span class='line'>  <span class="c1"># too old to begin the training...</span>
+</span><span class='line'>  <span class="no">MAX_AGE</span> <span class="o">=</span> <span class="mi">9</span>
+</span><span class='line'>  <span class="c1"># ...but we can&#39;t safely put lightsabers in the </span>
+</span><span class='line'>  <span class="c1"># hands of babes, so we need this floor threshold too.</span>
+</span><span class='line'>  <span class="no">MIN_AGE</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">MIDICHLORIAN_THRESHOLD</span> <span class="o">=</span> <span class="mi">9000</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:is_an_acceptable_age_to_be_trained</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:has_enough_midichlorians</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">is_an_acceptable_age_to_be_trained</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">age</span> <span class="o">&gt;</span> <span class="no">MAX_AGE</span>
+</span><span class='line'>     <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:age</span><span class="p">,</span> <span class="s2">&quot;is too old to be trained&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="no">MIN_AGE</span>
+</span><span class='line'>     <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:age</span><span class="p">,</span> <span class="s2">&quot;is too young to be trained&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">has_enough_midichlorians</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">midichlorian_count</span> <span class="o">&lt;</span> <span class="no">MIDICHLORIAN_THRESHOLD</span>
+</span><span class='line'>        <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:midichlorian_count</span><span class="p">,</span> <span class="s2">&quot;is too low to be trained&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If we were writing a whole application, we could continue on adding validations in this way for quite a while.  For very small apps we might never have a problem.</p>
+
+<h2>I felt a moderately-sized disturbance in the force</h2>
+
+<p>If you&rsquo;re like me you might start to cringe as requirements increase and we find ourselves maintaining dozens of lines of validation code to do things as basic as checking whether a value falls within a range.  As it is, we&rsquo;re nearly up to 40 lines and all we&rsquo;ve done is check that two properties fall within a particular range. Inconcievable!</p>
+
+<p>As we write more and more validations, patterns begin to emerge.  What&rsquo;s that, you say?  A <em>disturbance in the Force</em>? It&rsquo;s as if a thousand methods cried out all at once to be DRYed up.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Padawan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="c1"># Master Yoda says people over a certain age are </span>
+</span><span class='line'>  <span class="c1"># too old to begin the training...</span>
+</span><span class='line'>  <span class="no">MAX_AGE</span> <span class="o">=</span> <span class="mi">9</span>
+</span><span class='line'>  <span class="c1"># ...but we can&#39;t safely put lightsabers in the </span>
+</span><span class='line'>  <span class="c1"># hands of babes, so we need this floor threshold too.</span>
+</span><span class='line'>  <span class="no">MIN_AGE</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">MIDICHLORIAN_THRESHOLD</span> <span class="o">=</span> <span class="mi">9000</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:is_an_acceptable_age_to_be_trained</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:has_enough_midichlorians</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">is_an_acceptable_age_to_be_trained</span>
+</span><span class='line'>    <span class="n">attribute_greater_than_or_equal_to</span> <span class="ss">:age</span><span class="p">,</span> <span class="no">MIN_AGE</span>
+</span><span class='line'>    <span class="n">attribute_less_than_or_equal_to</span> <span class="ss">:age</span><span class="p">,</span> <span class="no">MAX_AGE</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">has_enough_midichlorians</span>
+</span><span class='line'>    <span class="n">attribute_greater_than_or_equal_to</span> <span class="ss">:midichlorian_count</span><span class="p">,</span>
+</span><span class='line'>                                        <span class="no">MIDICHLORIAN_THRESHOLD</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">attribute_greater_than_or_equal_to</span><span class="p">(</span><span class="n">attribute_name</span><span class="p">,</span> <span class="n">minimum</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">unless</span> <span class="nb">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">attribute_name</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">minimum</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attribute_name</span><span class="p">,</span> <span class="s2">&quot;is smaller than </span><span class="si">#{</span><span class="n">minimum</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">attribute_less_than_or_equal_to</span><span class="p">(</span><span class="n">attribute_name</span><span class="p">,</span> <span class="n">maximum</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">unless</span> <span class="nb">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">attribute_name</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">maximum</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attribute_name</span><span class="p">,</span> <span class="s2">&quot;is larger than </span><span class="si">#{</span><span class="n">maximum</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Is this better? Now our code is even longer than before (!), but we can see how the savings from abstracting these range checks into methods would compound as we validate more attributes in the future.</p>
+
+<p>This is a definite step in the right direction, but it&rsquo;s beginning to look like this validation logic could probably be further generalized and be pulled into a Concern; there&rsquo;s nothing inside <code>attribute_less_than_or_equal_to</code> or <code>attribute_greater_than_or_equal_to</code> that depends on <code>Padawan</code>. If any other ActiveRecord models have similar types of validations&mdash;and we have every reason to believe that they would&mdash;we don&rsquo;t want to duplicate and maintain that code in more than one place in our project.</p>
+
+<h1>A little knowledge is a dangerous thing</h1>
+
+<p>So what&rsquo;s a Rails Padawan on the path to mastery to do in this situation? It turns out that the Rails developers have already solved this problem for us.</p>
+
+<p>Custom validations are wonderful tools, but a little due diligence and study of the excellent <a href="http://guides.rubyonrails.org/active_record_validations.html">Rails Guide on ActiveRecord validations</a> at the beginning would have saved us a lot of effort in applying them in this situation. The docs show that ActiveRecord already ships with a large set of validation helpers that handle common scenarios like this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Padawan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="c1"># Master Yoda says people over a certain age are </span>
+</span><span class='line'>  <span class="c1"># too old to begin the training...</span>
+</span><span class='line'>  <span class="no">MAX_AGE</span> <span class="o">=</span> <span class="mi">9</span>
+</span><span class='line'>  <span class="c1"># ...but we can&#39;t safely put lightsabers in the </span>
+</span><span class='line'>  <span class="c1"># hands of babes, so we need this floor threshold too.</span>
+</span><span class='line'>  <span class="no">MIN_AGE</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">MIDICHLORIAN_THRESHOLD</span> <span class="o">=</span> <span class="mi">9000</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+</span><span class='line'>                  <span class="ss">:numericality</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">greater_than</span><span class="p">:</span> <span class="no">MIN_AGE</span><span class="p">,</span>
+</span><span class='line'>                                     <span class="ss">less_than</span><span class="p">:</span> <span class="no">MAX_AGE</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:midichlorian_count</span><span class="p">,</span>
+</span><span class='line'>            <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+</span><span class='line'>            <span class="ss">:numericality</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">greater_than</span><span class="p">:</span> <span class="no">MIDICHLORIAN_THRESHOLD</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And check these out:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">class</span> <span class="nc">SithLord</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>    <span class="n">validates</span> <span class="ss">:name</span><span class="p">,</span>
+</span><span class='line'>              <span class="ss">:format</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">with</span><span class="p">:</span> <span class="sr">/^Darth\ /</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">validates</span> <span class="ss">:lightsaber_color</span><span class="p">,</span>
+</span><span class='line'>              <span class="ss">:exclusion</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">in</span><span class="p">:</span> <span class="sx">%w(green blue)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">validates</span> <span class="ss">:undercover</span><span class="p">,</span>
+</span><span class='line'>              <span class="ss">:inclusion</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">in</span><span class="p">:</span> <span class="o">[</span><span class="kp">true</span><span class="p">,</span> <span class="kp">false</span><span class="o">]</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">validates</span> <span class="ss">:catchphrase</span><span class="p">,</span> <span class="ss">:length</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">minimum</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">too_short</span><span class="p">:</span> <span class="s2">&quot;must have at least %{count} characters&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>May the docs be with you!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Blocks, Procs, and Lamdas: A Tour of Anonymous Functions in Ruby]]></title>
+    <link href="http://jhamon.github.io/blog/2013/09/10/blocks/"/>
+    <updated>2013-09-10T12:27:47-07:00</updated>
+    <id>http://jhamon.github.io/blog/2013/09/10/blocks</id>
+    <content type="html"><![CDATA[<p>Great news! Ruby has several ways of creating and passing around anonymous functions.  Key language features like the <code>Enumerable</code> module would not be possible without this capability.</p>
+
+<p>You might not even realize that when you are using a function that takes a block, you have just written an anonymous function. An anonymous function is exactly what it sounds like: a function with no name.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="sx">%w(do re mi fa so la ti)</span><span class="o">.</span><span class="n">map!</span> <span class="p">{</span> <span class="o">|</span><span class="n">note</span><span class="o">|</span> <span class="n">note</span><span class="o">.</span><span class="n">capitalize</span> <span class="p">}</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;Do&quot;, &quot;Re&quot;, &quot;Mi&quot;, &quot;Fa&quot;, &quot;So&quot;, &quot;La&quot;, &quot;Ti&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example, the <code>{ |note| note.capitalize }</code> bit is the anonymous function. Used in this way the <code>{}</code> characters are block literals, passing function expecting one variable to the higher-order <code>map!</code> method.</p>
+
+<h2>Our own methods that take blocks</h2>
+
+<p>We can pretty easily write our own methods that accept blocks like this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">block_caller</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Hello from inside block_caller&quot;</span>
+</span><span class='line'>  <span class="n">block</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;About to leave block_caller&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which we can use like this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">block_caller</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Hello from inside the block&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1"># Hello from inside block_caller</span>
+</span><span class='line'><span class="c1"># Hello from inside the block</span>
+</span><span class='line'><span class="c1"># About to leave block_caller</span>
+</span><span class='line'><span class="c1"># =&gt; nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We use blocks expecting an argument in a very similar way.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">greeting</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">block</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">greeting</span><span class="p">(</span><span class="s2">&quot;Mao&quot;</span><span class="p">)</span>      <span class="p">{</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="s2">&quot;Ni hao, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="c1"># =&gt; &quot;Ni hao, Mao!&quot;</span>
+</span><span class='line'><span class="n">greeting</span><span class="p">(</span><span class="s2">&quot;Adolf&quot;</span><span class="p">)</span>    <span class="p">{</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="s2">&quot;Guten Tag, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="c1"># =&gt; &quot;Guten Tag, Adolf!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Use <code>yield</code> for a nice performance boost</h2>
+
+<p>There&rsquo;s an alternative syntax available to us when writing methods expecting blocks: the <code>yield</code> keyword.  We should prefer it because benchmarking shows that <code>yield</code> is about 5x faster than <code>block.call</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">greeting</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">yield</span> <span class="nb">name</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">greeting</span><span class="p">(</span><span class="s2">&quot;Mao&quot;</span><span class="p">)</span>      <span class="p">{</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="s2">&quot;Ni hao, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="c1"># =&gt; &quot;Ni hao, Mao!&quot;</span>
+</span><span class='line'><span class="n">greeting</span><span class="p">(</span><span class="s2">&quot;Adolf&quot;</span><span class="p">)</span>    <span class="p">{</span> <span class="o">|</span><span class="nb">name</span><span class="o">|</span> <span class="s2">&quot;Guten Tag, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="c1"># =&gt; &quot;Guten Tag, Adolf!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Overcoming limitations of blocks with Proc</h2>
+
+<p>If you do a little experimentation, you might notice that this brace syntax is a syntactic sugar that can only be used after a method call.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{</span> <span class="o">|</span><span class="n">note</span><span class="o">|</span> <span class="n">note</span><span class="o">.</span><span class="n">capitalize</span> <span class="p">}</span>
+</span><span class='line'><span class="ss">SyntaxError</span><span class="p">:</span> <span class="n">unexpected</span> <span class="s1">&#39;}&#39;</span><span class="p">,</span> <span class="n">expecting</span> <span class="k">end</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">input</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There&rsquo;s also no way to pass multiple blocks to a single function.  So a very common idiom in other langauges like JavaScript is to pass multiple functions to be used in different circumstances.  For example, when making an Ajax call it&rsquo;s convenient to pass both a success and error callback so our code knows how to continue in both situations:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// example.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">successCallback</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Take care of business</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">errorCallback</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Do damage control</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;http://www.example.com/api/widgets&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">success</span><span class="o">:</span> <span class="nx">successCallback</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">error</span><span class="o">:</span> <span class="nx">errorCallback</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The equivalent ruby would be something like</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">ajax</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># ... where the magic happens</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can&rsquo;t use blocks to send <code>success</code> and <code>error</code> callbacks to this method. To accomplish this type of feat with Ruby, we have to use <code>Proc</code> objects, which Ruby provides as a way of wrapping a block into an object that may be passed around and used in multiple places. This is useful to use because methods can accept an arbitrary number of object parameters.</p>
+
+<p>The simplest possible example of a <code>Proc</code> would be something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">capitalizer</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="o">|</span><span class="n">str</span><span class="o">|</span> <span class="n">str</span><span class="o">.</span><span class="n">capitalize</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">capitalizer</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s2">&quot;obama&quot;</span><span class="p">)</span> <span class="c1"># =&gt; &quot;Obama&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using <code>Proc</code> and keeping in mind that blocks are closures, we can write functions that return Procs.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">make_counter</span><span class="p">()</span>
+</span><span class='line'>  <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">counter</span> <span class="o">=</span> <span class="n">make_counter</span><span class="p">()</span>
+</span><span class='line'><span class="n">counter</span><span class="o">.</span><span class="n">call</span><span class="p">()</span> <span class="c1"># =&gt; 1</span>
+</span><span class='line'><span class="n">counter</span><span class="o">.</span><span class="n">call</span><span class="p">()</span> <span class="c1"># =&gt; 2</span>
+</span><span class='line'><span class="n">counter</span><span class="o">.</span><span class="n">call</span><span class="p">()</span> <span class="c1"># =&gt; 3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Using a proc where a block is expected</h2>
+
+<p>If we need to use a proc where a block is expected, we can use the <code>&amp;</code> operator.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">add_five</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span> <span class="p">}</span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="o">].</span><span class="n">map</span> <span class="o">&amp;</span><span class="n">add_five</span>
+</span><span class='line'><span class="c1"># =&gt; [6, 7, 8, 9]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Choose your own syntax</h2>
+
+<p>Because Ruby likes to have multiple ways to accomplish everything, we&rsquo;ve got several different sytnaxes available to us for constructing <code>Proc</code> objects.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="c1"># Create a Proc object directly</span>
+</span><span class='line'>  <span class="no">Proc</span><span class="o">.</span><span class="n">new</span>  <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Use this Kernal method</span>
+</span><span class='line'>  <span class="nb">proc</span>      <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Or this Kernal method</span>
+</span><span class='line'>  <span class="nb">lambda</span>    <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Or the &quot;stabby lambda&quot; syntax</span>
+</span><span class='line'>  <span class="o">-&gt;</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Proc methods and lambda methods are almost exactly the same except for the <a href="http://stackoverflow.com/questions/626/when-to-use-lambda-when-to-use-proc-new">strange way</a> the <code>return</code> keyword is handled in procs created with <code>Proc.new</code>.</p>
+
+<p>The &ldquo;stabby lambda&rdquo; syntax, though probably the ugliest of all, can do something that none of the others can and that is specify default parameters similar to a normal method declaration.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">adder</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">}</span>
+</span><span class='line'><span class="n">adder</span><span class="o">.</span><span class="n">call</span><span class="p">()</span> <span class="c1"># =&gt; 9</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Handy!</p>
+
+<h2>Gimme that method</h2>
+
+<p>One final trick to have up your sleeve it the ability to reach inside an object and turn any method into a <code>Proc</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Pig</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">oink</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Oink!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">wilbur</span> <span class="o">=</span> <span class="no">Pig</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">oinker</span> <span class="o">=</span> <span class="n">wilbur</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:oink</span><span class="p">)</span><span class="o">.</span><span class="n">to_proc</span>
+</span><span class='line'><span class="n">oinker</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'><span class="c1"># Oink!</span>
+</span><span class='line'><span class="c1"># =&gt; nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Summary</h2>
+
+<p>Amazing! That concludes the tour of ruby&rsquo;s blocks, procs, and lambdas.</p>
+
+<p>To summarize:</p>
+
+<ul>
+<li>Use blocks for one-off inline anonymous functions.</li>
+<li>Use <code>Proc.new</code> if you need to reuse a code multiple times or need to pass multiple functions as arguments to the same function.</li>
+<li>Use <code>-&gt;</code> if you want to specify default parameters for your anonymous function.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why I'm Quitting My Caltech PhD]]></title>
+    <link href="http://jhamon.github.io/blog/2013/02/28/why-i-quit-my-caltech-phd/"/>
+    <updated>2013-02-28T11:28:02-08:00</updated>
+    <id>http://jhamon.github.io/blog/2013/02/28/why-i-quit-my-caltech-phd</id>
+    <content type="html"><![CDATA[<p>For those who don&rsquo;t know, I&rsquo;ve been working on a PhD at the intersection of geology and geophysics. I will be leaving with a Master&rsquo;s degree at the end of this year.</p>
+
+<p>I was originally attracted to geosciences because from 30,000 feet the subject matter has a definite aesthetic appeal.  When I think about the scale and size and antiquity of the Earth, I feel humble and in awe that I even exist at all.  I&rsquo;m not a religious person, but that feeling of awe toward nature is what originally attracted me to science as vocation.</p>
+
+<p>But over the past few years I&rsquo;ve learned that those feelings of awe have relatively little to do with the day-to-day life of a person in academia. I&rsquo;ve been telling myself for a while now that I have a decision to make about whether to stay in science.  About whether this PhD is really the on-ramp to a career that I want.</p>
+
+<p>But the truth is I have already decided; the crossroads is weeks (months?) in the rearview mirror.  Even though I&rsquo;ve been afraid to tell colleagues about my decision, for those paying attention my choices over the last several months paint a clear picture of my priorities.  I decided when I started researching opportunities outside the scientific realm.  I decided when I started ignoring my homework to go to local tech meetups and work on programming.  I decided when I spent my weekend applying to Hacker School instead of a small grant opportunity.</p>
+
+<p>I do feel guilty about leaving the program after taking up other peoples&#8217; time and resources.  I have nothing but warm feelings for my advisor, who I am sad to let them down.  But guilty feelings are not good reasons to stay, not when the opportunity cost of staying is so absurdly high.</p>
+
+<h2>I don&rsquo;t love it</h2>
+
+<p>The department chair said yesterday in a graduate student meeting that if you don&rsquo;t love what you&rsquo;re doing then science isn&rsquo;t worth it.  The message resonated deeply with me.</p>
+
+<p>Because the truth is that I don&rsquo;t love it.  I don&rsquo;t love trying to build a personal brand in the prestige economy that science turns on.  Even if my work was groundbreaking (it isn&rsquo;t), I know that I don&rsquo;t have the social temperament of a successful scientist.  The only way that your work adds value to your career in science is if you spend a lot of energy pimping and promoting and talking up your work at every opportunity.  I don&rsquo;t love that.  In fact, I don&rsquo;t like that at all.</p>
+
+<p>I don&rsquo;t love feeling like I need to be the best in the world at my particular thing just to have a <em>chance</em> at success, and even then it&rsquo;s only a chance because so much luck is involved.  I take pride in my work and aim to be the best, but <em>best in the world</em> is an insanely high bar.  This is the expectation at high-level science programs, and it seems like an unhealthy way to approach work.</p>
+
+<p>I don&rsquo;t love working in isolation on things that nobody cares about, that few people will read, and that affect nobody&rsquo;s life.  I am terrified by the truth in this John Ziman quote:</p>
+
+<blockquote><p>A scientist is a person who knows more and more about less and less, until he knows everything about nothing.</p></blockquote>
+
+<p>If that&rsquo;s what it means to be a successful scientific professional, I want no part of it. I want to keep learning about lots of different types of things throughout my career, not going ever deeper into the minutiae of one specific subfield.</p>
+
+<p>I don&rsquo;t love getting by on a meager stipend while my friends who got real jobs after college are buying cars, saving for retirement, and starting businesses. If there were some great opportunities waiting for me at the end of a PhD it might be worth it.  But there aren&rsquo;t. Economically, there&rsquo;s no way to justify working for such a pittance for your entire youth unless you are so passionate about the work that you can&rsquo;t see yourself doing anything else.</p>
+
+<p>Even if the money were not an issue, I don&rsquo;t love contemplating a future where the well-known &ldquo;two-body problem&rdquo; means there&rsquo;s a good chance I&rsquo;ll have to choose between optimizing for career and optimizing for family. As far as I know, no other professional field routinely expects participants to enter something as perverse as a <em>permanent long-distance marriage</em> (and <a href="http://www.salon.com/1999/03/25/24feature_5/">probable divorce</a>) in service of their career.</p>
+
+<p>And finally, I don&rsquo;t love being part of a culture where everyone is afraid all the time.  Some might disagree with this, but I would claim there is a general feeling of fear pervading academic life. Everyone is afraid their project won&rsquo;t work, afraid their paper won&rsquo;t get published, afraid they aren&rsquo;t working enough, afraid somebody will make them look dumb, afraid somebody will copy their idea, afraid they won&rsquo;t get a job, afraid the grant that they depend on won&rsquo;t get renewed, and so on.  I see this from top to bottom in staff, junior faculty, and students.</p>
+
+<p>I don&rsquo;t love it.  And I&rsquo;ve had enough.</p>
+
+<p>Coming this realization has been a scary process.  Overcoming the special brand of Stockholm syndrome that makes graduate students speak about &ldquo;leaving Science&rdquo; in hushed tones has been a long road.  Anyone who has dropped out of a top tier graduate program can tell you, it takes a lot of courage to break out of the bubble and realize how much opportunity there is out there in the wider world.</p>
+
+<p>Now that I&rsquo;ve come to a decision it feel good. It feels right. For the first time in a long time, I feel optimistic about what the future holds. I&rsquo;m excited to get started.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Not Your Grandmother's Flashcards]]></title>
+    <link href="http://jhamon.github.io/blog/2012/01/17/not-your-grandmothers-flashcards/"/>
+    <updated>2012-01-17T02:43:01-08:00</updated>
+    <id>http://jhamon.github.io/blog/2012/01/17/not-your-grandmothers-flashcards</id>
+    <content type="html"><![CDATA[<p>Richard Feynmann famously bemoaned the way that too many students memorized
+instead of thought their way through problems.  Over the years the pendulum has swung very far in the othe direction, to the point that the only time I remember anyone being asked to perform moderate feats of memorization were for Organic Chemistry.</p>
+
+<p>But it seems like that laizze faire approach to memorization has not been carried through all the way to graduate school and into academic life.  It seems that memorizing things is a  too-often neglected part of developing expertise.  Sure, it&rsquo;s great to be <em>smart</em>, but if at the end of the day you
+don&rsquo;t really <em>know things</em> then what kind of expert are you, really?</p>
+
+<p>This reality about the need to know things cold is one of the first hard truths
+I ran into during graduate school.  Being clever enough to <em>figure things out</em>
+was enough to get by as an undergraduate.  But I&rsquo;m certain that anybody who has
+worked on a science PhD would agree that no amount of cleverness will save you
+when the committee in your qualifying exam uncovers the gaping holes in your factual recall that keep you from tackling their problems spontaneously and fluidly.  Suddenly, all those <em>details</em> I &ldquo;learned&rdquo; and subsequently forgot as an undergradute seem like a collasal missed opportunity.</p>
+
+<p>Just today I was in a lecture class where a professor walked up to the
+blackboard and asked the class, <em>&ldquo;Who remembers the mineral formula for
+olivine?&rdquo;</em>  Later, <em>&ldquo;Can anyone tell me the difference between a clinopyroxene
+and an orthopyroxene?&rdquo;</em> Jargon aside, these are extremely common minerals that
+any good geology student should be well acquainted with.  But other than a few
+mubles there wasn&rsquo;t much response from the class. Usually there will be silence
+when these type of questions are posed because very few people are confident in
+their knowledge of the answer and none percieve an incentive that outweights the potential embarassment of getting such a basic question wrong. I sat there
+feeling pretty sure but not certain that I knew the answer as the professor gave a gruff admonition that, &ldquo;You should all really know this for your quals.&rdquo;</p>
+
+<p>To those who&rsquo;ve been to grad school this might feel like a familiar scenario.
+It&rsquo;s one that nearly caused me to drop out of graduate school, and I know it is
+a source of anxiety for many of my fellow students.  The mixture of shame,
+frustration, and anxiety that comes from not being able to remember those things that are simultaneously fundamental, familiar, and easy to understand cannot be overstated.</p>
+
+<p>I, and I&rsquo;m sure others, blame ourselves for these feelings, but the truth is
+that nobody in our educational legacy ever gave us the tools to learn and retain
+information.  Memorization as a teaching philosophy has been out of fashion for
+many years now, so that the current products of the public education system have
+never been asked to actually <em>memorize</em> anything.  The sad truth of it is,
+though, that if you aren&rsquo;t being asked to memorize anything while moving through
+a content-based educational curriculum (e.g. history, social studies, etc), then
+you aren&rsquo;t really being asked to do anything at all of lasting educational
+value.</p>
+
+<h1>Embracing memorization</h1>
+
+<p>Many people, including myself in the past, hate being asked to memorize things
+because it seems boring and frustrating to go over the same material again and
+again. But it doesn&rsquo;t have to be quite so bleak.  I have recently learned about
+a study technique called <a href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak?currentPage=all"><em>spaced
+repetition</em></a>
+which memory experts say will help us to memorize more efficiently.  The
+research suggests that memories decay exponentially if they are not systematically
+reinforced.  The brain essentially garbage collects all the information it soaks
+up and hasn&rsquo;t used in a while.  Without systematic review eventually everything
+of substance just evaporates leaving nothing but the vague feeling of having
+seen something before.</p>
+
+<p>Flashcards are an obvious tool for reviews, but I find them difficult
+to make by hand and annoying to carry around.  Fortunately, in the last decade
+or so several bits of software have been written to help people manage large
+digital collections of electronic flashcards.  These applications, termed
+<a href="http://en.wikipedia.org/wiki/Spaced_repetition">&ldquo;Spaced Repetition Systems,&rdquo;</a>
+help you schedule reviews to maximize learning over the long term.</p>
+
+<p>Some of the most popular are:</p>
+
+<ul>
+<li><strong><a href="http://ankisrs.net/">Anki</a></strong> (free, cross platform)</li>
+<li><a href="http://www.mnemosyne-proj.org/">Mnemosyne</a> (free, cross platform)</li>
+<li><a href="http://www.supermemo.com/">SuperMemo</a> (paid, Windows only)</li>
+<li><a href="http://orgmode.org/worg/org-contrib/org-drill.html">Org-Drill</a>,</li>
+<li>part of Org-Mode in Emacs (free, cross platform)</li>
+</ul>
+
+
+<p>These systems have the user rate themselves on how well they know each card and
+then uses an algorithm to figure out when they should study the card again.  The
+best time to study a card is right before you forget it.  Each time the user
+answers a card correctly the interval gets a little longer, until pretty soon a
+card only needs one or two reps per year to be maintained in memory. Forgetting
+a card resets the interval to daily reviews.</p>
+
+<p>Even if you think you hate flashcards, I&rsquo;d recommend giving this method of study
+a fresh look.  Really knowing things is such a high, I think you&rsquo;ll quickly come
+around to liking them.</p>
+]]></content>
+  </entry>
+  
+</feed>

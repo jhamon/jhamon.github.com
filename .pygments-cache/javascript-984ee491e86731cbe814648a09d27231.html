@@ -1,0 +1,35 @@
+<div class="highlight"><pre><span class="c1">// Take the first n child elements from the $container and move them</span>
+<span class="c1">// to the end.</span>
+<span class="kd">function</span> <span class="nx">popPushNItems</span> <span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$children</span> <span class="o">=</span> <span class="nx">$container</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.slottt-machine-recipe__item&#39;</span><span class="p">);</span>
+    <span class="nx">$children</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">n</span><span class="p">).</span><span class="nx">insertAfter</span><span class="p">(</span><span class="nx">$children</span><span class="p">.</span><span class="nx">last</span><span class="p">());</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="nx">$children</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">popPushNItems</span><span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// After the slide animation is complete, we want to pop some items off</span>
+<span class="c1">// the front of the container and push them onto the end. This is</span>
+<span class="c1">// so the animation can slide upward infinitely without adding</span>
+<span class="c1">// inifinte div elements inside the container.</span>
+<span class="kd">function</span> <span class="nx">rotateContents</span> <span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="nx">popPushNItems</span><span class="p">(</span><span class="nx">$container</span><span class="p">,</span> <span class="nx">n</span><span class="p">);</span>
+      <span class="nx">$container</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="mi">0</span><span class="p">});</span>
+    <span class="p">},</span> <span class="mi">300</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">animate</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">triggerIndex</span> <span class="o">=</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">triggers</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">actionIndex</span> <span class="o">=</span> <span class="nx">randomSlotttIndex</span><span class="p">(</span><span class="nx">actions</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+
+  <span class="nx">$trigger</span><span class="p">.</span><span class="nx">animate</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="o">-</span><span class="nx">triggerIndex</span><span class="o">*</span><span class="mi">150</span><span class="p">},</span> <span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;swing&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">rotateContents</span><span class="p">(</span><span class="nx">$trigger</span><span class="p">,</span> <span class="nx">triggerIndex</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">$action</span><span class="p">.</span><span class="nx">animate</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="o">-</span><span class="nx">actionIndex</span><span class="o">*</span><span class="mi">150</span><span class="p">},</span> <span class="mi">700</span><span class="p">,</span> <span class="s1">&#39;swing&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">rotateContents</span><span class="p">(</span><span class="nx">$action</span><span class="p">,</span> <span class="nx">actionIndex</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
