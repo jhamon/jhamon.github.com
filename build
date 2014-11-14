@@ -1,0 +1,9 @@
+#!/bin/bash
+
+haml static-source/index.haml > index.html
+haml static-source/portfolio.haml > portfolio.html
+
+rm -rf assets/stylesheets 
+mkdir assets/stylesheets
+sass static-source/stylesheets/homepage.scss > assets/stylesheets/homepage.css
+sass static-source/stylesheets/portfolio.scss > assets/stylesheets/portfolio.css

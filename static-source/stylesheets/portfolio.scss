@@ -1,0 +1,245 @@
+@import "bourbon/bourbon";
+
+$base:#222;
+$highlight: #F40;
+
+$size: 22vw;
+$margin: 2vw;
+
+@import url(http://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono|Oswald);
+
+body, html {
+  -webkit-text-size-adjust: none; /* prevent mobile safari from resizing text */
+  height: 100%;
+  padding: 0;
+  background: #FFF;
+  font-family: Ubuntu, Helvetica, sans serif;
+  font-weight: 400;
+  font-size: 1em;
+}
+
+.portfolio {
+  @include display(flex);
+  @include flex-direction(row);
+  @include align-items(row);
+  @include justify-content(space-around);
+  @include flex-wrap(wrap);
+}
+
+.portfolio-item {  
+  width: $size;
+  height: $size;
+
+  float: left;
+  overflow: hidden;
+}
+
+#flexshort {
+  align-self: flex-start;
+}
+
+img {
+  height: 100%;
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+/* entire container, keeps perspective */
+.flip-container {
+  perspective: 1000;
+  margin-bottom: $margin;
+}
+  /* flip the pane when hovered */
+.flip-container:hover .flipper, 
+.flip-container.hover .flipper {
+    @include transform(rotateY(180deg));
+}
+
+.flip-container, .front, .back {
+  width: $size;
+  height: $size;
+  float:left;
+}
+
+/* flip speed goes here */
+.flipper {
+  transition: 0.6s;
+  @include transform-style(preserve-3d);
+
+  position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+  @include backface-visibility(hidden);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+  z-index: 2;
+  /* for firefox 31 */
+  @include transform(rotateY(0deg));
+}
+
+/* back, initially hidden pane */
+.back {
+  @include transform(rotateY(180deg));
+}
+
+.item-back {
+  width: $size;
+  height: $size;
+  background: #000;
+  color: #FFF;
+  float: left;
+  text-align: center;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  p {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .links {
+    @include display(flex);
+    @include flex-direction(row);
+    @include justify-content(center);
+    @include align-items(center);
+  }
+  
+  .links.tall {
+    @include flex-direction(column);
+    @include justify-content(flex-end);
+  }
+  
+  a {
+    color: #FFF;
+    padding: 5px;
+    border: 1px solid white;
+    font-weight: bold;
+    display: block;
+    width: 30%;
+    margin: 10px; 
+    text-decoration: none;
+    
+    &.wide {
+      width: 80%;
+      margin: 5px;
+    }
+    
+    &:hover {
+      border: 1px solid #FFF;
+      color: #000;
+      background: #FFF;
+    }
+  }
+  
+  h2 {
+    color: #FFF;
+    font-family: Oswald, Helvetica, sans serif;
+    text-transform: uppercase;
+    line-height: 100%;
+    font-weight: 700;
+    width:75%;
+  }
+  
+  .description {
+    text-align: center;
+    width: 100%;
+  }
+}
+
+// iphone
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 568px) {
+    .portfolio-item {
+        width: 40vw;
+        height: 40vw;
+    }  
+  
+  .flip-container, .front, .back {
+    width: 40vw;
+    height: 40vw;
+    float:left;
+  }
+  
+  .item-back {
+    width: 40vw;
+    height: 40vw;
+  }
+}
+
+// ipad
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px)
+and (-webkit-min-device-pixel-ratio: 1) {
+    body {
+      font-size: 2em;
+    }
+  
+    .portfolio-item {
+        width: 30vw;
+        height: 30vw;
+    }  
+  
+  .flip-container, .front, .back {
+    width: 30vw;
+    height: 30vw;
+    float:left;
+  }
+  
+  .item-back {
+    width: 30vw;
+    height: 30vw;
+  }
+}
+
+
+nav {
+  background: white;
+  font-family: Ubuntu Mono, Ubuntu, Oswald, Helvetica, sans serif;
+  
+  @include display(flex);
+  @include flex-direction(row);
+  @include align-items(center);
+  @include justify-content(space-around);
+
+  font-size: 2.5em;
+  margin: 2vw;
+  
+  .logo {
+    background: black;
+    color: white;
+  }
+  
+  .nav-item {
+    padding: 10px;
+
+    text-transform: uppercase;
+    display: block;
+    float: left;
+    position: relative;
+
+    a, a:visited {
+     color: black;
+     text-decoration: none;
+     transition: all 1s ease;
+     padding-left: 20px;
+     padding-right: 20px;
+    }
+    a:hover {
+      background: #CCC;
+    }
+  }
+}

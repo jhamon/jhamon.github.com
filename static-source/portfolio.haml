@@ -1,0 +1,194 @@
+!!!
+%html
+  %head
+    %title
+      Jen Hamon - Ruby and JavaScript code portfolio
+    %link{:href => "assets/stylesheets/portfolio.css", :type => "text/css", :rel => "stylesheet"}
+  %body
+    %nav
+      .nav-item
+        %a{:href => "http://www.hamon.io/"}
+          Home
+      .nav-item.logo
+        JH
+      .nav-item
+        %a{:href => "http://www.hamon.io/blog"}
+          Blog
+
+    .portfolio
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#asteroids
+              %img{:src => "assets/img/asteroids.gif" }
+              .description
+          .back
+            .item-back
+              %h2 Asteroids
+              .description
+                %p
+                  Simulation based on the classic arcade game
+                .links
+                  %a{:href=>"http://www.hamon.io/asteroids.js"}
+                    Live
+                  %a{:href=>"http://www.github.com/jhamon/asteroids.js"}
+                    Source
+
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#illusions
+              %img{:src => "assets/img/Illusion_XI__How_many_cubes__-_CodePen.png"}
+          .back
+            .item-back
+              %h2 Illusions in CSS
+              .description
+                %p
+                  A dozen classic optical illusions rendered and animated with pure CSS
+                .links
+                  %a.wide{:href => "http://codepen.io/collection/mzyeH/"}
+                    Gallery on Codepen
+
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#eca
+              %img{:src => "assets/img/Elementary_Cellular_Automata_-_CodePen.png"}
+
+          .back
+            .item-back
+              %h2 Elementary Cellular Automata
+              .description
+                %p
+                  Order and chaos can both arise in this 1D simulation.
+                .links.tall
+                  %a.wide{:href=>"http://www.github.com/jhamon/elementary_cellular_automata"}
+                    Ruby version
+                  %a.wide{:href=>"http://codepen.io/jhamon/pen/ogvpxQ"}
+                    JS version
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#snake
+              %img{:src => "assets/img/snake2.gif"}
+          .back
+            .item-back
+              %h2 Snake
+              .description
+                Can you top the scoreboard?
+                .links
+                  %a{:href => "http://www.serpent.io"}
+                    Live
+                  %a{:href => "http://www.serpent.io"}
+                    Source
+
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#conway
+              %img{:src => "assets/img/conway.gif"}
+          .back
+            .item-back
+              %h2 Conway's<br>Game of Life
+              .description
+                %p
+                  Built with HTML5 Canvas and Web Workers
+                .links
+                  %a{:href => "http://www.hamon.io/conway.js"}
+                    Live
+                  %a{:href => "http://www.github.com/jhamon/conway.js" }
+                    Source
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#connect4
+              %img{:src => "assets/img/Connect_Four__-_Jen_Hamon__Yelp_Code_Challenge.png"}
+          .back
+            .item-back
+              %h2 Connect4
+              .description
+                %p
+                  Built and tested with JavaScript, jQuery, Jasmine
+                .links
+                  %a{:href => "http://www.hamon.io/connect4.js"}
+                    Live
+                  %a{:href => "http://www.github.com/jhamon/connect4"}
+                    Source
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#meme
+              %img{:src => "assets/img/meme2.gif"}
+          .back
+            .item-back
+              %h2 Meme Generator
+              .description
+                %p
+                  Make image macros with images of pets up for adoption
+                .links
+                  %a{:href => "http://www.adoptme.me"}
+                    Live
+                  %a{:href => "http://www.github.com/jhamon/AdoptMeme"}
+                    Source
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#projecteuler
+              %img{:src => "assets/img/projecteuler.jpg"}
+          .back
+            .item-back
+              %h2 Project Euler
+              .description
+                %p
+                  I've solved more problems on Project Euler than 85% of participants.
+                .links
+                  %a.wide{:href => "http://www.github.com/jhamon/projecteuler"}
+                    Project Euler
+
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#algorithms
+              %img{:src => "assets/img/sortable.png"}
+          .back
+            .item-back
+              %h2 Sorting Algorithms
+              .description
+                %p
+                  Array extensions for sorting in Ruby
+                .links.tall
+                  %a.wide{:href => "http://www.github.com/jhamon/sortable"}
+                    Github
+
+      .flip-container{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#algorithms
+              %img{:src => "assets/img/datastructures.png"}
+          .back
+            .item-back
+              %h2 Data Structures
+              .description
+                %p
+                  I learn best by doing.
+                .links.tall
+                  %a.wide{:href => "http://www.github.com/jhamon/ruby_data_structures"}
+                    Trees, Tries, and more in Ruby
+                  %a.wide{:href => "http://www.github.com/jhamon/heap.js"}
+                    Heaps in JS
+      .flip-container#linkshort{:ontouchstart => "this.classList.toggle('hover');"}
+        .flipper
+          .front
+            .portfolio-item#link-shortner
+              %img{:src => "assets/img/SimpleShortner.png"}
+          .back
+            .item-back
+              %h2 Personal Link Shortener
+              .description
+                %p Ruby on Rails. RSpec. Heroku.
+                .links
+                  %a{:href=>"http://www.jlh.io"}
+                    Live
+                  %a{:href=>"https://github.com/jhamon/simple_shortener"}
+                    Source
+
