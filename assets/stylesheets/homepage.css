@@ -117,12 +117,12 @@ a, a:hover, a:visited, a:active {
 .media {
   position: absolute;
   top: 0;
-  right: 0;
-  color: white; }
+  right: 0; }
   .media i {
     padding-top: 8px;
     padding-right: 16px;
     font-size: 1.5em;
-    transition: all 1s ease; }
+    color: black;
+    transition: all 0.2s ease; }
     .media i:hover {
-      color: #FFF; }
+      color: gray; }
